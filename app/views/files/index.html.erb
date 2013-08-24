@@ -1,0 +1,19 @@
+<h1>Listing files</h1>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+
+<% @files.each do |file| %>
+  <tr>
+    <td><%= file['filename'] %></td>
+    <td><%= link_to 'Destroy', "/files/#{file['filename']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New File', '/files/new' %>

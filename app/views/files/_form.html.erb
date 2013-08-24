@@ -1,0 +1,8 @@
+<%= form_tag({:action => :upload}, :method => 'post', :multipart => true) do %>
+<div>
+  <%= label_tag(:file, 'File:') %>
+  <%= file_field_tag(:file) %>
+</div>
+<br/>
+<%= submit_tag("Upload") %>
+<% end %>

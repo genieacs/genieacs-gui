@@ -1,0 +1,13 @@
+<%
+  param_names = {
+    'summary.serialNumber' => 'Serial number',
+    'summary.mac' => 'MAC',
+    'summary.ip' => 'IP',
+    'summary.softwareVersion' => 'Software version',
+    'summary.productClass' => 'Product class',
+  }
+%>
+"<%= param_names.values.join('","').html_safe %>","Last inform"
+<% @devices.each do |device| %>
+  "<%= param_names.collect{|k,v| device[k]['_value'] }.join('","').html_safe %>","<%= device['summary.lastInform'] %>"
+<% end %>

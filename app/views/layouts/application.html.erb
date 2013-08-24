@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GenieacsGui</title>
+  <title>GenieACS</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "/assets/raphael-min.js", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "/assets/pie.js", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "/assets/list.min.js", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<div id="header">
+  <div id="user_menu" style="float: right; margin: 5px;">
+  </div>
+  <div class="app-name">GenieACS</div>
+  <%= render 'layouts/menu' %>
+</div>
+
+<div id="content">
+<%- flash.each do |k, v| %>
+  <div class="flash <%= k %>"><%= v %></div>
+<% end %>
 
 <%= yield %>
-
+</div>
+<div id="footer">&copy;2013 genieacs.com</div>
 </body>
 </html>

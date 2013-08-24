@@ -1,0 +1,117 @@
+<%
+  param_names = {
+    'summary.serialNumber' => 'Serial number',
+    'summary.mac' => 'MAC',
+    'summary.ip' => 'IP',
+    'summary.softwareVersion' => 'Software version',
+    'summary.productClass' => 'Product class',
+  }
+
+  sort_param = params[:sort].start_with?('-') ? params[:sort][1..-1] : params[:sort] rescue nil
+  sort_symbol = params[:sort].start_with?('-') ? ' &#9650;' : ' &#9660;' rescue nil
+%>
+<h1>Listing devices</h1>
+<script type="text/javascript">
+filters = {
+  'summary.serialNumber' : 'Serial number',
+  'summary.mac' : 'MAC',
+  'summary.ip' : 'IP',
+  'summary.wlanSsid' : 'WLAN SSID',
+  'summary.softwareVersion' : 'Software version',
+  'summary.hardwareVersion' : 'Hardware version',
+  'summary.oui' : 'OUI',
+  'summary.productClass' : 'Product class',
+  'summary.lastInform' : 'Last inform',
+  '_tags' : 'Tag',
+}
+</script>
+<b>Filters</b>
+<form id="filters" onsubmit="updateFilters('filters');" >
+  <input type="hidden" name="query" value='<%= JSON.generate(@query) %>' />
+  <input type="hidden" name="sort" value="<%= params[:sort] %>" />
+  <div class="filters_container"></div>
+  <div class="filter_selection"></div>
+  <br/><br/>
+  <div>
+    <input type="submit" value="Filter" />
+    <a href="/devices">Clear</a>
+  </div>
+</form>
+
+<h2>Showing <%= @total %> devices</h2>
+<table class="records">
+  <tr>
+    <% param_names.each do |k, v| %>
+      <th><a href="#" class="action" onclick="sort('filters', '<%= k %>');return false;"><%= v %><%= sort_symbol.html_safe if sort_param == k %></a></th>
+    <% end %>
+    <th><a href="#" class="action" onclick="sort('filters', 'summary.lastInform');return false;">Last inform<%= sort_symbol.html_safe if sort_param == 'summary.lastInform' %></a></th>
+    <th></th>
+  </tr>
+
+<% cell_names = {} %>
+<% @devices.each do |device| %>
+  <tr>
+    <% param_names.each do |k, v| %>
+      <td><%= param_value(k, device) %></td>
+    <% end %>
+    <td>
+      <% cls = 'status-green' if (@now - device['summary.lastInform'].to_time) < 300 %>
+      <span class="<%= cls %>"><%= distance_of_time_in_words(@now, device['summary.lastInform'], include_seconds: true) %> ago</span>
+    </td>
+    <td class="action"><%= link_to 'Show', "/devices/#{u(device['_id'])}" %></td>
+  </tr>
+<% end %>
+</table>
+
+<div>
+  <%
+    q = ''
+    if params.include?(:query)
+      q += "&query=#{u(params[:query])}"
+    end
+
+    if params.include?(:sort)
+      q += "&sort=#{u(params[:sort])}"
+    end
+
+    current_page = Integer(params[:page] || 1)
+    total_pages = Integer(@total / 30) + 1
+    if total_pages <= 30
+      pages = Array(1..total_pages)
+    else
+      pages = Array(1..17) + Array(0) + Array((total_pages-2)..total_pages)
+    end
+  %>
+
+  <% if total_pages > 1 %>
+    <% if current_page == 1 %>
+      <span>&#8592; Previous</span>
+    <% else %>
+      <a href="?page=<%= current_page-1 %><%= q %>">&#8592; Previous</a>
+    <% end %>
+
+    <% for i in pages %>
+      <% if current_page == i %>
+        <%= current_page %>
+      <% elsif i == 0 %>
+        ...
+      <% else %>
+        <a href="?page=<%= i %><%= q %>"><%= i %></a>
+      <% end %>
+    <% end %>
+    <% if current_page == total_pages %>
+      <span>Next &#8594;</span>
+    <% else %>
+      <a href="?page=<%= current_page+1 %><%= q %>">Next &#8594;</a>
+    <% end %>
+  <% end %>
+</div>
+
+
+<a href="/devices.csv?<%= q %>">Download</a>
+
+<script type="text/javascript">
+$(function() {
+  initFilters('filters');  
+});
+</script>

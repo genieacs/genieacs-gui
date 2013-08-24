@@ -1,0 +1,54 @@
+<script type="text/javascript">
+filters = {
+  'summary.serialNumber' : 'Serial number',
+  'summary.mac' : 'MAC',
+  'summary.ip' : 'IP',
+  'summary.wlanSsid' : 'WLAN SSID',
+  'summary.softwareVersion' : 'Software version',
+  'summary.hardwareVersion' : 'Hardware version',
+  'summary.oui' : 'OUI',
+  'summary.productClass' : 'Product class',
+  'summary.cinr' : 'CINR',
+  'summary.rssi' : 'RSSI',
+  'summary.bsid' : 'BSID',
+  'summary.lastInform' : 'Last inform',
+  '_tags' : 'Tag',
+}
+</script>
+
+<form method="POST" action="/presets" onsubmit="updateFilters('precondition');updateConfigurations('configurations');">
+<div class="field">
+  <label for="name">Name</label><br />
+  <input id="name" name="name" type="text" <%= 'readonly' if @preset.include? '_id' %> value="<%= @preset['_id'] %>" />
+</div>
+<br/>
+<div class="field">
+  <label for="weight">Weight</label><br />
+  <input id="weight" name="weight" type="text" value="<%= @preset['weight'] %>" />
+</div>
+<h2>Precondition</h2>
+<div id="precondition">
+  <input type="hidden" name="query" value='<%= JSON.generate(@preset['precondition']) rescue '{}' %>' />
+  <div class="filters_container"></div>
+  <div class="filter_selection"></div>
+</div>
+
+
+<h2>Configurations</h2>
+<div id="configurations">
+  <input type="hidden" name="configurations" value='<%= JSON.generate(@preset['configurations']) rescue '{}' %>' />
+  <div class="configurations_container"></div>
+  <div class="filter_selection configurations_selection"></div>
+</div>
+
+
+<br/>
+<div class="actions">
+  <input type="submit" value="Save" />
+</div>
+<script type="text/javascript">
+$(function() {
+  initFilters('precondition');
+  initConfigurations('configurations');
+});
+</script>

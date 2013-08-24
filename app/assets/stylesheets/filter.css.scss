@@ -1,0 +1,19 @@
+@import "base";
+
+.popup {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 2px solid $color1;
+  z-index: 1000;
+  border-radius: 6px;
+  padding: 5px;
+  box-shadow: rgba(black, 0.2) 0 0 5px;
+}
+
+.filter_selection {
+  display: inline-block;
+  &:hover .popup {
+    display: inline-block;
+  }
+}

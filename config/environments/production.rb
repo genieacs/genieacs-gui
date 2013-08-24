@@ -77,4 +77,8 @@ GenieacsGui::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # GenieACS API
+  config.genieacs_api_host = 'localhost'
+  config.genieacs_api_port = 7557
 end

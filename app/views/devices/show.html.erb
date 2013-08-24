@@ -1,0 +1,89 @@
+<script type="text/javascript">
+var pending = {};
+
+$(function() {
+  var options = {
+    valueNames: ['param-path', 'param-value'],
+    page: 1000
+  };
+
+  var featureList = new List('device-params', options);
+  addActions();
+  refreshPending();
+});
+</script>
+
+<h1>Device: <%= @device['_id'] %></h1>
+<p>
+  <b>Last inform:</b>
+  <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
+  <span class="<%= cls %>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
+  &mdash;
+  <a href="#" class="action" onclick="refreshSummary(); return false;">Refresh</a>,
+  <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] %>');return false;">Ping</a>
+</p>
+
+<div class="summary">
+<p><b>Serial number:</b> <%= param_value('summary.serialNumber', @device) %></p>
+<p><b>Manufacturer:</b> <%= param_value('summary.manufacturer', @device) %></p>
+<p><b>Product class:</b> <%= param_value('summary.productClass', @device) %></p>
+<p><b>OUI:</b> <%= param_value('summary.oui', @device) %></p>
+<p><b>Hardware version:</b> <%= param_value('summary.hardwareVersion', @device) %></p>
+<p><b>Software version:</b> <%= param_value('summary.softwareVersion', @device) %></p>
+<p><b>MAC:</b> <%= param_value('summary.mac', @device) %></p>
+<p><b>IP:</b> <%= param_value('summary.ip', @device) %></p>
+
+<br/>
+<% if @device['summary.wlanSsid'] %>
+<p>
+<b>WLAN SSID:</b> <%= param_value('summary.wlanSsid', @device) %>
+<a href="#" onclick="editSsid('<%= @device['summary.wlanSsid']['_value'] %>');return false;">Edit SSID</a>
+<a href="#" onclick="editPsk();return false;">Edit PSK</a>
+</p>
+<% end %>
+</div>
+
+<% tags = @device['_tags'] || [] %>
+<% if tags %>
+<h2>Tags</h2>
+<% tags.each do |t| %>
+<span class="tag"><%= t %>
+  <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
+</span>
+<% end %>
+<a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
+<% end %>
+
+<div style="clear:both;"></div>
+<h2>Device parameters</h2>
+<div id="device-params">
+  <input class="search" type="search" placeholder="Type to search..." />
+  <ul class="list">
+    <% for p in @device_params %>
+    <li name="<%= "InternetGatewayDevice.#{p['_path']}" %>" value="<%= p['_value'] %>" type="<%= p['_type'] %>" writable="<%= p['_writable']? 1 : 0 %>" <%= 'instance' if p['_instance'] %> <%= 'object' if p['_object'] %> >
+      <span class="param-path"><%= "InternetGatewayDevice.#{p['_path']}" %></span><% if p.include?('_value') %>: <span class="param-value"><%= param_value("InternetGatewayDevice.#{p['_path']}", @device) %></span><% end %>
+    </li>
+    <% end %>
+  </ul>
+</div>
+<br/>
+<p>
+<div><a id="reboot" href="#" onclick="reboot();return false;">Reboot</a></div>
+<div><a id="factory-reset" href="#" onclick="factoryReset();return false;">Factory reset</a></div>
+<div class="filter_selection">
+  <a id="firmware-upgrade" href="#">Firmware upgrade &raquo;</a>
+  <div class="popup">
+    <% for f in @files %>
+    <a href="#" onclick="firmwareUpgrade('<%= f['_id'] %>', '<%= f['filename'] %>');return false;"><%= f['filename'] %></a><br/>
+    <% end %>
+  </div>
+</div>
+</p>
+
+<div id="pending">
+<h>Pending tasks</h>
+  <ul>
+  </ul>
+  <a class="button" href="#" onclick="commitPending();return false;">Commit</a>
+  <a href="#" onclick="clearPending();return false;">Cancel</a>
+</div>

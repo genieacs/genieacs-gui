@@ -1,0 +1,22 @@
+<h1>Listing objects</h1>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @objects.each do |object| %>
+  <tr>
+    <td><%= object['_id'] %></td>
+    <td><%= link_to 'Edit', "/objects/#{object['_id']}/edit" %></td>
+    <td><%= link_to 'Destroy', "/objects/#{object['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New object', '/objects/new' %>

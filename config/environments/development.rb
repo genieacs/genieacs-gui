@@ -26,4 +26,8 @@ GenieacsGui::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # GenieACS API
+  config.genieacs_api_host = 'localhost'
+  config.genieacs_api_port = 7557
 end

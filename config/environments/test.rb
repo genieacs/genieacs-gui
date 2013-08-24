@@ -33,4 +33,8 @@ GenieacsGui::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # GenieACS API
+  config.genieacs_api_host = 'localhost'
+  config.genieacs_api_port = 7557
 end

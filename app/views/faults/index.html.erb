@@ -1,0 +1,100 @@
+<h1>Listing faults</h1>
+
+<script type="text/javascript">
+filters = {
+  'device' : 'Device',
+  'name' : 'Task',
+  'timestamp' : 'Date'
+}
+</script>
+<b>Filters</b>
+<form id="filters" onsubmit="updateFilters('filters');" >
+  <input type="hidden" name="query" value='<%= JSON.generate(@query) %>' />
+  <input type="hidden" name="sort" value="<%= params[:sort] %>" />
+  <div class="filters_container"></div>
+  <div class="filter_selection"></div>
+  <br/><br/>
+  <div>
+    <input type="submit" value="Filter" />
+    <a href="/faults">Clear</a>
+  </div>
+</form>
+
+
+<h2>Showing <%= @total %> faults</h2>
+<table class="records">
+  <tr>
+    <th>Device</th>
+    <th>Task</th>
+    <th>Retries</th>
+    <th>Date</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @faults.each do |task| %>
+  <tr>
+    <td><a href="/devices/<%= task['device'] %>"><%= task['device'] %></a></td>
+    <td><%= task['name'] %></td>
+    <td>
+      <% if task['retries'].blank? %>
+      <%= 0 %>
+      <% else %>
+      <%= task['retries'] %>
+      <% end %>
+    </td>
+    <td>
+      <%= task['timestamp'] %>
+    </td>
+    <td><%= link_to 'Retry', "/faults/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Destroy', "/faults/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+
+<div>
+  <%
+    q = ''
+    if params.include?(:query)
+      q += "&query=#{u(params[:query])}"
+    end
+
+    current_page = Integer(params[:page] || 1)
+    total_pages = Integer(@total / 30) + 1  
+    if total_pages <= 30
+      pages = Array(1..total_pages)
+    else
+      pages = Array(1..17) + Array(0) + Array((total_pages-2)..total_pages)
+    end
+  %>
+
+  <% if total_pages > 1 %>
+    <% if current_page == 1 %>
+      <span>&#8592; Previous</span>
+    <% else %>
+      <a href="?page=<%= current_page-1 %><%= q %>">&#8592; Previous</a>
+    <% end %>
+
+    <% for i in pages %>
+      <% if current_page == i %>
+        <%= current_page %>
+      <% elsif i == 0 %>
+        ...
+      <% else %>
+        <a href="?page=<%= i %><%= q %>"><%= i %></a>
+      <% end %>
+    <% end %>
+    <% if current_page == total_pages %>
+      <span>Next &#8594;</span>
+    <% else %>
+      <a href="?page=<%= current_page+1 %><%= q %>">Next &#8594;</a>
+    <% end %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  initFilters('filters');
+});
+</script>

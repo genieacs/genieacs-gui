@@ -1,56 +1,36 @@
+# Need to not fail when uri contains curly braces
+# This overrides the DEFAULT_PARSER with the UNRESERVED key, including '{' and '}'
+# DEFAULT_PARSER is used everywhere, so its better to override it once
+module URI
+  remove_const :DEFAULT_PARSER
+  unreserved = REGEXP::PATTERN::UNRESERVED
+  DEFAULT_PARSER = Parser.new(:UNRESERVED => unreserved + "\{\}\^")
+end
+
 GenieacsGui::Application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  root 'home#index'
+  get 'devices' => 'devices#index'
+  get 'devices/:id' => 'devices#show'
+  post 'devices/:id' => 'devices#update'
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  get 'faults' => 'faults#index'
+  post 'faults/:id/retry' => 'faults#retry'
+  delete 'faults/:id' => 'faults#destroy'
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  get 'presets' => 'presets#index'
+  get 'presets/new' => 'presets#new'
+  get 'presets/:id/edit' => 'presets#edit'
+  post 'presets' => 'presets#update'
+  delete 'presets/:id' => 'presets#destroy'
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+  get 'objects' => 'objects#index'
+  get 'objects/new' => 'objects#new'
+  get 'objects/:id/edit' => 'objects#edit'
+  post 'objects' => 'objects#update'
+  delete 'objects/:id' => 'objects#destroy'
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-  
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  get 'files' => 'files#index'
+  get 'files/new' => 'files#new'
+  post 'files' => 'files#upload'
+  delete 'files/:id' => 'files#destroy', :constraints => { :id => /[0-9A-Za-z_\-\.\/]+/ }
 end

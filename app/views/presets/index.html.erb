@@ -1,0 +1,23 @@
+<h1>Listing presets</h1>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @presets.each do |preset| %>
+  <tr>
+    <td><%= preset['_id'] %></td>
+    <td><%= link_to 'Devices', "/devices?query=#{URI.escape(ActiveSupport::JSON.encode(preset['precondition']))}" %></td>
+    <td><%= link_to 'Edit', "/presets/#{preset['_id']}/edit" %></td>
+    <td><%= link_to 'Destroy', "/presets/#{preset['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Preset', '/presets/new' %>

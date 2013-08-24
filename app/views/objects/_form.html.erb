@@ -1,0 +1,27 @@
+<form method="POST" action="/objects" onsubmit="updateObject('parameters');">
+<div class="field">
+  <label for="name">Name</label><br />
+  <input id="name" name="name" type="text" <%= 'readonly' if @object.include? '_id' %> value="<%= @object['_id'] %>" />
+</div>
+<br/>
+<h2>Parameters</h2>
+<div id="parameters">
+  <input type="hidden" name="parameters" value='<%= JSON.generate(@object) rescue '{}' %>' />
+  <table class="parameters_container records">
+    <thead>
+      <tr><th>Key</th><th>Parameter</th><th>Value</th></tr>
+    </thead>
+    <tbody/>
+  </table>
+  <div class="parameters_selection"></div>
+</div>
+
+<br/>
+<div class="actions">
+  <input type="submit" value="Save" />
+</div>
+<script type="text/javascript">
+$(function() {
+  initObject('parameters');
+});
+</script>

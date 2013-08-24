@@ -1,0 +1,262 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "base";
+
+body, input, button, select, option, textarea {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", "Arial", Sans-Serif;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  color: $color5; }
+
+a {
+  color: $color4;
+  &:visited {
+    color: $color4; }
+  &:hover {
+    color: white;
+    background-color: $color4; } }
+
+a.action {
+  text-decoration: none;
+}
+
+strong, b {
+  font-weight: bold; }
+
+#apps-bar {
+  background-color: $color5;
+  padding: 5px;
+  a {
+    color: $color2;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 15px;
+    &:hover, &.current {
+      background-color: inherit;
+      color: $color3;
+    }
+  }
+  ul {
+    display: none;
+    position: absolute;
+    background-color: $color5;
+    border: 2px solid $color2;
+    z-index: 1000;
+    border-radius: 6px;
+    padding: 5px;
+    box-shadow: rgba(black, 0.2) 0 0 5px;
+    min-width: 150px;
+  }
+  span:hover > ul {
+    display: inline-block;
+  } 
+}
+
+#header {
+  background-color: $color3;
+  border-bottom: 2px solid $color1;
+
+  ul.menu {
+    font-weight: bold;
+    height: 24px;
+    overflow: visible;
+    display: block;
+    margin-left: 10px;
+
+    li {
+      margin-top: 2px;
+      margin-left: 2px;
+      margin-right: 2px;
+      height: 14px;
+      padding: 4px;
+      border: 2px solid $color1;
+      margin: 0;
+      background-color: $color1;
+      display: inline-block;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+
+      &.active, &:hover {
+        border-bottom: 2px solid white;
+        background-color: white; }
+
+      a, a:visited, a:hover {
+        color: $color4;
+        text-decoration: none;
+        background: none; } } }
+
+  .app-name {
+    padding: 20px 10px;
+    //display: block;
+    font-size: 24px;
+    color: $color4;
+    font-weight: bold; } }
+
+#footer {
+  font-size: 12px;
+  padding: 10px;
+  color: $color2;
+  text-align: center; }
+
+#content {
+  margin: 10px;
+  min-height: 250px; }
+
+.flash {
+  color: #777;
+  background-color: #eee;
+  border: 1px solid #777;
+  font-weight: bold;
+  padding: 3px;
+
+  &.alert, &.error {
+    color: #700;
+    background-color: #fee;
+    border: 1px solid #700;
+  }
+  &.warning, &.notice {
+    color: #770;
+    background-color: #ffe;
+    border: 1px solid #770;
+  }
+  &.success {
+    color: #070;
+    background-color: #efe;
+    border: 1px solid #070;
+  }
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table; }
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff; }
+  ul li {
+    font-size: 12px;
+    list-style: square; } }
+
+table.records {
+  text-align: left;
+
+  th {
+    font-size: 12px;
+    color: $color4;
+    font-weight: bold;
+    border-bottom: 2px solid $color4;
+    padding: 2px 0.5em; }
+
+  td {
+    border-bottom: 1px dotted $color1;
+    padding: 6px 8px;
+    &.action a {
+      visibility: hidden; } }
+
+  tr.no-records, tr.no-records:hover {
+    td {
+      background-color: white;
+      text-align: center; } }
+
+  tbody tr:hover td {
+    a {
+      visibility: visible; }
+
+    background-color: $color3;
+    color: $color5; } }
+
+.invalid-ref {
+  color: #888 !important}
+
+table.filters {
+  text-align: left;
+
+  th {
+    color: $color4;
+    padding-right: 5px;
+    font-weight: bold; } }
+
+h1 {
+  color: $color4;
+  font-size: 150%;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em; }
+
+h2 {
+  color: $color5;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em; }
+
+h3 {
+  color: $color5;
+  font-size: 15px;
+  margin-top: 1em;
+  margin-bottom: 0.5em; }
+
+/* Remove button padding in FF */
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0; }
+
+input[type="submit"], input[type="button"], .button {
+  display: inline-block;
+  min-width: 6em;
+  position: relative;
+  top: 0px;
+  vertical-align: baseline;
+  margin: 0 0.1em;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.1em 0.6em;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border-top-right-radius: 0.2em;
+  border-bottom-left-radius: 0.2em;
+
+  color: $color4;
+  background-color: $color1;
+  border: 1px solid $color2;
+
+  &:link, &:visited {
+    color: $color4;
+    background-color: $color1; }
+
+  &:hover, &:active {
+    color: $color1;
+    background-color: $color4; }
+
+  &:disabled {
+    background-color: $color1;
+    color: $color2;
+  } }
+
+select, input {
+  border-radius: 4px;
+  color: $color5;
+  background-color: white;
+  border: 1px solid $color2;
+  margin: 1px;
+  &:disabled {
+    border-color: $color3; } }
