@@ -125,31 +125,8 @@ class DevicesController < ApplicationController
 
     if params.include? 'commit'
       tasks = ActiveSupport::JSON.decode(params['commit'])
-      perms = []
-      for t in tasks
-        case t['name']
-        when 'reboot'
-          perms << [:update, "devices/<#{params[:id]}>/reboot/"]
-        when 'factoryReset'
-          perms << [:update, "devices/<#{params[:id]}>/factory_reset/"]
-        when 'download'
-          perms << [:update, "devices/<#{params[:id]}>/download/", t['filename']]
-        when 'setParameterValues'
-          for v in t['parameterValues']
-            perms << [:update, "devices/<#{params[:id]}>/parameters/<#{v[0]}>/", v[1].to_s]
-          end
-        when 'getParameterValues'
-          for n in t['parameterNames']
-            perms << [:read, "devices/<#{params[:id]}>/parameters/<#{n}>/"]
-          end
-        end
-      end
-
-      for p in perms
-        log(p[0], p[1], (p[2] rescue nil))
-      end
-
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+
       for t in tasks
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(t))
         if res.code == '200'

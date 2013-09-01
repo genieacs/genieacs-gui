@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def index
+    require 'net/http'
     online_threshold_green = (Time.now - (60 * 10))
     online_threshold_yellow = (Time.now - (60 * 60 * 24))
 
