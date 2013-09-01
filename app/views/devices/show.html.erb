@@ -4,7 +4,7 @@ var pending = {};
 $(function() {
   var options = {
     valueNames: ['param-path', 'param-value'],
-    page: 1000
+    page: 2000
   };
 
   var featureList = new List('device-params', options);
@@ -20,7 +20,7 @@ $(function() {
   <span class="<%= cls %>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
   &mdash;
   <a href="#" class="action" onclick="refreshSummary(); return false;">Refresh</a>,
-  <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] %>');return false;">Ping</a>
+  <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] rescue '' %>');return false;">Ping</a>
 </p>
 
 <div class="summary">

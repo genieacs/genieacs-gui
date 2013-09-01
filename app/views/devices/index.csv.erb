@@ -9,5 +9,5 @@
 %>
 "<%= param_names.values.join('","').html_safe %>","Last inform"
 <% @devices.each do |device| %>
-  "<%= param_names.collect{|k,v| device[k]['_value'] }.join('","').html_safe %>","<%= device['summary.lastInform'] %>"
+  "<%= param_names.collect{|k,v| device[k]['_value'] rescue ''}.join('","').html_safe %>","<%= device['summary.lastInform'] %>"
 <% end %>

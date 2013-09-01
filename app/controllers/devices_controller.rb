@@ -10,7 +10,7 @@ class DevicesController < ApplicationController
         v['_path'] = "#{prefix}#{n}"
         v['_type'] = v['_value'].class
         output << v
-      elsif v['_object'] == true or v['_instance'] == true
+      else
         v['_path'] = "#{prefix}#{n}"
         output << v
         output += flatten_params(v, prefix ? "#{prefix}#{n}." : "#{n}.")
