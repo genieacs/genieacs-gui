@@ -209,7 +209,7 @@ window.removeTag = (tag) ->
   submitUpdate('remove_tag', tag)
 
 window.pingDevice = (ip) ->
-  $.get("/api/ping/#{ip}", (data) ->
+  $.get("/ping/#{ip}", (data) ->
     alert(data)
   ).fail(() ->
     alert('Device is offline')
