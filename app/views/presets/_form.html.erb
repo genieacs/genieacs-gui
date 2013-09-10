@@ -8,15 +8,13 @@ filters = {
   'summary.hardwareVersion' : 'Hardware version',
   'summary.oui' : 'OUI',
   'summary.productClass' : 'Product class',
-  'summary.cinr' : 'CINR',
-  'summary.rssi' : 'RSSI',
-  'summary.bsid' : 'BSID',
   'summary.lastInform' : 'Last inform',
   '_tags' : 'Tag',
 }
 </script>
 
 <form method="POST" action="/presets" onsubmit="updateFilters('precondition');updateConfigurations('configurations');">
+<%= token_tag form_authenticity_token %>
 <div class="field">
   <label for="name">Name</label><br />
   <input id="name" name="name" type="text" <%= 'readonly' if @preset.include? '_id' %> value="<%= @preset['_id'] %>" />

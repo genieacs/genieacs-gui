@@ -1,4 +1,5 @@
 <form method="POST" action="/objects" onsubmit="updateObject('parameters');">
+<%= token_tag form_authenticity_token %>
 <div class="field">
   <label for="name">Name</label><br />
   <input id="name" name="name" type="text" <%= 'readonly' if @object.include? '_id' %> value="<%= @object['_id'] %>" />
