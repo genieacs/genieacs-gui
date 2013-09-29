@@ -27,6 +27,35 @@ window.addAgeConfiguration = (container, name = '', age = '', fade = true) ->
   el.hide().fadeIn(300) if fade
 
 
+window.addCustomCommandValueConfiguration = (container, command = '', value = '', fade = true) ->
+  html = """<div configurationType="custom_command_value">
+      Command
+      <input type="text" _name="command" value="#{command}" />
+      Assert value
+      <input type="text" _name="value" value="#{value}" />
+      <a href="#" class="action" onclick="fadeOutAndRemove($(this).parent());return false;">&nbsp;x&nbsp;</a>
+    </div>"""
+
+  el = $(html)
+  $(container).append(el)
+  el.hide().fadeIn(300) if fade
+
+
+window.addCustomCommandAgeConfiguration = (container, command = '', age = '', fade = true) ->
+  html = """<div configurationType="custom_command_age">
+      Execute
+      <input type="text" _name="command" value="#{command}" />
+      every
+      <input type="text" _name="age" value="#{age}" />
+      seconds
+      <a href="#" class="action" onclick="fadeOutAndRemove($(this).parent());return false;">&nbsp;x&nbsp;</a>
+    </div>"""
+
+  el = $(html)
+  $(container).append(el)
+  el.hide().fadeIn(300) if fade
+
+
 window.addAddTagConfiguration = (container, tag = '', fade = true) ->
   html = """<div configurationType="add_tag">
       Add tag
@@ -99,6 +128,10 @@ window.initConfigurations = (id) ->
         addAddObjectConfiguration(container_selector, c['name'], c['object'], false)
       when 'delete_object'
         addRemoveObjectConfiguration(container_selector, c['name'], c['object'], false)
+      when 'custom_command_value'
+        addCustomCommandValueConfiguration(container_selector, c['command'], c['value'])
+      when 'custom_command_age'
+        addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'])
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
@@ -109,6 +142,8 @@ window.initConfigurations = (id) ->
       <a href="#" class="action" onclick="addRemoveTagConfiguration('#{container_selector}');return false;">Remove tag</a><br/>
       <a href="#" class="action" onclick="addAddObjectConfiguration('#{container_selector}');return false;">Add object</a><br/>
       <a href="#" class="action" onclick="addRemoveObjectConfiguration('#{container_selector}');return false;">Remove object</a><br/>
+      <a href="#" class="action" onclick="addCustomCommandValueConfiguration('#{container_selector}');return false;">Command value</a><br/>
+      <a href="#" class="action" onclick="addCustomCommandAgeConfiguration('#{container_selector}');return false;">Command age</a><br/>
     </div>
   """
   f.children('.configurations_selection').html(popup)
@@ -128,6 +163,14 @@ window.updateConfigurations = (id) ->
         name = $(this).children('input[_name="name"]').val()
         age = $(this).children('input[_name="age"]').val()
         configurations.push({type: 'age', name: name, age: age})
+      when 'custom_parameter_value'
+        command = $(this).children('input[_name="command"]').val().trim()
+        value = $(this).children('input[_name="value"]').val().trim()
+        configurations.push({type: 'custom_parameter_value', command: command, value: value})
+      when 'custom_parameter_age'
+        command = $(this).children('input[_name="command"]').val()
+        age = $(this).children('input[_name="age"]').val()
+        configurations.push({type: 'custom_command_age', command: command, age: age})
       when 'add_tag'
         tag = $(this).children('input[_name="tag"]').val()
         configurations.push({type: 'add_tag', tag: tag})
@@ -142,5 +185,13 @@ window.updateConfigurations = (id) ->
         name = $(this).children('input[_name="name"]').val()
         object = $(this).children('input[_name="object"]').val()
         configurations.push({type: 'delete_object', name: name, object: object})
+      when 'custom_command_value'
+        command = $(this).children('input[_name="command"]').val().trim()
+        value = $(this).children('input[_name="value"]').val().trim()
+        configurations.push({type: 'custom_command_value', command: command, value: value})
+      when 'custom_command_age'
+        command = $(this).children('input[_name="command"]').val()
+        age = $(this).children('input[_name="age"]').val()
+        configurations.push({type: 'custom_command_age', command: command, age: age})
   )
   $("##{id} > input[name=configurations]").attr('value', JSON.stringify(configurations))
