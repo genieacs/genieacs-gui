@@ -39,7 +39,7 @@ class FaultsController < ApplicationController
       flash[:error] = "Unexpected error (#{res.code})"
     end
 
-    redirect_to :action => :index
+    redirect_to :back
   end
 
   # DELETE /faults/1
@@ -53,6 +53,6 @@ class FaultsController < ApplicationController
       flash[:error] = "Unexpected error (#{res.code})"
     end
 
-    redirect_to :action => :index
+    redirect_to :back
   end
 end

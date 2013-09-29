@@ -32,8 +32,6 @@ $(function() {
 <p><b>Software version:</b> <%= param_value('summary.softwareVersion', @device) %></p>
 <p><b>MAC:</b> <%= param_value('summary.mac', @device) %></p>
 <p><b>IP:</b> <%= param_value('summary.ip', @device) %></p>
-
-<br/>
 <% if @device['summary.wlanSsid'] %>
 <p>
 <b>WLAN SSID:</b> <%= param_value('summary.wlanSsid', @device) %>
@@ -53,6 +51,32 @@ $(function() {
 <% end %>
 <a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
 <% end %>
+
+<h2>Task queue</h2>
+<table id="task-queue" class="records">
+  <tr>
+    <th>Task</th>
+    <th>Time</th>
+    <th>Retries</th>
+    <th>Fault</th>
+    <th></th>
+  </tr>
+  <% for t in @tasks %>
+  <tr>
+  <td><%= t['name'] %></td>
+  <td><%= t['timestamp'] %></td>
+  <td><%= t['retries'].to_i %></td>
+  <td><%= task_fault(t) %></td>
+  <td style="text-align:right;">
+    <%= link_to 'Retry', "/faults/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
+    <%= link_to 'Destroy', "/faults/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+  </td>
+  </tr>
+  <% end %>
+  <% if @tasks.empty? %>
+  <tr class="no-records"><td colspan="0">Empty</td></tr>
+  <% end %>
+</table>
 
 <div style="clear:both;"></div>
 <h2>Device parameters</h2>

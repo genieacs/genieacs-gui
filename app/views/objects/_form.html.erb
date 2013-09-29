@@ -4,7 +4,7 @@
   <label for="name">Name</label><br />
   <input id="name" name="name" type="text" <%= 'readonly' if @object.include? '_id' %> value="<%= @object['_id'] %>" />
 </div>
-<br/>
+
 <h2>Parameters</h2>
 <div id="parameters">
   <input type="hidden" name="parameters" value='<%= JSON.generate(@object) rescue '{}' %>' />

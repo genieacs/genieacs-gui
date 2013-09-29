@@ -29,6 +29,16 @@ class DevicesController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)[0]
   end
 
+  def get_device_tasks(device_id)
+    query = {
+      'query' => ActiveSupport::JSON.encode({'device' => URI.escape(device_id)}),
+      'sort' => ActiveSupport::JSON.encode({'timestamp' => 1})
+    }
+    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    res = http.get("/tasks/?#{query.to_query}")
+    return ActiveSupport::JSON.decode(res.body)
+  end
+
   def find_devices(query, skip = 0, limit = 10, sort = nil)
     q = {
       'query' => ActiveSupport::JSON.encode(query),
@@ -77,6 +87,7 @@ class DevicesController < ApplicationController
     @device = get_device(params[:id])
     @device_params = flatten_params(@device['InternetGatewayDevice'])
     @files = FilesController.find_files({})
+    @tasks = get_device_tasks(params[:id])
     mac = @device['summary.mac']['_value'].gsub(':', '') rescue nil
     respond_to do |format|
       format.html # show.html.erb
