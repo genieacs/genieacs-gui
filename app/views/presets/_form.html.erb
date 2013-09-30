@@ -1,15 +1,8 @@
 <script type="text/javascript">
 filters = {
-  'summary.serialNumber' : 'Serial number',
-  'summary.mac' : 'MAC',
-  'summary.ip' : 'IP',
-  'summary.wlanSsid' : 'WLAN SSID',
-  'summary.softwareVersion' : 'Software version',
-  'summary.hardwareVersion' : 'Hardware version',
-  'summary.oui' : 'OUI',
-  'summary.productClass' : 'Product class',
-  'summary.lastInform' : 'Last inform',
-  '_tags' : 'Tag',
+<% for k,v in Rails.configuration.device_filters %>
+  '<%= v %>' : '<%= k %>',
+<% end %>
 }
 </script>
 

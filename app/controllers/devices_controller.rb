@@ -6,13 +6,10 @@ class DevicesController < ApplicationController
     output = []
     for n, v in params
       next if n.start_with?('_')
-      if v.include?('_value')
-        v['_path'] = "#{prefix}#{n}"
-        v['_type'] = v['_value'].class
-        output << v
-      else
-        v['_path'] = "#{prefix}#{n}"
-        output << v
+      v['_path'] = "#{prefix}#{n}"
+      output << v
+
+      if not v.include?('_value')
         output += flatten_params(v, prefix ? "#{prefix}#{n}." : "#{n}.")
       end
     end

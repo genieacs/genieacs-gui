@@ -124,29 +124,9 @@ window.firmwareUpgrade = (file_id, filename) ->
   task.filename = filename
   addPending(task)
 
-window.editSsid = (defaultValue) ->
-  v = window.prompt('SSID', defaultValue)
-  return if v == null
-  task = {}
-  task.name = 'setParameterValues'
-  task.parameterValues = [['summary.wlanSsid', v]]
-  addPending(task)
-
-window.editPsk = () ->
-  v = window.prompt('PSK')
-  return if v == null
-  task = {}
-  task.name = 'setParameterValues'
-  task.parameterValues = [['summary.wlanPsk', v]]
-  addPending(task)
-
-window.editParam = (paramName) ->
-  param = $("#device-params li[name=\"#{paramName}\"]")
-  paramType = param.attr('type')
-  defaultValue = param.children('.param-value').text()
-
+window.editParam = (paramName, paramType, defaultValue) ->
   switch paramType
-    when 'FalseClass', 'TrueClass'
+    when 'xsd:boolean'
       v = window.prompt("#{paramName} (Allowed: true, false)", defaultValue)
       return if v == null
 
@@ -157,14 +137,14 @@ window.editParam = (paramName) ->
       else
         alert('Invalid value')
         return
-    when 'Fixnum'
+    when 'xsd:int', 'xsd:unsignedInt'
       v = window.prompt("#{paramName} (Allowed: integer number)", defaultValue)
       return if v == null
       val = parseInt(v)
       if isNaN(val)
         alert('Invalid value')
         return
-    when 'String'
+    when 'xsd:string'
       val = window.prompt("#{paramName}", defaultValue)
       return if val == null
     else

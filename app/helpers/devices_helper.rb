@@ -1,9 +1,21 @@
 module DevicesHelper
-  def get_value_from_path(device, path)
+  def get_param(path, device)
+    #return device[path] if device.has_key?(path)
+
     ref = device
     nodes = path.split('.')
-    for n in nodes
-      ref = ref[n]
+    pp = []
+    for node in nodes
+      pp << node
+      p = pp.join('.')
+
+      if ref.has_key?(p)
+        ref = ref[p]
+        pp = []
+      end
+    end
+    if not pp.empty?
+      return nil
     end
     return ref
   end
@@ -11,14 +23,10 @@ module DevicesHelper
   def param_value(path, device)
     classes = ['param-value']
 
-    if device.has_key?(path)
-      param = device[path]
-    else
-      begin
-        param = get_value_from_path(device, path)
-      rescue
-        return ''
-      end
+    begin
+      param = get_param(path, device)
+    rescue
+      return ''
     end
 
     if param.is_a?(Hash)

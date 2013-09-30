@@ -24,19 +24,14 @@ $(function() {
 </p>
 
 <div class="summary">
-<p><b>Serial number:</b> <%= param_value('summary.serialNumber', @device) %></p>
-<p><b>Manufacturer:</b> <%= param_value('summary.manufacturer', @device) %></p>
-<p><b>Product class:</b> <%= param_value('summary.productClass', @device) %></p>
-<p><b>OUI:</b> <%= param_value('summary.oui', @device) %></p>
-<p><b>Hardware version:</b> <%= param_value('summary.hardwareVersion', @device) %></p>
-<p><b>Software version:</b> <%= param_value('summary.softwareVersion', @device) %></p>
-<p><b>MAC:</b> <%= param_value('summary.mac', @device) %></p>
-<p><b>IP:</b> <%= param_value('summary.ip', @device) %></p>
-<% if @device['summary.wlanSsid'] %>
+<% for k,v in Rails.configuration.summary_parameters %>
 <p>
-<b>WLAN SSID:</b> <%= param_value('summary.wlanSsid', @device) %>
-<a href="#" onclick="editSsid('<%= @device['summary.wlanSsid']['_value'] %>');return false;">Edit SSID</a>
-<a href="#" onclick="editPsk();return false;">Edit PSK</a>
+  <strong><%= k %>:</strong>
+  <%= param_value(v, @device) %>
+  <% if (p = get_param(v, @device)) != nil and p['_writable'] %>
+  &mdash;
+  <a href="#" onclick="editParam('<%= v %>', '<%= p['_type'] %>', '<%= p['_value'] %>');return false;">Edit</a>
+  <% end %>
 </p>
 <% end %>
 </div>

@@ -1,11 +1,5 @@
 <%
-  param_names = {
-    'summary.serialNumber' => 'Serial number',
-    'summary.mac' => 'MAC',
-    'summary.ip' => 'IP',
-    'summary.softwareVersion' => 'Software version',
-    'summary.productClass' => 'Product class',
-  }
+  param_names = Rails.configuration.index_parameters
 
   sort_param = params[:sort].start_with?('-') ? params[:sort][1..-1] : params[:sort] rescue nil
   sort_symbol = params[:sort].start_with?('-') ? ' &#9650;' : ' &#9660;' rescue nil
@@ -13,16 +7,9 @@
 <h1>Listing devices</h1>
 <script type="text/javascript">
 filters = {
-  'summary.serialNumber' : 'Serial number',
-  'summary.mac' : 'MAC',
-  'summary.ip' : 'IP',
-  'summary.wlanSsid' : 'WLAN SSID',
-  'summary.softwareVersion' : 'Software version',
-  'summary.hardwareVersion' : 'Hardware version',
-  'summary.oui' : 'OUI',
-  'summary.productClass' : 'Product class',
-  'summary.lastInform' : 'Last inform',
-  '_tags' : 'Tag',
+<% for k,v in Rails.configuration.device_filters %>
+  '<%= v %>' : '<%= k %>',
+<% end %>
 }
 </script>
 <b>Filters</b>
@@ -41,8 +28,8 @@ filters = {
 <h2>Showing <%= @total %> devices</h2>
 <table class="records">
   <tr>
-    <% param_names.each do |k, v| %>
-      <th><a href="#" class="action" onclick="sort('filters', '<%= k %>');return false;"><%= v %><%= sort_symbol.html_safe if sort_param == k %></a></th>
+    <% param_names.each do |label, path| %>
+      <th><a href="#" class="action" onclick="sort('filters', '<%= path %>');return false;"><%= label %><%= sort_symbol.html_safe if sort_param == path %></a></th>
     <% end %>
     <th><a href="#" class="action" onclick="sort('filters', 'summary.lastInform');return false;">Last inform<%= sort_symbol.html_safe if sort_param == 'summary.lastInform' %></a></th>
     <th></th>
@@ -51,8 +38,8 @@ filters = {
 <% cell_names = {} %>
 <% @devices.each do |device| %>
   <tr>
-    <% param_names.each do |k, v| %>
-      <td><%= param_value(k, device) %></td>
+    <% param_names.each do |label, path| %>
+      <td><%= param_value(path, device) %></td>
     <% end %>
     <td>
       <% cls = 'status-green' if (@now - device['summary.lastInform'].to_time) < 300 %>

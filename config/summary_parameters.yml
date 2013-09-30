@@ -1,0 +1,16 @@
+Serial number: summary.serialNumber
+Manufacturer: summary.manufacturer
+Product class: summary.productClass
+OUI: summary.oui
+Hardware version: summary.hardwareVersion
+Software version: summary.softwareVersion
+MAC: summary.mac
+IP: summary.wanPppConnection.ExternalIPAddress
+WLAN SSID: summary.wlanSsid
+WLAN key: summary.wlanPsk
+WLAN channel: summary.wlanChannel
+Admin password: summary.adminPassword
+Connection username: summary.wanPppConnection.Username
+Connection password: summary.wanPppConnection.Password
+NAT enabled: summary.wanPppConnection.NATEnabled
+
