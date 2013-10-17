@@ -42,12 +42,15 @@ class FilesController < ApplicationController
 
   # POST /files
   def upload
-    uploaded_io = params[:file]
-    file = {}
-    file['name'] = uploaded_io.original_filename
-
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    res = http.put("/files/#{uploaded_io.original_filename}", uploaded_io.read)
+    req = Net::HTTP::Put.new("/files/#{URI.escape(params[:file].original_filename)}")
+    req.body = params[:file].read
+    req['FileType'] = params[:file_type]
+    req['Manufacturer'] = params[:manufacturer]
+    req['ProductClass'] = params[:product_class]
+    req['SoftwareVersion'] = params[:software_version]
+    res = http.request(req)
+
     if res.code == '201'
       flash[:success] = 'File saved'
     else
@@ -61,7 +64,7 @@ class FilesController < ApplicationController
   # DELETE /files/1.json
   def destroy
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    res = http.delete("/files/#{params[:id]}", nil)
+    res = http.delete("/files/#{URI.escape(params[:id])}", nil)
     if res.code == '200'
       flash[:success] = 'File deleted'
     else

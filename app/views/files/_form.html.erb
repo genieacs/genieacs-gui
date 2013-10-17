@@ -1,7 +1,23 @@
 <%= form_tag({:action => :upload}, :method => 'post', :multipart => true) do %>
 <div>
-  <%= label_tag(:file, 'File:') %>
-  <%= file_field_tag(:file) %>
+  <%= label_tag('file_type', 'File type:') %>
+  <%= select_tag('file_type', options_for_select(['1 Firmware Upgrade Image', '2 Web Content', '3 Vendor Configuration File', '4 Tone File', '5 Ringer File'], '1 Firmware Upgrade Image')) %>
+</div>
+<div>
+  <%= label_tag('manufacturer', 'Manufacturer:') %>
+  <%= text_field_tag 'manufacturer' %>
+</div>
+<div>
+  <%= label_tag('product_class', 'Product class:') %>
+  <%= text_field_tag 'product_class' %>
+</div>
+<div>
+  <%= label_tag('software_version', 'Software version:') %>
+  <%= text_field_tag 'software_version' %>
+</div>
+<div>
+  <%= label_tag('file', 'File:') %>
+  <%= file_field_tag('file') %>
 </div>
 <br/>
 <%= submit_tag("Upload") %>
