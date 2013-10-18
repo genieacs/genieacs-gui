@@ -56,6 +56,18 @@ window.addCustomCommandAgeConfiguration = (container, command = '', age = '', fa
   el.hide().fadeIn(300) if fade
 
 
+window.addSoftwareVersionConfiguration = (container, softwareVersion = '', fade = true) ->
+  html = """<div configurationType="software_version">
+      Software version
+      <input type="text" _name="software_version" value="#{softwareVersion}" />
+      <a href="#" class="action" onclick="fadeOutAndRemove($(this).parent());return false;">&nbsp;x&nbsp;</a>
+    </div>"""
+
+  el = $(html)
+  $(container).append(el)
+  el.hide().fadeIn(300) if fade
+
+
 window.addAddTagConfiguration = (container, tag = '', fade = true) ->
   html = """<div configurationType="add_tag">
       Add tag
@@ -132,6 +144,8 @@ window.initConfigurations = (id) ->
         addCustomCommandValueConfiguration(container_selector, c['command'], c['value'])
       when 'custom_command_age'
         addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'])
+      when 'software_version'
+        addSoftwareVersionConfiguration(container_selector, c['software_version'])
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
@@ -144,6 +158,7 @@ window.initConfigurations = (id) ->
       <a href="#" class="action" onclick="addRemoveObjectConfiguration('#{container_selector}');return false;">Remove object</a><br/>
       <a href="#" class="action" onclick="addCustomCommandValueConfiguration('#{container_selector}');return false;">Command value</a><br/>
       <a href="#" class="action" onclick="addCustomCommandAgeConfiguration('#{container_selector}');return false;">Command age</a><br/>
+      <a href="#" class="action" onclick="addSoftwareVersionConfiguration('#{container_selector}');return false;">Software version</a><br/>
     </div>
   """
   f.children('.configurations_selection').html(popup)
@@ -193,5 +208,8 @@ window.updateConfigurations = (id) ->
         command = $(this).children('input[_name="command"]').val()
         age = $(this).children('input[_name="age"]').val()
         configurations.push({type: 'custom_command_age', command: command, age: age})
+      when 'software_version'
+        softwareVersion = $(this).children('input[_name="software_version"]').val()
+        configurations.push({type: 'software_version', software_version: softwareVersion})
   )
   $("##{id} > input[name=configurations]").attr('value', JSON.stringify(configurations))
