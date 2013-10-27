@@ -141,11 +141,11 @@ window.initConfigurations = (id) ->
       when 'delete_object'
         addRemoveObjectConfiguration(container_selector, c['name'], c['object'], false)
       when 'custom_command_value'
-        addCustomCommandValueConfiguration(container_selector, c['command'], c['value'])
+        addCustomCommandValueConfiguration(container_selector, c['command'], c['value'], false)
       when 'custom_command_age'
-        addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'])
+        addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'], false)
       when 'software_version'
-        addSoftwareVersionConfiguration(container_selector, c['software_version'])
+        addSoftwareVersionConfiguration(container_selector, c['software_version'], false)
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
