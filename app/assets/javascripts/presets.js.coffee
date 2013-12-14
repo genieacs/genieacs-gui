@@ -141,11 +141,11 @@ window.initConfigurations = (id) ->
       when 'delete_object'
         addRemoveObjectConfiguration(container_selector, c['name'], c['object'], false)
       when 'custom_command_value'
-        addCustomCommandValueConfiguration(container_selector, c['command'], c['value'])
+        addCustomCommandValueConfiguration(container_selector, c['command'], c['value'], false)
       when 'custom_command_age'
-        addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'])
+        addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'], false)
       when 'software_version'
-        addSoftwareVersionConfiguration(container_selector, c['software_version'])
+        addSoftwareVersionConfiguration(container_selector, c['software_version'], false)
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
@@ -178,14 +178,6 @@ window.updateConfigurations = (id) ->
         name = $(this).children('input[_name="name"]').val()
         age = $(this).children('input[_name="age"]').val()
         configurations.push({type: 'age', name: name, age: age})
-      when 'custom_parameter_value'
-        command = $(this).children('input[_name="command"]').val().trim()
-        value = $(this).children('input[_name="value"]').val().trim()
-        configurations.push({type: 'custom_parameter_value', command: command, value: value})
-      when 'custom_parameter_age'
-        command = $(this).children('input[_name="command"]').val()
-        age = $(this).children('input[_name="age"]').val()
-        configurations.push({type: 'custom_command_age', command: command, age: age})
       when 'add_tag'
         tag = $(this).children('input[_name="tag"]').val()
         configurations.push({type: 'add_tag', tag: tag})
