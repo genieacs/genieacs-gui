@@ -37,11 +37,12 @@ class DevicesController < ApplicationController
   end
 
   def find_devices(query, skip = 0, limit = 10, sort = nil)
+    projection = ['_lastInform'] + Rails.configuration.index_parameters.values
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'skip' => skip,
       'limit' => limit,
-      'projection' => 'summary',
+      'projection' => projection.join(','),
     }
     q['sort'] = ActiveSupport::JSON.encode(sort) if sort
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
@@ -85,7 +86,7 @@ class DevicesController < ApplicationController
     @device_params = flatten_params(@device['InternetGatewayDevice'])
     @files = FilesController.find_files({})
     @tasks = get_device_tasks(params[:id])
-    mac = @device['summary.mac']['_value'].gsub(':', '') rescue nil
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @device }
