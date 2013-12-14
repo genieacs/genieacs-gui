@@ -25,14 +25,19 @@ $(function() {
 
 <div class="summary">
 <% for k,v in Rails.configuration.summary_parameters %>
-<p>
-  <strong><%= k %>:</strong>
-  <%= param_value(v, @device) %>
-  <% if (p = get_param(v, @device)) != nil and p['_writable'] %>
-  &mdash;
-  <a href="#" onclick="editParam('<%= v %>', '<%= p['_type'] %>', '<%= p['_value'] %>');return false;">Edit</a>
+  <% if v.instance_of?(String) %>
+  <p>
+    <strong><%= k %>:</strong>
+    <%= param_value(v, @device) %>
+    <% if (p = get_param(v, @device)) != nil and p['_writable'] %>
+    &mdash;
+    <a href="#" onclick="editParam('<%= v %>', '<%= p['_type'] %>', '<%= p['_value'] %>');return false;">Edit</a>
+    <% end %>
+  </p>
+  <% else %>
+    <h2><%= k %></h2>
+    <%= render partial: 'object_table', locals: {params: v} %>
   <% end %>
-</p>
 <% end %>
 </div>
 

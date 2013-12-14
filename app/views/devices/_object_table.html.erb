@@ -1,0 +1,26 @@
+<% object = get_param(params['_object'], @device) %>
+<table class="records">
+<tr>
+<% for k, v in params %>
+  <% next if k[0] == '_' %>
+  <th><%= k %></th>
+<% end %>
+</tr>
+
+<% for k, v in object %>
+  <% next if k[0] == '_' %>
+  <tr>
+  <% for k2, v2 in params %>
+    <% next if k2[0] == '_' %>
+    <td>
+      <%= param_value("#{params['_object']}.#{k}.#{v2}", @device) rescue '' %>
+      <% if v[v2]['_writable'] %>
+      &mdash;
+      <a href="#" onclick="editParam('<%= "#{params['_object']}.#{k}.#{v2}" %>', '<%= v[v2]['_type'] %>', '<%= v[v2]['_value'] %>');return false;">Edit</a>
+      <% end %>
+    </td>
+  <% end %>
+  </tr>
+<% end %>
+</table>
+

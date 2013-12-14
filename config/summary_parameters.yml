@@ -13,4 +13,8 @@ Admin password: summary.adminPassword
 Connection username: summary.wanPppConnection.Username
 Connection password: summary.wanPppConnection.Password
 NAT enabled: summary.wanPppConnection.NATEnabled
-
+Hosts:
+    _object: InternetGatewayDevice.LANDevice.1.Hosts.Host
+    Host name: HostName
+    IP: IPAddress
+    MAC: MACAddress

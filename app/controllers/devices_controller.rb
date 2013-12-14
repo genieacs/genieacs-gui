@@ -94,7 +94,22 @@ class DevicesController < ApplicationController
 
   def update
     if params.include? 'refresh_summary'
-      task = {'name' => 'getParameterValues', 'parameterNames' => ['summary']}
+      parameterNames = []
+      objectNames = []
+      for k, v in Rails.configuration.summary_parameters
+        if v.instance_of?(String)
+          parameterNames << v
+        else
+          objectNames << v['_object']
+        end
+      end
+
+      for o in objectNames
+        task = {'name' => 'refreshObject', 'objectName' => o}
+        http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+        res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
+      end
+      task = {'name' => 'getParameterValues', 'parameterNames' => parameterNames}
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
       res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))
 
