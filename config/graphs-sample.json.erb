@@ -1,0 +1,25 @@
+<%
+threshold_green = (Time.now - (60 * 10))
+threshold_yellow = (Time.now - (60 * 60 * 24))
+%>
+{
+  "online_devices" : {
+    "all_devices" : [
+      {
+        "label" : "Online now",
+        "color" : "#5e5",
+        "query" : {"_lastInform" : {"$gt" : "<%= threshold_green %>"}}
+      },
+      {
+        "label" : "Past 24 hours",
+        "color" : "#ee5",
+        "query" : {"_lastInform" : {"$lt" : "<%= threshold_green %>", "$gt" : "<%= threshold_yellow %>"}}
+      },
+      {
+        "label" : "Others",
+        "color" : "#e55",
+        "query" : {"_lastInform" : {"$lt" : "<%= threshold_yellow %>"}}
+      }
+    ]
+  }
+}

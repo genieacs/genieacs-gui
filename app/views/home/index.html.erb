@@ -1,32 +1,23 @@
-<%
-  online = [
-    {
-      'label' => 'Online now',
-      'color' => '#5e5',
-      'data' => @online_green_count,
-      'href' => "/devices?query=#{u(ActiveSupport::JSON.encode(@online_green_query))}"
-    },
-    {
-      'label' => 'Past 24 hours',
-      'color' => '#ee5',
-      'data' => @online_yellow_count,
-      'href' => "/devices?query=#{u(ActiveSupport::JSON.encode(@online_yellow_query))}"
-    },
-    {
-      'label' => 'Others',
-      'color' => '#e55',
-      'data' => @online_red_count,
-      'href' => "/devices?query=#{u(ActiveSupport::JSON.encode(@online_red_query))}"
-    },
-  ]
-%>
+<% @graphs.each do |group_name, group_graphs| %>
+<h1><%= group_name.humanize %></h1>
 <table style="margin-left:auto;margin-right:auto;">
   <tr>
-    <td style="padding:0 40px;"><h2 style="text-align:center;">Online devices</h2><div id="online"></div></td>
+  <% group_graphs.each do |graph_name, graph| %>
+    <td style="padding:0 40px;">
+      <h2 style="text-align:center;"><%= graph_name.humanize %></h2>
+      <div id="<%= group_name %>_<%= graph_name %>"></div>
+    </td>
+  <% end %>
   </tr>
 </table>
+<% end %>
 <script type="text/javascript">
 $(function() {
-  pieChart('online', 200, <%= ActiveSupport::JSON.encode(online).html_safe %>);
+<% @graphs.each do |group_name, group_graphs| %>
+  <% group_graphs.each do |graph_name, graph| %>
+  pieChart("<%= group_name %>_<%= graph_name %>", 200, <%= ActiveSupport::JSON.encode(graph).html_safe %>);
+  <% end %>
+<% end %>
 });
 </script>
+
