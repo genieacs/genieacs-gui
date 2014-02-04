@@ -84,7 +84,9 @@ class DevicesController < ApplicationController
   def show
     @device = get_device(params[:id])
     @device_params = flatten_params(@device['InternetGatewayDevice'])
-    @files = FilesController.find_files({})
+    @files = FilesController.find_files({
+      'metadata.manufacturer' => @device['_deviceId']['_Manufacturer'],
+      'metadata.productClass' => @device['_deviceId']['_ProductClass']})
     @tasks = get_device_tasks(params[:id])
 
     respond_to do |format|
