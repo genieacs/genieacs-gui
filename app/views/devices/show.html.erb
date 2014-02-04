@@ -95,10 +95,10 @@ $(function() {
 <div><a id="reboot" href="#" onclick="reboot();return false;">Reboot</a></div>
 <div><a id="factory-reset" href="#" onclick="factoryReset();return false;">Factory reset</a></div>
 <div class="filter_selection">
-  <a id="firmware-upgrade" href="#">Firmware upgrade &raquo;</a>
+  <a id="push-file" href="#">Push file &raquo;</a>
   <div class="popup">
     <% for f in @files %>
-    <a href="#" onclick="firmwareUpgrade('<%= f['_id'] %>', '<%= f['filename'] %>');return false;"><%= f['filename'] %></a><br/>
+    <a href="#" onclick="pushFile('<%= f['_id'] %>', '<%= f['filename'] %>');return false;"><%= f['filename'] %> (<%= f['metadata']['fileType'] %>)</a><br/>
     <% end %>
   </div>
 </div>

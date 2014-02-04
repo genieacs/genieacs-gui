@@ -22,7 +22,7 @@ getTaskFriendlyName = (task) ->
     when 'factoryReset'
       return 'Factory reset'
     when 'download'
-      return "Firmware upgrade (#{task.filename})"
+      return "Push file (#{task.filename})"
     when 'addObject'
       return "Add to #{getFriendlyParamNames([task.objectName])}"
     when 'deleteObject'
@@ -117,7 +117,7 @@ window.factoryReset = () ->
   task.name = 'factoryReset'
   addPending(task)
 
-window.firmwareUpgrade = (file_id, filename) ->
+window.pushFile = (file_id, filename) ->
   task = {}
   task.name = 'download'
   task.file = file_id
