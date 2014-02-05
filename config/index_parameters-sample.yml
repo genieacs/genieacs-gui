@@ -2,7 +2,6 @@ Serial number: summary.serialNumber
 Product class: summary.productClass
 Software version: summary.softwareVersion
 MAC: summary.mac
-IP: summary.wanPppConnection.ExternalIPAddress
+IP: summary.ip
 WLAN SSID: summary.wlanSsid
-Connection username: summary.wanPppConnection.Username
 
