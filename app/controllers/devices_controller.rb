@@ -18,7 +18,7 @@ class DevicesController < ApplicationController
 
   def get_device(id)
     query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => URI.escape(id)}),
+      'query' => ActiveSupport::JSON.encode({'_id' => id}),
     }
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
     res = http.get("/devices/?#{query.to_query}")
@@ -28,7 +28,7 @@ class DevicesController < ApplicationController
 
   def get_device_tasks(device_id)
     query = {
-      'query' => ActiveSupport::JSON.encode({'device' => URI.escape(device_id)}),
+      'query' => ActiveSupport::JSON.encode({'device' => device_id}),
       'sort' => ActiveSupport::JSON.encode({'timestamp' => 1})
     }
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
