@@ -174,7 +174,8 @@ window.addActions = () ->
       actions += "<a href=\"#\" onclick=\"refreshObject('#{name}');return false;\">Refresh</a>"
     else
       if isWritable
-        actions += "<a href=\"#\" onclick=\"editParam('#{name}', '#{type}');return false;\">Edit</a>"
+        defaultValue = this.getAttribute('value')
+        actions += "<a href=\"#\" onclick=\"editParam('#{name}', '#{type}', '#{defaultValue}');return false;\">Edit</a>"
       actions += "<a href=\"#\" onclick=\"refreshParam('#{name}');return false;\">Refresh</a>"
 
     $(this).prepend("<span class=\"actions\">#{actions}</span>")
