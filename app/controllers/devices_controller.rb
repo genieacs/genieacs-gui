@@ -100,7 +100,7 @@ class DevicesController < ApplicationController
       parameterNames = []
       objectNames = []
       for k, v in Rails.configuration.summary_parameters
-        if v.instance_of?(String)
+        if v.is_a?(String)
           parameterNames << v
         else
           objectNames << v['_object']
