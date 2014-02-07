@@ -4,3 +4,4 @@ GenieacsGui::Application.config.index_parameters = YAML.load_file('config/index_
 GenieacsGui::Application.config.device_filters = {'Last inform' => 'summary.lastInform', 'Tag' => '_tags'}
 GenieacsGui::Application.config.device_filters.merge!(GenieacsGui::Application.config.summary_parameters)
 GenieacsGui::Application.config.device_filters.merge!(GenieacsGui::Application.config.index_parameters)
+GenieacsGui::Application.config.device_filters.delete_if {|key, value| not value.is_a?(String)}
