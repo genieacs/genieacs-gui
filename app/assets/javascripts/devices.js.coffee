@@ -173,7 +173,7 @@ window.addActions = () ->
         actions += "<a href=\"#\" onclick=\"deleteObject('#{name}');return false;\">Delete</a>"
       actions += "<a href=\"#\" onclick=\"refreshObject('#{name}');return false;\">Refresh</a>"
     else
-      if isWritable
+      if isWritable and type
         defaultValue = this.getAttribute('value')
         actions += "<a href=\"#\" onclick=\"editParam('#{name}', '#{type}', '#{defaultValue}');return false;\">Edit</a>"
       actions += "<a href=\"#\" onclick=\"refreshParam('#{name}');return false;\">Refresh</a>"

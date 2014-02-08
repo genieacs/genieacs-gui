@@ -84,7 +84,7 @@ $(function() {
   <input class="search" type="search" placeholder="Type to search..." />
   <ul class="list">
     <% for p in @device_params %>
-    <li name="<%= "InternetGatewayDevice.#{p['_path']}" %>" value="<%= p['_value'] %>" type="<%= p['_type'] %>" writable="<%= p['_writable']? 1 : 0 %>" <%= 'instance' if p['_instance'] %> <%= 'object' if p['_object'] or not p.has_key?('_value') %> >
+    <li name="<%= "InternetGatewayDevice.#{p['_path']}" %>" value="<%= p['_value'] %>" type="<%= p['_type'] %>" writable="<%= p['_writable']? 1 : 0 %>" <%= 'instance' if p['_instance'] %> <%= 'object' if p['_object'] %> >
       <span class="param-path"><%= "InternetGatewayDevice.#{p['_path']}" %></span><% if p.include?('_value') %>: <span class="param-value"><%= param_value("InternetGatewayDevice.#{p['_path']}", @device) %></span><% end %>
     </li>
     <% end %>
