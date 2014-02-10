@@ -14,6 +14,18 @@ $(function() {
 </script>
 
 <h1>Device: <%= @device['_id'] %></h1>
+
+<div class="tags">
+<% tags = @device['_tags'] || [] %>
+<strong>Tags:</strong>
+<% tags.each do |t| %>
+<span class="tag"><%= t %>
+  <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
+</span>
+<% end %>
+<a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
+</div>
+
 <p>
   <b>Last inform:</b>
   <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
@@ -40,17 +52,6 @@ $(function() {
   <% end %>
 <% end %>
 </div>
-
-<% tags = @device['_tags'] || [] %>
-<% if tags %>
-<h2>Tags</h2>
-<% tags.each do |t| %>
-<span class="tag"><%= t %>
-  <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
-</span>
-<% end %>
-<a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
-<% end %>
 
 <h2>Task queue</h2>
 <table id="task-queue" class="records">

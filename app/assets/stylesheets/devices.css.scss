@@ -118,6 +118,13 @@
   }
 }
 
+.tags {
+  margin-bottom: 10px;
+  strong {
+    color: $color4;
+  }
+}
+
 #map {
   float: right;
   width: 600px;
