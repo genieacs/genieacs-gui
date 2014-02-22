@@ -39,6 +39,14 @@ module DevicesHelper
       val = param
     end
 
+    if Rails.configuration.parameter_renderers.has_key?(path)
+      begin
+        val = ParameterRenderers::send(Rails.configuration.parameter_renderers[path], val)
+      rescue => e
+        logger.error("Exception in renderer '#{Rails.configuration.parameter_renderers[path]}' for value '#{val}': #{e}")
+      end
+    end
+
     if not classes.empty?
       cls = 'class="' + classes.join(' ') + '"'
     end

@@ -5,3 +5,9 @@ GenieacsGui::Application.config.device_filters = {'Last inform' => 'summary.last
 GenieacsGui::Application.config.device_filters.merge!(GenieacsGui::Application.config.summary_parameters)
 GenieacsGui::Application.config.device_filters.merge!(GenieacsGui::Application.config.index_parameters)
 GenieacsGui::Application.config.device_filters.delete_if {|key, value| not value.is_a?(String)}
+
+module ParameterRenderers
+  Dir['config/parameter_renderers/*.rb'].each {|file| load "./#{file}" }
+end
+GenieacsGui::Application.config.parameter_renderers = YAML.load_file('config/parameter_renderers.yml')
+
