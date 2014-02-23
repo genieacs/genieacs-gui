@@ -8,7 +8,6 @@ $(function() {
   };
 
   var featureList = new List('device-params', options);
-  addActions();
   refreshPending();
 });
 </script>
@@ -85,8 +84,30 @@ $(function() {
   <input class="search" type="search" placeholder="Type to search..." />
   <ul class="list">
     <% for p in @device_params %>
-    <li name="<%= "InternetGatewayDevice.#{p['_path']}" %>" value="<%= p['_value'] %>" type="<%= p['_type'] %>" writable="<%= p['_writable']? 1 : 0 %>" <%= 'instance' if p['_instance'] %> <%= 'object' if p['_object'] %> >
-      <span class="param-path"><%= "InternetGatewayDevice.#{p['_path']}" %></span><% if p.include?('_value') %>: <span class="param-value"><%= param_value("InternetGatewayDevice.#{p['_path']}", @device) %></span><% end %>
+    <li>
+      <span class="param-path"><%= p['_path'] %></span>
+      <% if p.has_key?('_value')%>
+        <span class="param-value"><%= param_value(p['_path'], @device) %></span>
+      <% end %>
+      <span class="actions">
+        <% if p.has_key?('_object') %>
+          <% if p['_writable'] %>
+            <a href="#" onclick="addObject('<%= p['_path']%>');return false;">Add</a>
+          <% end %>
+          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
+        <% elsif p.has_key?('_instance') %>
+          <% if p['_writable'] %>
+            <a href="#" onclick="deleteObject('<%= p['_path']%>');return false;">Delete</a>
+          <% end %>
+          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
+        <% else %>
+          <% if p['_writable'] %>
+            <% options = Rails.configuration.parameters_edit[p['_path']] %>
+            <a href="#" onclick='editParam("<%= p['_path']%>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
+          <% end %>
+          <a href="#" onclick="refreshParam('<%= p['_path']%>');return false;">Refresh</a>
+        <% end %>
+      </span>
     </li>
     <% end %>
   </ul>
@@ -106,9 +127,11 @@ $(function() {
 </p>
 
 <div id="pending">
-<h>Pending tasks</h>
+  <h>Pending tasks</h>
   <ul>
   </ul>
-  <a class="button" href="#" onclick="commitPending();return false;">Commit</a>
-  <a href="#" onclick="clearPending();return false;">Cancel</a>
+  <div class="buttons">
+    <a class="button" href="#" onclick="commitPending();return false;">Commit</a>
+    <a href="#" onclick="clearPending();return false;">Cancel</a>
+  </div>
 </div>

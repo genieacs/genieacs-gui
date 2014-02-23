@@ -1,0 +1,6 @@
+InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode:
+    description: WPA authentication mode
+    options:
+        - PSKAuthentication
+        - EAPAuthentication
+

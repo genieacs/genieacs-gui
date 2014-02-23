@@ -2,10 +2,10 @@ class DevicesController < ApplicationController
   require 'net/http'
   require 'json'
 
-  def flatten_params(params, prefix = nil)
+  def flatten_params(params, prefix = '')
     output = []
     for n, v in params
-      next if n.start_with?('_')
+      next if n.start_with?('_') or v.is_a?(String)
       v['_path'] = "#{prefix}#{n}"
       output << v
 
@@ -83,7 +83,7 @@ class DevicesController < ApplicationController
   # GET /devices/1.json
   def show
     @device = get_device(params[:id])
-    @device_params = flatten_params(@device['InternetGatewayDevice'])
+    @device_params = flatten_params(@device)
     @files = FilesController.find_files({
       'metadata.manufacturer' => @device['_deviceId']['_Manufacturer'],
       'metadata.productClass' => @device['_deviceId']['_ProductClass']})

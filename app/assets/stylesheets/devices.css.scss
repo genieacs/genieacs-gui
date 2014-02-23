@@ -1,8 +1,8 @@
 @import "base";
 
 #pending {
-  position: absolute;
-  top: 100px;
+  position: fixed;
+  top: 20px;
   right: 20px;
   width: 360px;
   border: 2px solid $color1;
@@ -11,6 +11,10 @@
   border-top-right-radius: 6px;
   box-shadow:0px 0px 5px #333;
   padding: 5px;
+
+  .buttons {
+    text-align: center;
+  }
   h {
     font-weight: bold;
   }
@@ -129,4 +133,39 @@
   float: right;
   width: 600px;
   height: 400px;
+}
+
+.modal-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+
+  .modal {
+    background-color: white;
+    border: 2px solid $color1;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: rgba(black, 0.2) 0 0 10px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    margin-top: -75px;
+    margin-left: -200px;
+    word-wrap: break-word;
+
+    p {
+      margin-bottom: 0.5em;
+    }
+
+    .buttons {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
 }

@@ -11,3 +11,5 @@ module ParameterRenderers
 end
 GenieacsGui::Application.config.parameter_renderers = YAML.load_file('config/parameter_renderers.yml')
 
+GenieacsGui::Application.config.parameters_edit = YAML.load_file('config/parameters_edit.yml')
+

@@ -124,61 +124,13 @@ window.pushFile = (file_id, filename) ->
   task.filename = filename
   addPending(task)
 
-window.editParam = (paramName, paramType, defaultValue) ->
-  switch paramType
-    when 'xsd:boolean'
-      v = window.prompt("#{paramName} (Allowed: true, false)", defaultValue)
-      return if v == null
-
-      if v == 'true'
-        val = true
-      else if v == 'false'
-        val = false
-      else
-        alert('Invalid value')
-        return
-    when 'xsd:int', 'xsd:unsignedInt'
-      v = window.prompt("#{paramName} (Allowed: integer number)", defaultValue)
-      return if v == null
-      val = parseInt(v)
-      if isNaN(val)
-        alert('Invalid value')
-        return
-    when 'xsd:string'
-      val = window.prompt("#{paramName}", defaultValue)
-      return if val == null
-    else
-      return
-
-  task = {}
-  task.name = 'setParameterValues'
-  task.parameterValues = [[paramName, val]]
-  addPending(task)
-
-window.addActions = () ->
-  $("\#device-params li").each( (index) ->
-    name = this.getAttribute('name')
-    isWritable = parseInt(this.getAttribute('writable'))
-    type = this.getAttribute('type')
-    isObject = this.getAttribute('object')?
-    isInstance = this.getAttribute('instance')?
-    actions = ""
-
-    if isObject
-      if isWritable
-        actions += "<a href=\"#\" onclick=\"addObject('#{name}');return false;\">Add</a>"
-      actions += "<a href=\"#\" onclick=\"refreshObject('#{name}');return false;\">Refresh</a>"
-    else if isInstance
-      if isWritable
-        actions += "<a href=\"#\" onclick=\"deleteObject('#{name}');return false;\">Delete</a>"
-      actions += "<a href=\"#\" onclick=\"refreshObject('#{name}');return false;\">Refresh</a>"
-    else
-      if isWritable and type
-        defaultValue = this.getAttribute('value')
-        actions += "<a href=\"#\" onclick=\"editParam('#{name}', '#{type}', '#{defaultValue}');return false;\">Edit</a>"
-      actions += "<a href=\"#\" onclick=\"refreshParam('#{name}');return false;\">Refresh</a>"
-
-    $(this).prepend("<span class=\"actions\">#{actions}</span>")
+window.editParam = (paramName, paramType, defaultValue, options) ->
+  prompt(paramName, paramType, defaultValue, options, (val) ->
+    return if val == null
+    task = {}
+    task.name = 'setParameterValues'
+    task.parameterValues = [[paramName, val]]
+    addPending(task)
   )
 
 window.addTag = () ->
@@ -210,3 +162,56 @@ window.sort = (container, param) ->
     f.children('input[name=sort]').attr('value', param)
   
   f.submit()
+
+prompt = (paramName, paramType, defaultValue, options, callback) ->
+  modalWrapper = $('<div class="modal-wrapper"></div>')
+  $('body').append(modalWrapper)
+
+  modal = $('<div class="modal"></div>')
+  modalWrapper.append(modal)
+
+  modal.append("<p><strong>Editing</strong> <i>#{paramName}</i></p>")
+  if options?.description?
+    modal.append("<p>#{options.description}</p>")
+
+  switch paramType
+    when 'xsd:boolean'
+      input = $('<select><option value="true">true</option><option value="false">false</option></select>')
+      input.val(String(defaultValue))
+    when 'xsd:int', 'xsd:unsignedInt'
+      input = $("<input type=\"number\" value=\"#{defaultValue}\"/>")
+    else
+      if options?.options?
+        input = $('<select>' + ("<option value='#{o}'>#{o}</option>" for o in options.options).join('') + '</select>')
+      else
+        input = $("<input type=\"text\" value=\"#{defaultValue}\"/>")
+      input.val(defaultValue)
+
+  modal.append(input)
+  input.focus().select()
+
+  buttons = $('<div class="buttons"></div>')
+  modal.append(buttons)
+
+  ok = $('<a href="#" class="button">OK</a>').click(() ->
+    modalWrapper.remove()
+    switch paramType
+      when 'xsd:boolean'
+        val = input.val() == 'true'
+      when 'xsd:int', 'xsd:unsignedInt'
+        val = parseInt(input.val())
+      else
+        val = input.val()
+
+    callback(val)
+    return false
+  )
+
+  cancel = $('<a href="#">Cancel</a>').click(() ->
+    modalWrapper.remove()
+    callback(null)
+    return false
+  )
+
+  buttons.append(ok).append(' ').append(cancel)
+  return false
