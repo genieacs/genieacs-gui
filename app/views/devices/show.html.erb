@@ -42,7 +42,8 @@ $(function() {
     <%= param_value(v, @device) %>
     <% if (p = get_param(v, @device)) != nil and p['_writable'] %>
     &mdash;
-    <a href="#" onclick="editParam('<%= v %>', '<%= p['_type'] %>', '<%= p['_value'] %>');return false;">Edit</a>
+    <% options = Rails.configuration.parameters_edit[p['_path']] %>
+    <a href="#" onclick='editParam("<%= v %>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
     <% end %>
   </p>
   <% else %>
