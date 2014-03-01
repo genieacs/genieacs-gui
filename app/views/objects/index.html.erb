@@ -11,12 +11,12 @@
 <% @objects.each do |object| %>
   <tr>
     <td><%= object['_id'] %></td>
-    <td><%= link_to 'Edit', "/objects/#{object['_id']}/edit" %></td>
-    <td><%= link_to 'Destroy', "/objects/#{object['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Edit', "/objects/#{object['_id']}/edit" if can?(:update, 'objects') %></td>
+    <td><%= link_to 'Destroy', "/objects/#{object['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'objects') %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New object', '/objects/new' %>
+<%= link_to 'New object', '/objects/new' if can?(:create, 'objects') %>

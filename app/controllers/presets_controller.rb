@@ -26,65 +26,75 @@ class PresetsController < ApplicationController
   # GET /presets
   # GET /presets.json
   def index
-    filters = nil
-    
-    skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
+    can?(:read, 'presets') do
+      filters = nil
 
-    @presets = find_presets(filters, skip)
+      skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @presets }
+      @presets = find_presets(filters, skip)
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: @presets }
+      end
     end
   end
 
   # GET /presets/new
   # GET /presets/new.json
   def new
-    @preset = {'precondition' => {}}
+    can?(:create, 'presets') do
+      @preset = {'precondition' => {}}
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @preset }
+      respond_to do |format|
+        format.html # new.html.erb
+        format.json { render json: @preset }
+      end
     end
   end
 
   # GET /presets/1/edit
   def edit
-    @preset = get_preset(params[:id]) || {}
+    can?(:update, 'presets') do
+      @preset = get_preset(params[:id]) || {}
+    end
   end
 
   # PUT /presets/1
   # PUT /presets/1.json
   def update
-    preset = {}
-    preset['name'] = params['name']
-    preset['weight'] = params['weight']
-    preset['precondition'] = ActiveSupport::JSON.decode(params['query'])
-    preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
+    can?(:update, 'presets') do
+      preset = {}
+      preset['name'] = params['name']
+      preset['weight'] = params['weight']
+      preset['precondition'] = ActiveSupport::JSON.decode(params['query'])
+      preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
 
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    res = http.put("/presets/#{preset['name']}", ActiveSupport::JSON.encode(preset))
-    if res.code == '200'
-      flash[:success] = 'Preset saved'
-    else
-      flash[:error] = "Unexpected error (#{res.code})"
+      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      res = http.put("/presets/#{preset['name']}", ActiveSupport::JSON.encode(preset))
+      if res.code == '200'
+        flash[:success] = 'Preset saved'
+      else
+        flash[:error] = "Unexpected error (#{res.code})"
+      end
+
+      redirect_to :action => :index
     end
-
-    redirect_to :action => :index
   end
 
   # DELETE /presets/1
   # DELETE /presets/1.json
   def destroy
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    res = http.delete("/presets/#{params[:id]}", nil)
-    if res.code == '200'
-      flash[:success] = 'Preset deleted'
-    else
-      flash[:error] = "Unexpected error (#{res.code})"
-    end
+    can?(:delete, 'presets') do
+      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      res = http.delete("/presets/#{params[:id]}", nil)
+      if res.code == '200'
+        flash[:success] = 'Preset deleted'
+      else
+        flash[:error] = "Unexpected error (#{res.code})"
+      end
 
-    redirect_to :action => :index
+      redirect_to :action => :index
+    end
   end
 end

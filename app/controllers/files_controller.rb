@@ -17,60 +17,68 @@ class FilesController < ApplicationController
   # GET /files
   # GET /files.json
   def index
-    filters = nil
-    
-    skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
+    can?(:read, 'files') do
+      filters = nil
 
-    @files = FilesController.find_files(filters, skip)
+      skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @files }
+      @files = FilesController.find_files(filters, skip)
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: @files }
+      end
     end
   end
 
   # GET /files/new
   # GET /files/new.json
   def new
-    @file = {}
+    can?(:create, 'files') do
+      @file = {}
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @file }
+      respond_to do |format|
+        format.html # new.html.erb
+        format.json { render json: @file }
+      end
     end
   end
 
   # POST /files
   def upload
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    req = Net::HTTP::Put.new("/files/#{URI.escape(params[:file].original_filename)}")
-    req.body = params[:file].read
-    req['fileType'] = params[:file_type]
-    req['manufacturer'] = params[:manufacturer]
-    req['productClass'] = params[:product_class]
-    req['version'] = params[:version]
-    res = http.request(req)
+    can?(:create, 'files') do
+      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      req = Net::HTTP::Put.new("/files/#{URI.escape(params[:file].original_filename)}")
+      req.body = params[:file].read
+      req['fileType'] = params[:file_type]
+      req['manufacturer'] = params[:manufacturer]
+      req['productClass'] = params[:product_class]
+      req['version'] = params[:version]
+      res = http.request(req)
 
-    if res.code == '201'
-      flash[:success] = 'File saved'
-    else
-      flash[:error] = "Unexpected error (#{res.code})"
+      if res.code == '201'
+        flash[:success] = 'File saved'
+      else
+        flash[:error] = "Unexpected error (#{res.code})"
+      end
+
+      redirect_to :action => :index
     end
-
-    redirect_to :action => :index
   end
 
   # DELETE /files/1
   # DELETE /files/1.json
   def destroy
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-    res = http.delete("/files/#{URI.escape(params[:id])}", nil)
-    if res.code == '200'
-      flash[:success] = 'File deleted'
-    else
-      flash[:error] = "Unexpected error (#{res.code})"
-    end
+    can?(:delete, 'files') do
+      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      res = http.delete("/files/#{URI.escape(params[:id])}", nil)
+      if res.code == '200'
+        flash[:success] = 'File deleted'
+      else
+        flash[:error] = "Unexpected error (#{res.code})"
+      end
 
-    redirect_to :action => :index
+      redirect_to :action => :index
+    end
   end
 end

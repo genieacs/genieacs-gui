@@ -1,3 +1,7 @@
+<%
+can_retry = can?(:update, 'tasks/retry')
+can_delete = can?(:delete, 'tasks')
+%>
 <h1>Listing faults</h1>
 
 <script type="text/javascript">
@@ -46,8 +50,8 @@ filters = {
     <td>
       <%= task['timestamp'] %>
     </td>
-    <td><%= link_to 'Retry', "/faults/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } %></td>
-    <td><%= link_to 'Destroy', "/faults/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Retry', "/faults/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if can_retry %></td>
+    <td><%= link_to 'Destroy', "/faults/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
   </tr>
 <% end %>
 </table>

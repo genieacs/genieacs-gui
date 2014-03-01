@@ -1,20 +1,32 @@
 <ul class="menu">
+  <% if can?(:read, 'home') %>
   <li class="<%= params[:controller] == 'home' ? 'active' : ''%>" >
     <%= link_to 'Home', root_path %>
   </li>
+  <% end %>
+  <% if can?(:read, 'devices') %>
   <li class="<%= params[:controller] == 'devices' ? 'active' : ''%>" >
     <%= link_to 'Devices', devices_path %>
   </li>
+  <% end %>
+  <% if can?(:read, 'tasks') %>
   <li class="<%= params[:controller] == 'faults' ? 'active' : ''%>" >
     <%= link_to 'Faults', faults_path %>
   </li>
+  <% end %>
+  <% if can?(:read, 'presets') %>
   <li class="<%= params[:controller] == 'presets' ? 'active' : ''%>" >
     <%= link_to 'Presets', presets_path %>
   </li>
+  <% end %>
+  <% if can?(:read, 'objects') %>
   <li class="<%= params[:controller] == 'objects' ? 'active' : ''%>" >
     <%= link_to 'Objects', objects_path %>
   </li>
+  <% end %>
+  <% if can?(:read, 'files') %>
   <li class="<%= params[:controller] == 'files' ? 'active' : ''%>" >
     <%= link_to 'Files', files_path %>
   </li>
+  <% end %>
 </ul>

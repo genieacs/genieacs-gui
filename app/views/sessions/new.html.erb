@@ -1,0 +1,12 @@
+<h1>Log in</h1>
+<p>
+<%= form_tag sessions_path do %>
+  <%= label_tag :username, 'Username' %>
+  <%= text_field_tag :username, nil, :autofocus => true %>
+<br/>
+  <%= label_tag :password, 'Password' %>
+  <%= password_field_tag :password %>
+<br/><br/>
+  <%= submit_tag 'Log in' %>
+<% end %>
+</p>

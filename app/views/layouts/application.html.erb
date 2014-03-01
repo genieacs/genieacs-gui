@@ -9,6 +9,11 @@
 <body>
 <div id="header">
   <div id="user_menu" style="float: right; margin: 5px;">
+    <% if logged_in? %>
+      <%= current_user %> | <%= link_to 'Log out', log_out_path %>
+    <% else %>
+      <%= link_to 'Log in', log_in_path %>
+    <% end %>
   </div>
   <div class="app-name">GenieACS</div>
   <%= render 'layouts/menu' %>

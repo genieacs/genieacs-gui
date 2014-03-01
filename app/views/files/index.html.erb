@@ -17,11 +17,11 @@
     <td><%= file['metadata']['manufacturer'] rescue '' %></td>
     <td><%= file['metadata']['productClass'] rescue '' %></td>
     <td><%= file['metadata']['version'] rescue '' %></td>
-    <td><%= link_to 'Destroy', "/files/#{file['filename']}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Destroy', "/files/#{file['filename']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'files') %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New File', '/files/new' %>
+<%= link_to 'New File', '/files/new' if can?(:create, 'files') %>

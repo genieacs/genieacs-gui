@@ -1,3 +1,6 @@
+<%
+can_edit_parameters = can?(:update, 'devices/parameters')
+%>
 <script type="text/javascript">
 var pending = {};
 
@@ -19,19 +22,25 @@ $(function() {
 <strong>Tags:</strong>
 <% tags.each do |t| %>
 <span class="tag"><%= t %>
+  <% if can?(:delete, 'devices/tags') %>
   <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
+  <% end %>
 </span>
 <% end %>
+<% if can?(:create, 'devices/tags') %>
 <a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
+<% end %>
 </div>
 
 <p>
   <b>Last inform:</b>
   <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
   <span class="<%= cls %>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
+  <% if can?(:read, 'devices/refresh_summary') %>
   &mdash;
   <a href="#" class="action" onclick="refreshSummary(); return false;">Refresh</a>,
   <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] rescue '' %>');return false;">Ping</a>
+  <% end %>
 </p>
 
 <div class="summary">
@@ -40,7 +49,7 @@ $(function() {
   <p>
     <strong><%= k %>:</strong>
     <%= param_value(v, @device) %>
-    <% if (p = get_param(v, @device)) != nil and p['_writable'] %>
+    <% if (p = get_param(v, @device)) != nil and p['_writable'] and can_edit_parameters %>
     &mdash;
     <% options = Rails.configuration.parameters_edit[p['_path']] %>
     <a href="#" onclick='editParam("<%= v %>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
@@ -53,6 +62,7 @@ $(function() {
 <% end %>
 </div>
 
+<% if can?(:read, 'tasks') %>
 <h2>Task queue</h2>
 <table id="task-queue" class="records">
   <tr>
@@ -69,8 +79,12 @@ $(function() {
   <td><%= t['retries'].to_i %></td>
   <td><%= task_fault(t) %></td>
   <td style="text-align:right;">
+    <% if can?(:update, 'tasks/retry') %>
     <%= link_to 'Retry', "/faults/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
+    <% end %>
+    <% if can?(:delete, 'tasks') %>
     <%= link_to 'Destroy', "/faults/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </td>
   </tr>
   <% end %>
@@ -78,8 +92,11 @@ $(function() {
   <tr class="no-records"><td colspan="0">Empty</td></tr>
   <% end %>
 </table>
+<% end %>
 
 <div style="clear:both;"></div>
+
+<% if can?(:read, 'devices/parameters') %>
 <h2>Device parameters</h2>
 <div id="device-params">
   <input class="search" type="search" placeholder="Type to search..." />
@@ -102,7 +119,7 @@ $(function() {
           <% end %>
           <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
         <% else %>
-          <% if p['_writable'] %>
+          <% if p['_writable'] and can_edit_parameters %>
             <% options = Rails.configuration.parameters_edit[p['_path']] %>
             <a href="#" onclick='editParam("<%= p['_path']%>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
           <% end %>
@@ -114,9 +131,16 @@ $(function() {
   </ul>
 </div>
 <br/>
+<% end %>
+
 <p>
+<% if can?(:update, 'devices/reboot') %>
 <div><a id="reboot" href="#" onclick="reboot();return false;">Reboot</a></div>
+<% end %>
+<% if can?(:update, 'devices/fectory_reset') %>
 <div><a id="factory-reset" href="#" onclick="factoryReset();return false;">Factory reset</a></div>
+<% end %>
+<% if can?(:update, 'devices/download') %>
 <div class="filter_selection">
   <a id="push-file" href="#">Push file &raquo;</a>
   <div class="popup">
@@ -126,6 +150,7 @@ $(function() {
   </div>
 </div>
 </p>
+<% end %>
 
 <div id="pending">
   <h>Pending tasks</h>
