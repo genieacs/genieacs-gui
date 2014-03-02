@@ -76,7 +76,10 @@ class ApplicationController < ActionController::Base
       permissions = []
       roles.each do |role|
         if Rails.configuration.permissions.has_key?(role)
-          permissions.concat(Rails.configuration.permissions[role])
+          # do not concat directly to avoid modifying original permissions during normalization
+          Rails.configuration.permissions[role].map do |a|
+            permissions << a.dup
+          end
         end
       end
       normalize_permissions(permissions)

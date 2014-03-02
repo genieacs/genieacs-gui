@@ -12,8 +12,8 @@
   <tr>
     <td><%= preset['_id'] %></td>
     <td><%= link_to 'Devices', "/devices?query=#{URI.escape(ActiveSupport::JSON.encode(preset['precondition']))}" %></td>
-    <td><%= link_to 'Edit', "/presets/#{preset['_id']}/edit" if can(:update, 'presets') %></td>
-    <td><%= link_to 'Destroy', "/presets/#{preset['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can(:delete, 'presets') %></td>
+    <td><%= link_to 'Edit', "/presets/#{preset['_id']}/edit" if can?(:update, 'presets') %></td>
+    <td><%= link_to 'Destroy', "/presets/#{preset['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'presets') %></td>
   </tr>
 <% end %>
 </table>
