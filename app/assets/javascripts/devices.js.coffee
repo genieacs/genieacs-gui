@@ -215,3 +215,8 @@ prompt = (paramName, paramType, defaultValue, options, callback) ->
 
   buttons.append(ok).append(' ').append(cancel)
   return false
+
+$(document).keydown((e) ->
+  if e.keyCode == 27
+    $('.modal-wrapper').remove()
+)
