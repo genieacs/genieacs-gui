@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def create
     if (Rails.configuration.users[params[:username]]['password'] == params[:password] rescue false)
       session[:username] = params[:username]
-      redirect_to root_path
+      redirect_to :back
     else
       flash.now.alert = 'Invalid username or password'
       render 'new'
