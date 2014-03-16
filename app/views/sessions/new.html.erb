@@ -1,6 +1,7 @@
 <h1>Log in</h1>
 <p>
-<%= form_tag sessions_path do %>
+<%= form_tag log_in_path do %>
+  <%= hidden_field_tag :url, params[:url] || request.original_url %>
   <%= label_tag :username, 'Username' %>
   <%= text_field_tag :username, nil, :autofocus => true %>
 <br/>
