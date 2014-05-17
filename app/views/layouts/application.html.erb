@@ -15,7 +15,7 @@
       <%= link_to 'Log in', log_in_path %>
     <% end %>
   </div>
-  <div class="app-name">GenieACS</div>
+  <%= image_tag('logo.png', class: 'logo') %>
   <%= render 'layouts/menu' %>
 </div>
 
@@ -26,6 +26,5 @@
 
 <%= yield %>
 </div>
-<div id="footer">&copy;2013 genieacs.com</div>
 </body>
 </html>
