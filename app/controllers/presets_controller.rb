@@ -57,6 +57,10 @@ class PresetsController < ApplicationController
   def edit
     can?(:update, 'presets') do
       @preset = get_preset(params[:id]) || {}
+      # For backward compatibility
+      if not @preset['precondition'].is_a?(String)
+        @preset['precondition'] = @preset['precondition'].to_json
+      end
     end
   end
 
@@ -67,7 +71,7 @@ class PresetsController < ApplicationController
       preset = {}
       preset['name'] = params['name']
       preset['weight'] = params['weight']
-      preset['precondition'] = ActiveSupport::JSON.decode(params['query'])
+      preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
 
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
