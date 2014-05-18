@@ -57,10 +57,6 @@ class PresetsController < ApplicationController
   def edit
     can?(:update, 'presets') do
       @preset = get_preset(params[:id]) || {}
-      # For backward compatibility
-      if not @preset['precondition'].is_a?(String)
-        @preset['precondition'] = @preset['precondition'].to_json
-      end
     end
   end
 

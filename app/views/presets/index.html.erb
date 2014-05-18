@@ -9,11 +9,12 @@
   </tr>
 
 <% @presets.each do |preset| %>
+  <% precondition = preset['precondition'].is_a?(Hash) ? preset['precondition'].to_json : preset['precondition'] %>
   <tr>
     <td><%= preset['_id'] %></td>
-    <td><%= link_to 'Devices', "/devices?query=#{URI.escape(preset['precondition'])}" %></td>
-    <td><%= link_to 'Edit', "/presets/#{preset['_id']}/edit" if can?(:update, 'presets') %></td>
-    <td><%= link_to 'Destroy', "/presets/#{preset['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'presets') %></td>
+    <td><%= link_to 'Devices', {controller: 'devices', action: 'index', query: precondition || '{}'} %></td>
+    <td><%= link_to 'Edit', {controller: 'presets', action: 'edit', id: preset['_id']} if can?(:update, 'presets') %></td>
+    <td><%= link_to 'Destroy', {controller: 'presets', action: 'destroy', id: preset['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'presets') %></td>
   </tr>
 <% end %>
 </table>

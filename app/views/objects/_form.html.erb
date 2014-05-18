@@ -7,7 +7,7 @@
 
 <h2>Parameters</h2>
 <div id="parameters">
-  <input type="hidden" name="parameters" value='<%= JSON.generate(@object) rescue '{}' %>' />
+  <input type="hidden" name="parameters" value='<%= (@object || {}).to_json %>' />
   <table class="parameters_container records">
     <thead>
       <tr><th>Key</th><th>Parameter</th><th>Value</th></tr>

@@ -13,7 +13,7 @@ filters = {
 </script>
 <b>Filters</b>
 <form id="filters" onsubmit="updateFilters('filters');" >
-  <input type="hidden" name="query" value='<%= JSON.generate(@query) %>' />
+  <input type="hidden" name="query" value='<%= @query.to_json %>' />
   <input type="hidden" name="sort" value="<%= params[:sort] %>" />
   <div class="filters_container"></div>
   <div class="filter_selection"></div>

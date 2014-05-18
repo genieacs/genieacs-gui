@@ -19,7 +19,8 @@ filters = {
 </div>
 <h2>Precondition</h2>
 <div id="precondition">
-  <input type="hidden" name="query" value='<%= @preset['precondition'] || '{}' %>' />
+  <% precondition = @preset['precondition'].is_a?(Hash) ? @preset['precondition'].to_json : @preset['precondition'] %>
+  <input type="hidden" name="query" value='<%= precondition || '{}' %>' />
   <div class="filters_container"></div>
   <div class="filter_selection"></div>
 </div>
@@ -27,7 +28,7 @@ filters = {
 
 <h2>Configurations</h2>
 <div id="configurations">
-  <input type="hidden" name="configurations" value='<%= JSON.generate(@preset['configurations'] || {}) %>' />
+  <input type="hidden" name="configurations" value='<%= (@preset['configurations'] || {}).to_json %>' />
   <div class="configurations_container"></div>
   <div class="filter_selection configurations_selection"></div>
 </div>
