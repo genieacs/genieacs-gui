@@ -44,7 +44,7 @@ class PresetsController < ApplicationController
   # GET /presets/new.json
   def new
     can?(:create, 'presets') do
-      @preset = {'precondition' => {}}
+      @preset = {}
 
       respond_to do |format|
         format.html # new.html.erb
