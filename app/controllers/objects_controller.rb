@@ -4,7 +4,7 @@ class ObjectsController < ApplicationController
 
   def get_object(id)
     query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => URI.escape(id)}),
+      'query' => ActiveSupport::JSON.encode({'_id' => id}),
     }
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
     res = http.get("/objects/?#{query.to_query}")
@@ -64,11 +64,10 @@ class ObjectsController < ApplicationController
   # PUT /objects/1.json
   def update
     can?(:update, 'objects') do
-      objectName = params['name']
       object = ActiveSupport::JSON.decode(params['parameters'])
 
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.put("/objects/#{objectName}", ActiveSupport::JSON.encode(object))
+      res = http.put("/objects/#{URI.escape(params['name'])}", ActiveSupport::JSON.encode(object))
       if res.code == '200'
         flash[:success] = 'Object saved'
       else
@@ -84,7 +83,7 @@ class ObjectsController < ApplicationController
   def destroy
     can?(:delete, 'objects') do
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.delete("/objects/#{params[:id]}", nil)
+      res = http.delete("/objects/#{URI.escape(params[:id])}", nil)
       if res.code == '200'
         flash[:success] = 'Object deleted'
       else

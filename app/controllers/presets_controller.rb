@@ -4,7 +4,7 @@ class PresetsController < ApplicationController
 
   def get_preset(id)
     query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => URI.escape(id)}),
+      'query' => ActiveSupport::JSON.encode({'_id' => id}),
     }
     http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
     res = http.get("/presets/?#{query.to_query}")
@@ -65,13 +65,12 @@ class PresetsController < ApplicationController
   def update
     can?(:update, 'presets') do
       preset = {}
-      preset['name'] = params['name']
       preset['weight'] = params['weight']
       preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
 
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.put("/presets/#{preset['name']}", ActiveSupport::JSON.encode(preset))
+      res = http.put("/presets/#{URI.escape(params['name'])}", ActiveSupport::JSON.encode(preset))
       if res.code == '200'
         flash[:success] = 'Preset saved'
       else
@@ -87,7 +86,7 @@ class PresetsController < ApplicationController
   def destroy
     can?(:delete, 'presets') do
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.delete("/presets/#{params[:id]}", nil)
+      res = http.delete("/presets/#{URI.escape(params[:id])}", nil)
       if res.code == '200'
         flash[:success] = 'Preset deleted'
       else
