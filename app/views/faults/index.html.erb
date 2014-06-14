@@ -38,7 +38,7 @@ filters = {
 
 <% @faults.each do |task| %>
   <tr>
-    <td><a href="/devices/<%= task['device'] %>"><%= task['device'] %></a></td>
+    <td><a href="/devices/<%=u task['device'] %>"><%= task['device'] %></a></td>
     <td><%= task['name'] %></td>
     <td>
       <% if task['retries'].blank? %>
