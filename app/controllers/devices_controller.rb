@@ -163,7 +163,7 @@ class DevicesController < ApplicationController
       tasks = ActiveSupport::JSON.decode(params['commit'])
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
 
-      for t in tasks
+      tasks.each_with_index do |t, i|
         case t['name']
         when 'getParameterValues'
           action = :read
@@ -192,13 +192,17 @@ class DevicesController < ApplicationController
         end
 
         can?(action, resource) do
-          res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(t))
-          if res.code == '200'
-            flash[:success] = 'Tasks committed'
-          elsif res.code == '202'
-            flash[:warning] = 'Tasks added to queue and will be committed when device is online'
+          if i < tasks.count - 1
+            http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(t))
           else
-            flash[:error] = "Unexpected error (#{res.code})"
+            res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(t))
+            if res.code == '200'
+              flash[:success] = 'Tasks committed'
+            elsif res.code == '202'
+              flash[:warning] = 'Tasks added to queue and will be committed when device is online'
+            else
+              flash[:error] = "Unexpected error (#{res.code})"
+            end
           end
         end
       end
