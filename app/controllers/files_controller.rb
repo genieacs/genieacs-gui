@@ -2,7 +2,7 @@ class FilesController < ApplicationController
   require 'net/http'
   require 'json'
 
-  def self.find_files(query, skip = 0, limit = 10)
+  def find_files(query, skip = 0, limit = Rails.configuration.page_size)
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'skip' => skip,
@@ -20,9 +20,9 @@ class FilesController < ApplicationController
     can?(:read, 'files') do
       filters = nil
 
-      skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
 
-      @files = FilesController.find_files(filters, skip)
+      @files = find_files(filters, skip)
 
       respond_to do |format|
         format.html # index.html.erb

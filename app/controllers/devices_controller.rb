@@ -36,7 +36,7 @@ class DevicesController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)
   end
 
-  def find_devices(query, skip = 0, limit = 10, sort = nil)
+  def find_devices(query, skip = 0, limit = Rails.configuration.page_size, sort = nil)
     projection = ['_lastInform'] + Rails.configuration.index_parameters.values
     q = {
       'query' => ActiveSupport::JSON.encode(query),
@@ -54,7 +54,7 @@ class DevicesController < ApplicationController
 
   def index
     can?(:read, 'devices') do
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * 30 : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
       if params.include?(:sort)
         sort_param = params[:sort].start_with?('-') ? params[:sort][1..-1] : params[:sort]
         sort_dir = params[:sort].start_with?('-') ? -1 : 1
@@ -70,7 +70,7 @@ class DevicesController < ApplicationController
       if request.format == Mime::CSV
         @devices = find_devices(@query, 0, 0)
       else
-        @devices = find_devices(@query, skip, 30, sort)
+        @devices = find_devices(@query, skip, Rails.configuration.page_size, sort)
       end
 
       respond_to do |format|

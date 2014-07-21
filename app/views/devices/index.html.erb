@@ -35,7 +35,6 @@ filters = {
     <th></th>
   </tr>
 
-<% cell_names = {} %>
 <% @devices.each do |device| %>
   <tr>
     <% param_names.each do |label, path| %>
@@ -50,52 +49,9 @@ filters = {
 <% end %>
 </table>
 
-<div>
-  <%
-    q = ''
-    if params.include?(:query)
-      q += "&query=#{u(params[:query])}"
-    end
+<%= render partial: 'pagination' %>
 
-    if params.include?(:sort)
-      q += "&sort=#{u(params[:sort])}"
-    end
-
-    current_page = Integer(params[:page] || 1)
-    total_pages = Integer(@total / 30) + 1
-    if total_pages <= 30
-      pages = Array(1..total_pages)
-    else
-      pages = Array(1..17) + Array(0) + Array((total_pages-2)..total_pages)
-    end
-  %>
-
-  <% if total_pages > 1 %>
-    <% if current_page == 1 %>
-      <span>&#8592; Previous</span>
-    <% else %>
-      <a href="?page=<%= current_page-1 %><%= q %>">&#8592; Previous</a>
-    <% end %>
-
-    <% for i in pages %>
-      <% if current_page == i %>
-        <%= current_page %>
-      <% elsif i == 0 %>
-        ...
-      <% else %>
-        <a href="?page=<%= i %><%= q %>"><%= i %></a>
-      <% end %>
-    <% end %>
-    <% if current_page == total_pages %>
-      <span>Next &#8594;</span>
-    <% else %>
-      <a href="?page=<%= current_page+1 %><%= q %>">Next &#8594;</a>
-    <% end %>
-  <% end %>
-</div>
-
-
-<a href="/devices.csv?<%= q %>">Download</a>
+<%= link_to 'Download', params.except(:page).merge(:format => :csv) %>
 
 <script type="text/javascript">
 $(function() {

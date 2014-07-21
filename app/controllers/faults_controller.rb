@@ -2,7 +2,7 @@ class FaultsController < ApplicationController
   require 'net/http'
   require 'json'
 
-  def find_faults(query, skip = 0, limit = 0)
+  def find_faults(query, skip = 0, limit = Rails.configuration.page_size)
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'skip' => skip,
@@ -18,11 +18,11 @@ class FaultsController < ApplicationController
   # GET /faults.json
   def index
     can?(:read, 'tasks') do
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * 30 : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
       @query = {}
       @query = ActiveSupport::JSON.decode(URI.unescape(params['query'])) if params.has_key?('query')
       @query['fault'] = {'$exists' => 1}
-      @faults = find_faults(@query, skip, 30)
+      @faults = find_faults(@query, skip, Rails.configuration.page_size)
       @query.delete('fault')
       respond_to do |format|
         format.html # index.html.erb

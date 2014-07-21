@@ -1,0 +1,37 @@
+<div>
+  <%
+    query = request.GET.except('page').to_query
+
+    current_page = Integer(params[:page] || 1)
+    total_pages = (@total / Rails.configuration.page_size.to_f).ceil
+
+    if total_pages <= 30
+      pages = Array(1..total_pages)
+    else
+      pages = Array(1..17) + Array(0) + Array((total_pages-2)..total_pages)
+    end
+  %>
+
+  <% if total_pages > 1 %>
+    <% if current_page == 1 %>
+      <span>&#8592; Previous</span>
+    <% else %>
+      <%= link_to '&#8592; Previous'.html_safe, params.merge(:page => current_page - 1) %>
+    <% end %>
+
+    <% for i in pages %>
+      <% if current_page == i %>
+        <%= current_page %>
+      <% elsif i == 0 %>
+        ...
+      <% else %>
+        <%= link_to i, params.merge(:page => i) %>
+      <% end %>
+    <% end %>
+    <% if current_page == total_pages %>
+      <span>Next &#8594;</span>
+    <% else %>
+    <%= link_to 'Next &#8594;'.html_safe, params.merge(:page => current_page + 1) %>
+    <% end %>
+  <% end %>
+</div>

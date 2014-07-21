@@ -11,7 +11,7 @@ class PresetsController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)[0]
   end
 
-  def find_presets(query, skip = 0, limit = 10)
+  def find_presets(query, skip = 0, limit = Rails.configuration.page_size)
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'skip' => skip,
@@ -29,7 +29,7 @@ class PresetsController < ApplicationController
     can?(:read, 'presets') do
       filters = nil
 
-      skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
 
       @presets = find_presets(filters, skip)
 

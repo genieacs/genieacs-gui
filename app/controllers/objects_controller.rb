@@ -11,7 +11,7 @@ class ObjectsController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)[0]
   end
 
-  def find_objects(query, skip = 0, limit = 10)
+  def find_objects(query, skip = 0, limit = Rails.configuration.page_size)
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'skip' => skip,
@@ -29,7 +29,7 @@ class ObjectsController < ApplicationController
     can?(:read, 'objects') do
       filters = nil
 
-      skip = params.include?(:page) ? Integer(params[:page]) * 10 : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
 
       @objects = find_objects(filters, skip)
 

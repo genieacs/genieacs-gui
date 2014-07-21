@@ -1,5 +1,7 @@
 <h1>Listing files</h1>
 
+<h2>Showing <%= @total %> files</h2>
+
 <table class="records">
   <tr>
     <th>Name</th>
@@ -17,10 +19,12 @@
     <td><%= file['metadata']['manufacturer'] rescue '' %></td>
     <td><%= file['metadata']['productClass'] rescue '' %></td>
     <td><%= file['metadata']['version'] rescue '' %></td>
-    <td><%= link_to 'Destroy', "/files/#{file['filename']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'files') %></td>
+    <td class="action"><%= link_to 'Destroy', "/files/#{file['filename']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'files') %></td>
   </tr>
 <% end %>
 </table>
+
+<%= render partial: 'pagination' %>
 
 <br />
 
