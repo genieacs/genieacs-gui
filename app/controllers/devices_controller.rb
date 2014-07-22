@@ -81,15 +81,26 @@ class DevicesController < ApplicationController
     end
   end
 
+  def get_files_for_device(manufacturer, product_class)
+    q = {
+      'query' => ActiveSupport::JSON.encode({
+        'metadata.manufacturer' => manufacturer,
+        'metadata.productClass' => product_class}),
+      'skip' => 0,
+      'limit' => 10
+    }
+    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    res = http.get("/files/?#{q.to_query}")
+    return ActiveSupport::JSON.decode(res.body)
+  end
+
   # GET /devices/1
   # GET /devices/1.json
   def show
     can?(:read, 'devices') do
       @device = get_device(params[:id])
       @device_params = flatten_params(@device)
-      @files = FilesController.find_files({
-        'metadata.manufacturer' => @device['_deviceId']['_Manufacturer'],
-        'metadata.productClass' => @device['_deviceId']['_ProductClass']})
+      @files = get_files_for_device(@device['_deviceId']['_Manufacturer'], @device['_deviceId']['_ProductClass'])
       @tasks = get_device_tasks(params[:id])
 
       respond_to do |format|
