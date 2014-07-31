@@ -70,8 +70,9 @@ class FilesController < ApplicationController
   # DELETE /files/1.json
   def destroy
     can?(:delete, 'files') do
+      filename = [params[:id], params[:format]].compact.join('.')
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.delete("/files/#{URI.escape(params[:id])}", nil)
+      res = http.delete("/files/#{URI.escape(filename)}", nil)
       if res.code == '200'
         flash[:success] = 'File deleted'
       else
