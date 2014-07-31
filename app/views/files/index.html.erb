@@ -6,7 +6,7 @@
   <tr>
     <th>Name</th>
     <th>Type</th>
-    <th>Manufacturer</th>
+    <th>OUI</th>
     <th>Product class</th>
     <th>Version</th>
     <th></th>
@@ -16,7 +16,7 @@
   <tr>
     <td><%= file['filename'] %></td>
     <td><%= file['metadata']['fileType'] rescue '' %></td>
-    <td><%= file['metadata']['manufacturer'] rescue '' %></td>
+    <td><%= file['metadata']['oui'] rescue '' %></td>
     <td><%= file['metadata']['productClass'] rescue '' %></td>
     <td><%= file['metadata']['version'] rescue '' %></td>
     <td class="action"><%= link_to 'Destroy', {controller: 'files', action: 'destroy', id: file['filename']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'files') %></td>

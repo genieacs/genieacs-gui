@@ -51,7 +51,7 @@ class FilesController < ApplicationController
       req = Net::HTTP::Put.new("/files/#{URI.escape(params[:file].original_filename)}")
       req.body = params[:file].read
       req['fileType'] = params[:file_type]
-      req['manufacturer'] = params[:manufacturer]
+      req['oui'] = params[:oui]
       req['productClass'] = params[:product_class]
       req['version'] = params[:version]
       res = http.request(req)
