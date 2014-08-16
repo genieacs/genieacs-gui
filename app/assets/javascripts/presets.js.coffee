@@ -175,33 +175,33 @@ window.updateConfigurations = (id) ->
         value = $(this).children('input[_name="value"]').val().trim()
         configurations.push({type: 'value', name: name, value: value})
       when 'age'
-        name = $(this).children('input[_name="name"]').val()
-        age = $(this).children('input[_name="age"]').val()
+        name = $(this).children('input[_name="name"]').val().trim()
+        age = $(this).children('input[_name="age"]').val().trim()
         configurations.push({type: 'age', name: name, age: age})
       when 'add_tag'
-        tag = $(this).children('input[_name="tag"]').val()
+        tag = $(this).children('input[_name="tag"]').val().trim()
         configurations.push({type: 'add_tag', tag: tag})
       when 'delete_tag'
-        tag = $(this).children('input[_name="tag"]').val()
+        tag = $(this).children('input[_name="tag"]').val().trim()
         configurations.push({type: 'delete_tag', tag: tag})
       when 'add_object'
-        name = $(this).children('input[_name="name"]').val()
-        object = $(this).children('input[_name="object"]').val()
+        name = $(this).children('input[_name="name"]').val().trim()
+        object = $(this).children('input[_name="object"]').val().trim()
         configurations.push({type: 'add_object', name: name, object: object})
       when 'delete_object'
-        name = $(this).children('input[_name="name"]').val()
-        object = $(this).children('input[_name="object"]').val()
+        name = $(this).children('input[_name="name"]').val().trim()
+        object = $(this).children('input[_name="object"]').val().trim()
         configurations.push({type: 'delete_object', name: name, object: object})
       when 'custom_command_value'
         command = $(this).children('input[_name="command"]').val().trim()
         value = $(this).children('input[_name="value"]').val().trim()
         configurations.push({type: 'custom_command_value', command: command, value: value})
       when 'custom_command_age'
-        command = $(this).children('input[_name="command"]').val()
-        age = $(this).children('input[_name="age"]').val()
+        command = $(this).children('input[_name="command"]').val().trim()
+        age = $(this).children('input[_name="age"]').val().trim()
         configurations.push({type: 'custom_command_age', command: command, age: age})
       when 'software_version'
-        softwareVersion = $(this).children('input[_name="software_version"]').val()
+        softwareVersion = $(this).children('input[_name="software_version"]').val().trim()
         configurations.push({type: 'software_version', software_version: softwareVersion})
   )
   $("##{id} > input[name=configurations]").attr('value', JSON.stringify(configurations))

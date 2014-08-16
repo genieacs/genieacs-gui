@@ -50,10 +50,10 @@ class FilesController < ApplicationController
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
       req = Net::HTTP::Put.new("/files/#{URI.escape(params[:file].original_filename)}")
       req.body = params[:file].read
-      req['fileType'] = params[:file_type]
-      req['oui'] = params[:oui]
-      req['productClass'] = params[:product_class]
-      req['version'] = params[:version]
+      req['fileType'] = params[:file_type].strip
+      req['oui'] = params[:oui].strip
+      req['productClass'] = params[:product_class].strip
+      req['version'] = params[:version].strip
       res = http.request(req)
 
       if res.code == '201'

@@ -63,9 +63,9 @@ window.updateFilters = (id) ->
   query = {}
   params = {}
   $("##{id} > .filters_container").children().each( () ->
-    name = $(this).children('[_name=name]').attr('name')
-    op = $(this).children('select').val()
-    value = $(this).children('input[_name="value"]').val()
+    name = $(this).children('[_name=name]').attr('name').trim()
+    op = $(this).children('select').val().trim()
+    value = $(this).children('input[_name="value"]').val().trim()
     type = $(this).children('input[_name="value"]').attr('type')
     if type == 'number'
       value = Number(value)

@@ -67,7 +67,7 @@ class ObjectsController < ApplicationController
       object = ActiveSupport::JSON.decode(params['parameters'])
 
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.put("/objects/#{URI.escape(params['name'])}", ActiveSupport::JSON.encode(object))
+      res = http.put("/objects/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(object))
       if res.code == '200'
         flash[:success] = 'Object saved'
       else

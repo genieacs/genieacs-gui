@@ -146,7 +146,7 @@ class DevicesController < ApplicationController
       can?(:create, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['add_tag']).strip
         http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-        res = http.post("/devices/#{URI.escape(params[:id])}/tags/#{tag}", nil)
+        res = http.post("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
           flash[:success] = 'Tag added'

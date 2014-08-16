@@ -134,7 +134,7 @@ window.editParam = (paramName, paramType, defaultValue, options) ->
   )
 
 window.addTag = () ->
-  tag = window.prompt('Enter new tag:')
+  tag = window.prompt('Enter new tag:').trim()
   if tag
     submitUpdate('add_tag', tag)
 
@@ -201,7 +201,7 @@ prompt = (paramName, paramType, defaultValue, options, callback) ->
       when 'xsd:int', 'xsd:unsignedInt'
         val = parseInt(input.val())
       else
-        val = input.val()
+        val = input.val().trim()
 
     callback(val)
     return false

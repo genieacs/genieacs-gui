@@ -65,12 +65,12 @@ class PresetsController < ApplicationController
   def update
     can?(:update, 'presets') do
       preset = {}
-      preset['weight'] = params['weight']
+      preset['weight'] = params['weight'].to_i
       preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
 
       http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-      res = http.put("/presets/#{URI.escape(params['name'])}", ActiveSupport::JSON.encode(preset))
+      res = http.put("/presets/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(preset))
       if res.code == '200'
         flash[:success] = 'Preset saved'
       else
