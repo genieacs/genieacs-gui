@@ -16,6 +16,7 @@ GenieacsGui::Application.routes.draw do
   get 'devices' => 'devices#index'
   get 'devices/:id' => 'devices#show'
   post 'devices/:id' => 'devices#update'
+  delete 'devices/:id' => 'devices#destroy'
 
   get 'faults' => 'faults#index'
   post 'faults/:id/retry' => 'faults#retry'

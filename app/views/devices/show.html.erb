@@ -151,6 +151,9 @@ $(function() {
 </div>
 </p>
 <% end %>
+<% if can?(:delete, 'devices') %>
+<div><%= link_to 'Delete', nil, method: :delete, data: {confirm: 'Are you sure you want to delete this device?'} %></div>
+<% end %>
 
 <div id="pending">
   <h>Pending tasks</h>

@@ -160,7 +160,7 @@ class DevicesController < ApplicationController
       can?(:delete, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['remove_tag']).strip
         http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
-        res = http.delete("/devices/#{URI.escape(params[:id])}/tags/#{tag}", nil)
+        res = http.delete("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
           flash[:success] = 'Tag removed'
@@ -221,6 +221,17 @@ class DevicesController < ApplicationController
 
     #redirect_to :action => :show
     redirect_to "/devices/#{URI.escape(params[:id])}"
+  end
+
+  def destroy
+    deviceId = params[:id]
+    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    res = http.delete("/devices/#{URI::escape(deviceId)}")
+    if res.code != '200'
+      flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
+    end
+
+    redirect_to :controller => 'devices', :action => 'index'
   end
 
 end
