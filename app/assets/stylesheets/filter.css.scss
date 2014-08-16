@@ -9,10 +9,12 @@
   border-radius: 6px;
   padding: 5px;
   box-shadow: rgba(black, 0.2) 0 0 5px;
+  white-space: nowrap;
 }
 
 .filter_selection {
   display: inline-block;
+  position: relative;
   &:hover .popup {
     display: inline-block;
   }
