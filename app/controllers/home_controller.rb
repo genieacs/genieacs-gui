@@ -11,7 +11,7 @@ class HomeController < ApplicationController
             for slice in graph
               res = http.head("/devices/?query=#{CGI::escape ActiveSupport::JSON.encode(slice['query'])}")
               slice['data'] = res['Total'].to_i
-              slice['href'] = url_for(controller: 'devices', action: 'index', params: {query: ActiveSupport::JSON.encode(slice['query'])})
+              slice['href'] = url_for(controller: 'devices', action: 'index', params: {query: ActiveSupport::JSON.encode(slice['query'])}, only_path: true)
               slice.delete('query')
             end
           end
