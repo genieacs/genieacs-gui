@@ -37,7 +37,7 @@ GenieacsGui::Application.routes.draw do
   get 'files' => 'files#index'
   get 'files/new' => 'files#new'
   post 'files' => 'files#upload'
-  delete 'files/:id' => 'files#destroy'
+  delete 'files/:id' => 'files#destroy', :constraints => { :id => /.*/ }
 
   get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+/ }
 end
