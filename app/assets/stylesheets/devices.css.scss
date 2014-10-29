@@ -43,6 +43,8 @@
 
   ul.list {
     height: 200px;
+    min-height: 200px;
+    resize: vertical;
     overflow-y: scroll;
 
     li {
