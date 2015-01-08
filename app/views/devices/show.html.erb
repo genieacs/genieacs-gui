@@ -151,7 +151,6 @@ $(function() {
 </div>
 <% end %>
 <% if can?(:create, 'files') %>
-
 <div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['summary.oui'].html_safe, product_class: @device['summary.productClass'].html_safe, version: @device['summary.softwareVersion']['_value'].html_safe }}  %></div>
 <% end %>
 
