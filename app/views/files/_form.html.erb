@@ -5,15 +5,15 @@
 </div>
 <div>
   <%= label_tag('oui', 'OUI:') %>
-  <%= text_field_tag 'oui' %>
+  <%= text_field_tag 'oui', params[:oui] %>
 </div>
 <div>
   <%= label_tag('product_class', 'Product class:') %>
-  <%= text_field_tag 'product_class' %>
+  <%= text_field_tag 'product_class', params[:product_class] %>
 </div>
 <div>
   <%= label_tag('version', 'Version:') %>
-  <%= text_field_tag 'version' %>
+  <%= text_field_tag 'version', params[:version] %>
 </div>
 <div>
   <%= label_tag('file', 'File:') %>
