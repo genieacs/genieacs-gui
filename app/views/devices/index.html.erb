@@ -3,6 +3,7 @@
 
   sort_param = params[:sort].start_with?('-') ? params[:sort][1..-1] : params[:sort] rescue nil
   sort_symbol = params[:sort].start_with?('-') ? ' &#9650;' : ' &#9660;' rescue nil
+  content_for :title do 'Devices List' end
 %>
 <h1>Listing devices</h1>
 <script type="text/javascript">

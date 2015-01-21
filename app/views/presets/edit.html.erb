@@ -1,3 +1,6 @@
+<%
+content_for :title do 'Edit Preset ' + @preset['_id'] end
+%>
 <h1>Editing preset</h1>
 
 <%= render 'form' %>
