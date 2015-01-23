@@ -1,3 +1,6 @@
+<%
+content_for :title do 'Home' end
+%>
 <% @graphs.each do |group_name, group_graphs| %>
 <h1><%= group_name.humanize %></h1>
 <table style="margin-left:auto;margin-right:auto;">

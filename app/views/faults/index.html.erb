@@ -1,6 +1,7 @@
 <%
 can_retry = can?(:update, 'tasks/retry')
 can_delete = can?(:delete, 'tasks')
+content_for :title do 'Fault List' end
 %>
 <h1>Listing faults</h1>
 

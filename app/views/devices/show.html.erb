@@ -1,5 +1,6 @@
 <%
 can_edit_parameters = can?(:update, 'devices/parameters')
+content_for :title do 'Device ' + @device['_id'] end
 %>
 <script type="text/javascript">
 var pending = {};
