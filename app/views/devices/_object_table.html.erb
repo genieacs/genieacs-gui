@@ -13,16 +13,26 @@
   <tr>
   <% for k2, v2 in params %>
     <% next if k2[0] == '_' %>
-    <td>
+    <td class="action">
       <%= param_value("#{params['_object']}.#{k}.#{v2}", @device) rescue '' %>
       <% if v[v2]['_writable'] %>
-      &mdash;
       <a href="#" onclick="editParam('<%= "#{params['_object']}.#{k}.#{v2}" %>', '<%= v[v2]['_type'] %>', '<%= v[v2]['_value'] %>');return false;">Edit</a>
       <% end %>
     </td>
   <% end %>
+  <% if v['_writable'] %>
+    <td class="action">
+      <a href="#" onclick="deleteObject('<%= "#{params['_object']}.#{k}" %>');return false;">Delete</a>
+    </td>
+  <% end %>
   </tr>
+<% end %>
+<% if object['_writable'] %>
+<tr>
+  <td colspan="0">
+    <a href="#" onclick="addObject('<%= params['_object'] %>');return false;">Add</a>
+  </td>
+</tr>
 <% end %>
 <% end %>
 </table>
-
