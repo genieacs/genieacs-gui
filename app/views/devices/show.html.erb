@@ -52,7 +52,7 @@ $(function() {
     <%= param_value(v, @device) %>
     <% if (p = get_param(v, @device)) != nil and p['_writable'] and can_edit_parameters %>
     &mdash;
-    <% options = Rails.configuration.parameters_edit[p['_path']] %>
+    <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
     <a href="#" onclick='editParam("<%= v %>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
     <% end %>
   </p>
@@ -121,7 +121,7 @@ $(function() {
           <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
         <% else %>
           <% if p['_writable'] and can_edit_parameters %>
-            <% options = Rails.configuration.parameters_edit[p['_path']] %>
+            <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
             <a href="#" onclick='editParam("<%= p['_path']%>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
           <% end %>
           <a href="#" onclick="refreshParam('<%= p['_path']%>');return false;">Refresh</a>

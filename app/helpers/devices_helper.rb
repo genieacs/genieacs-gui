@@ -39,9 +39,10 @@ module DevicesHelper
       val = param
     end
 
-    if Rails.configuration.parameter_renderers.has_key?(path)
+    bare_path = path.gsub(/\.\d+\./, '..')
+    if Rails.configuration.parameter_renderers.has_key?(bare_path)
       begin
-        val = ParameterRenderers::send(Rails.configuration.parameter_renderers[path], val)
+        val = ParameterRenderers::send(Rails.configuration.parameter_renderers[bare_path], val)
       rescue => e
         logger.error("Exception in renderer '#{Rails.configuration.parameter_renderers[path]}' for value '#{val}': #{e}")
       end
