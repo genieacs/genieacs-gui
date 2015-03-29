@@ -16,7 +16,8 @@
     <td class="action">
       <%= param_value("#{params['_object']}.#{k}.#{v2}", @device) rescue '' %>
       <% if v[v2]['_writable'] %>
-      <a href="#" onclick="editParam('<%= "#{params['_object']}.#{k}.#{v2}" %>', '<%= v[v2]['_type'] %>', '<%= v[v2]['_value'] %>');return false;">Edit</a>
+      <% options = Rails.configuration.parameters_edit["#{params['_object']}.#{k}.#{v2}".gsub(/\.\d+\./, '..')] %>
+      <a href="#" onclick='editParam("<%= "#{params['_object']}.#{k}.#{v2}" %>", "<%= v[v2]['_type'] %>", "<%= v[v2]['_value'] %>", <%= options.to_json.html_safe %>);return false;'>Edit</a>
       <% end %>
     </td>
   <% end %>
