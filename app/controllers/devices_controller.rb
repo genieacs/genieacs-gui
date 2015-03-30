@@ -1,6 +1,7 @@
 class DevicesController < ApplicationController
   require 'net/http'
   require 'json'
+  require 'util'
 
   def flatten_params(params, prefix = '')
     output = []
@@ -20,7 +21,7 @@ class DevicesController < ApplicationController
     query = {
       'query' => ActiveSupport::JSON.encode({'_id' => id}),
     }
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.get("/devices/?#{query.to_query}")
     @now = res['Date'].to_time
     return ActiveSupport::JSON.decode(res.body)[0]
@@ -31,7 +32,7 @@ class DevicesController < ApplicationController
       'query' => ActiveSupport::JSON.encode({'device' => device_id}),
       'sort' => ActiveSupport::JSON.encode({'timestamp' => 1})
     }
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.get("/tasks/?#{query.to_query}")
     return ActiveSupport::JSON.decode(res.body)
   end
@@ -45,7 +46,7 @@ class DevicesController < ApplicationController
       'projection' => projection.join(','),
     }
     q['sort'] = ActiveSupport::JSON.encode(sort) if sort
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.get("/devices/?#{q.to_query}")
     @total = res['Total'].to_i
     @now = res['Date'].to_time
@@ -89,7 +90,7 @@ class DevicesController < ApplicationController
       'skip' => 0,
       'limit' => 10
     }
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.get("/files/?#{q.to_query}")
     return ActiveSupport::JSON.decode(res.body)
   end
@@ -125,11 +126,11 @@ class DevicesController < ApplicationController
 
         for o in objectNames
           task = {'name' => 'refreshObject', 'objectName' => o}
-          http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+          http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
         task = {'name' => 'getParameterValues', 'parameterNames' => parameterNames}
-        http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+        http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))
 
         if res.code == '200'
@@ -145,7 +146,7 @@ class DevicesController < ApplicationController
     if params.include? 'add_tag'
       can?(:create, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['add_tag']).strip
-        http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+        http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
@@ -159,7 +160,7 @@ class DevicesController < ApplicationController
     if params.include? 'remove_tag'
       can?(:delete, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['remove_tag']).strip
-        http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+        http = create_api_conn()
         res = http.delete("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
@@ -172,7 +173,7 @@ class DevicesController < ApplicationController
 
     if params.include? 'commit'
       tasks = ActiveSupport::JSON.decode(params['commit'])
-      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      http = create_api_conn()
 
       tasks.each_with_index do |t, i|
         case t['name']
@@ -225,7 +226,7 @@ class DevicesController < ApplicationController
 
   def destroy
     deviceId = params[:id]
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.delete("/devices/#{URI::escape(deviceId)}")
     if res.code != '200'
       flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
