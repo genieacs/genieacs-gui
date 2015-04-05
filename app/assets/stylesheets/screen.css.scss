@@ -128,6 +128,13 @@ i {
 
 table.records {
   text-align: left;
+  table.records {
+    font-size: 11px;
+    line-height: 11px;
+    th {
+      font-size: 11px;
+    }
+  }
 
   th {
     font-size: 12px;
