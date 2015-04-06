@@ -1,9 +1,11 @@
 class HomeController < ApplicationController
+  require 'util'
+
   def index
     can?(:read, 'home') do
       @graphs = Rails.cache.fetch('graphs', :expires_in => 60.seconds) do
         require 'net/http'
-        http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+        http = create_api_conn()
 
         graphs = ActiveSupport::JSON.decode(ERB.new(File.read('config/graphs.json.erb')).result)
         for group_name, group_graphs in graphs

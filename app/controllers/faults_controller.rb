@@ -1,6 +1,7 @@
 class FaultsController < ApplicationController
   require 'net/http'
   require 'json'
+  require 'util'
 
   def find_faults(query, skip = 0, limit = Rails.configuration.page_size)
     q = {
@@ -8,7 +9,7 @@ class FaultsController < ApplicationController
       'skip' => skip,
       'limit' => limit
     }
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+    http = create_api_conn()
     res = http.get("/tasks/?#{q.to_query}")
     @total = res['Total'].to_i
     return ActiveSupport::JSON.decode(res.body)
@@ -34,7 +35,7 @@ class FaultsController < ApplicationController
   # POST /faults/:id/retry
   def retry
     can?(:update, 'tasks/retry') do
-      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      http = create_api_conn()
       res = http.post("/tasks/#{params[:id]}/retry", nil)
       if res.code == '200'
         flash[:success] = 'Task updated'
@@ -50,7 +51,7 @@ class FaultsController < ApplicationController
   # DELETE /faults/1.json
   def destroy
     can?(:delete, 'tasks') do
-      http = Net::HTTP.new(Rails.configuration.genieacs_api_host, Rails.configuration.genieacs_api_port)
+      http = create_api_conn()
       res = http.delete("/tasks/#{params[:id]}", nil)
       if res.code == '200'
         flash[:success] = 'Faulty task deleted'
