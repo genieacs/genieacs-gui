@@ -36,7 +36,7 @@ $(function() {
 <p>
   <b>Last inform:</b>
   <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
-  <span class="<%= cls %>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
+  <span class="<%= cls %>" title="<%=@device['summary.lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
   <% if can?(:read, 'devices/refresh_summary') %>
   &mdash;
   <a href="#" class="action" onclick="refreshSummary(); return false;">Refresh</a>,
