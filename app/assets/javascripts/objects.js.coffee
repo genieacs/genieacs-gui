@@ -1,3 +1,15 @@
+flattenObject = (object) ->
+  newObj = {}
+  f = (obj, prefix) ->
+    for k, v of obj
+      if typeof(v) is 'object'
+        f(v, "#{prefix}#{k}.")
+      else
+        newObj["#{prefix}#{k}"] = v
+  f(object, '')
+  return newObj
+
+
 window.addParameter = (container, name = '', value = '', key = false) ->
   html = """<tr>
     <td>
@@ -21,7 +33,7 @@ window.addParameter = (container, name = '', value = '', key = false) ->
 
 window.initObject = (id) ->
   f = $("##{id}")
-  parameters = JSON.parse(f.children('input[name=parameters]').attr('value'))
+  parameters = flattenObject(JSON.parse(f.children('input[name=parameters]').attr('value')))
   container_selector = "##{id} > .parameters_container"
   container = $(container_selector)
 
@@ -45,7 +57,14 @@ window.updateObject = (id) ->
     key = $(this).find('input[_name="key"]').is(':checked')
     parameter = $(this).find('input[_name="parameter"]').val().trim()
     value = $(this).find('input[_name="value"]').val().trim()
-    object[parameter] = value
+
+    ref = object
+    p = parameter.split('.')
+    while p.length > 1
+      ref = ref[p[0]] ?= {}
+      p.shift()
+    ref[p[0]] = value
+
     if key
       keys.push(parameter)
   )
