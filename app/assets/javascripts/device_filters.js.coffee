@@ -35,16 +35,22 @@ window.fadeOutAndRemove = (el) ->
 
 window.initFilters = (id) ->
   f = $("##{id}")
-  query = JSON.parse(f.children('input[name=query]').attr('value'))
   container_selector = "##{id} > .filters_container"
   container = $(container_selector)
 
-  for q,v of query
-    if v instanceof Object
-      for op,v2 of v
-        addFilter(container, q, op, v2, false)
-    else
-      addFilter(container, q, '', v, false)
+  recursive = (query) ->
+    for q,v of query
+      if q[0] == '$' # this is an operator
+        if q != '$and' # only $and operator is supported
+          throw new Error("The logical operator #{q} is not supported in precondition query.")
+        recursive(v2) for v2 in v
+      else if v instanceof Object
+        for op,v2 of v
+          addFilter(container, q, op, v2, false)
+      else
+        addFilter(container, q, '', v, false)
+
+  recursive(JSON.parse(f.children('input[name=query]').attr('value')))
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
