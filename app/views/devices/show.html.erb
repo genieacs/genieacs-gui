@@ -152,7 +152,7 @@ $(function() {
 </div>
 <% end %>
 <% if can?(:create, 'files') %>
-<div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: (@device['summary.softwareVeeersion']['_value'].html_safe rescue '') }}  %></div>
+<div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: (@device['summary.softwareVersion']['_value'].html_safe rescue '') }}  %></div>
 <% end %>
 
 <% if can?(:delete, 'devices') %>
