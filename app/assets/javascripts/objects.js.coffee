@@ -2,7 +2,7 @@ flattenObject = (object) ->
   newObj = {}
   f = (obj, prefix) ->
     for k, v of obj
-      if typeof(v) is 'object'
+      if Object.prototype.toString.call(v) == '[object Object]'
         f(v, "#{prefix}#{k}.")
       else
         newObj["#{prefix}#{k}"] = v
