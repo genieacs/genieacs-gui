@@ -130,7 +130,7 @@ class DevicesController < ApplicationController
         elsif res.code == '202'
           flash[:warning] = 'Device is offline'
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -144,7 +144,7 @@ class DevicesController < ApplicationController
         if res.code == '200'
           flash[:success] = 'Tag added'
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -158,7 +158,7 @@ class DevicesController < ApplicationController
         if res.code == '200'
           flash[:success] = 'Tag removed'
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -205,7 +205,7 @@ class DevicesController < ApplicationController
             elsif res.code == '202'
               flash[:warning] = 'Tasks added to queue and will be committed when device is online'
             else
-              flash[:error] = "Unexpected error (#{res.code})"
+              flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
             end
           end
         end

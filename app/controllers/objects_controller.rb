@@ -72,7 +72,7 @@ class ObjectsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Object saved'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :action => :index
@@ -88,7 +88,7 @@ class ObjectsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Object deleted'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :action => :index
