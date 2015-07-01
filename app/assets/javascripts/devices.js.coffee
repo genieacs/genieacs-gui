@@ -42,8 +42,8 @@ submitUpdate = (type, data) ->
   $('body').append(form)
   $(form).submit()
 
-window.refreshSummary = () ->
-  submitUpdate('refresh_summary', null)
+window.refreshSummary = (parameters) ->
+  submitUpdate('refresh_summary', parameters)
 
 window.refreshPending = () ->
   if pending.length == 0
@@ -160,7 +160,7 @@ window.sort = (container, param) ->
     f.children('input[name=sort]').attr('value', "-#{param}")
   else
     f.children('input[name=sort]').attr('value', param)
-  
+
   f.submit()
 
 prompt = (paramName, paramType, defaultValue, options, callback) ->

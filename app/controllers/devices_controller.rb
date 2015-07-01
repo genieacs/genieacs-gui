@@ -114,22 +114,14 @@ class DevicesController < ApplicationController
   def update
     if params.include? 'refresh_summary'
       can?(:read, 'devices/refresh_summary') do
-        parameterNames = []
-        objectNames = []
-        for k, v in Rails.configuration.summary_parameters
-          if v.is_a?(String)
-            parameterNames << v
-          else
-            objectNames << v['_object']
-          end
-        end
+        to_refresh = ActiveSupport::JSON.decode(params['refresh_summary'])
 
-        for o in objectNames
+        for o in to_refresh['objects']
           task = {'name' => 'refreshObject', 'objectName' => o}
           http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
-        task = {'name' => 'getParameterValues', 'parameterNames' => parameterNames}
+        task = {'name' => 'getParameterValues', 'parameterNames' => to_refresh['parameters']}
         http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))
 
