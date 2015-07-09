@@ -121,6 +121,13 @@ class DevicesController < ApplicationController
           http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
+
+        for o in to_refresh['custom_commands']
+          task = {'name' => 'customCommand', 'command' => "#{o[16..-1]} get"}
+          http = create_api_conn()
+          res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
+        end
+
         task = {'name' => 'getParameterValues', 'parameterNames' => to_refresh['parameters']}
         http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))

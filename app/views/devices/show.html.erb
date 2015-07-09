@@ -36,13 +36,17 @@ $(function() {
 <%
   summary_parameters = {}
   summary_objects = {}
-  to_refresh = {'parameters' => [], 'objects' => []}
+  to_refresh = {'parameters' => [], 'objects' => [], 'custom_commands' => []}
 
   for k, v in Rails.configuration.summary_parameters
     if v.is_a?(String)
       if (p = get_param(v, @device)) != nil
         summary_parameters[k] = v
-        to_refresh['parameters'] << v
+        if v.start_with?('_customCommands')
+          to_refresh['custom_commands'] << v
+        else
+          to_refresh['parameters'] << v
+        end
       end
     else
       if get_param(v['_object'], @device) != nil
