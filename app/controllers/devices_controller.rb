@@ -128,7 +128,7 @@ class DevicesController < ApplicationController
         if res.code == '200'
           flash[:success] = 'Device refreshed'
         elsif res.code == '202'
-          flash[:warning] = 'Device is offline'
+          flash[:warning] = res.message
         else
           flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
@@ -203,7 +203,7 @@ class DevicesController < ApplicationController
             if res.code == '200'
               flash[:success] = 'Tasks committed'
             elsif res.code == '202'
-              flash[:warning] = 'Tasks added to queue and will be committed when device is online'
+              flash[:warning] = res.message
             else
               flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
             end
