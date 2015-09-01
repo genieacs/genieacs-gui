@@ -42,6 +42,14 @@ window.initFilters = (id) ->
   for q,v of query
     if v instanceof Object
       for op,v2 of v
+        if v2 instanceof Object
+          op = "$eq"
+          q = Object.keys(v2)[0]
+          v2 = v2[q]
+
+          if v2 instanceof Object
+            op = Object.keys(v2)[0]
+            v2 = v2[op]
         addFilter(container, q, op, v2, false)
     else
       addFilter(container, q, '', v, false)
