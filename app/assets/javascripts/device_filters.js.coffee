@@ -85,13 +85,14 @@ window.updateFilters = (id) ->
   # builds a mongodb query in the shortest possible form
   for name,p of params
     if p.length > 1
-      hasEq = false
-      for s in p
-        if s[0] == ''
-          hasEq = true
+      useAnd = false
+      p.sort()
+      for s, i in p
+        if s[0] == '' or s[0] == p[i-1]?[0]
+          useAnd = true
           break
 
-      if hasEq
+      if useAnd
         query['$and'] = [] if not query['$and']?
         for s in p
           o = {}
