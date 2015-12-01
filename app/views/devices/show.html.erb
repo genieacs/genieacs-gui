@@ -126,7 +126,16 @@ $(function() {
   <input class="search" type="search" placeholder="Type to search..." />
   <ul class="list">
     <% for p in @device_params %>
-    <li>
+     <%if p.has_key?('_instance') or p.has_key?('_object')%>
+        <li class="rolloutobj">
+       <%elsif%>
+        <li>
+       <% end %>
+       <%if p.has_key?('_instance') or p.has_key?('_object')%>
+        <span>&#9660;</span>
+       <%elsif%>
+        <span>&#9562;</span>
+       <% end %>
       <span class="param-path"><%= p['_path'] %></span>
       <% if p.has_key?('_value')%>
         <span class="param-value"><%= param_value(p['_path'], @device) %></span>
@@ -153,6 +162,37 @@ $(function() {
     </li>
     <% end %>
   </ul>
+  <script type="text/javascript">
+    $(function(){
+      $("li").not(".rolloutobj").hide();
+    });
+    
+    (function($){
+      $.fn.clickToggle = function(func1, func2){
+	var funcs = [func1, func2];
+	this.data('toggleclicked', 0);
+	this.click(function(){
+	  var data = $(this).data();
+	  var tc = data.toggleclicked;
+	  $.proxy(funcs[tc], this)();
+	  data.toggleclicked = (tc + 1) % 2;
+	  });
+	  return this;
+	};
+      }(jQuery));
+      
+    $(".param-path").clickToggle(function(){
+      var pferd = $(this).text();
+      pferd += ".";
+      $("li:contains(" + pferd + ")").slideUp("fast");
+      //$("li:contains(" + pferd + ")").css("display", "list-item");
+    }, function(){
+      var pferd = $(this).text();
+      pferd += ".";
+      $("li:contains(" + pferd + ")").slideDown("fast");
+      //$("li:contains(" + pferd + ")").css("display", "none");
+      });
+  </script>
 </div>
 <br/>
 <% end %>
