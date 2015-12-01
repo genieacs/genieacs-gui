@@ -131,11 +131,6 @@ $(function() {
        <%elsif%>
         <li>
        <% end %>
-       <%if p.has_key?('_instance') or p.has_key?('_object')%>
-        <span>&#9660;</span>
-       <%elsif%>
-        <span>&#9562;</span>
-       <% end %>
       <span class="param-path"><%= p['_path'] %></span>
       <% if p.has_key?('_value')%>
         <span class="param-value"><%= param_value(p['_path'], @device) %></span>
@@ -163,9 +158,9 @@ $(function() {
     <% end %>
   </ul>
   <script type="text/javascript">
-    $(function(){
+    /*$(function(){
       $("li").not(".rolloutobj").hide();
-    });
+    });*/
     
     (function($){
       $.fn.clickToggle = function(func1, func2){
@@ -185,13 +180,50 @@ $(function() {
       var pferd = $(this).text();
       pferd += ".";
       $("li:contains(" + pferd + ")").slideUp("fast");
-      //$("li:contains(" + pferd + ")").css("display", "list-item");
     }, function(){
       var pferd = $(this).text();
       pferd += ".";
       $("li:contains(" + pferd + ")").slideDown("fast");
-      //$("li:contains(" + pferd + ")").css("display", "none");
       });
+      
+    var spancounter = 1;
+    $(".param-path").each(function(){
+      var str = $(this).text();
+      var fields = str.split('.',8);
+      var nstr = $("span.param-path").eq(spancounter).text();
+      var nfields = nstr.split('.', 8); spancounter++;
+      switch(fields.length){
+	case 1: $(this).before("<span>&#9662;</span>");break;
+	case 2: $(this).before("<span>&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 3: $(this).before("<span>&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 4: $(this).before("<span>&emsp;&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 5: $(this).before("<span>&emsp;&emsp;&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 6: $(this).before("<span>&emsp;&emsp;&emsp;&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 7: $(this).before("<span>&emsp;&emsp;&emsp;&emsp;&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+	case 8: $(this).before("<span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&#9562;</span>");
+		if(fields.length < nfields.length){
+		  $(this).before("<span>&#9662;</span>");
+		}break;
+      }
+    });
   </script>
 </div>
 <br/>
