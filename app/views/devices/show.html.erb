@@ -126,12 +126,8 @@ $(function() {
   <input class="search" type="search" placeholder="Type to search..." />
   <ul class="list">
     <% for p in @device_params %>
-     <%if p.has_key?('_instance') or p.has_key?('_object')%>
-        <li class="rolloutobj">
-       <%elsif%>
-        <li>
-       <% end %>
-      <span class="param-path"><%= p['_path'] %></span>
+        <li><span class="param-path"><%=p['_path'] %></span>
+      
       <% if p.has_key?('_value')%>
         <span class="param-value"><%= param_value(p['_path'], @device) %></span>
       <% end %>
@@ -158,9 +154,16 @@ $(function() {
     <% end %>
   </ul>
   <script type="text/javascript">
-    /*$(function(){
-      $("li").not(".rolloutobj").hide();
-    });*/
+    $(function(){
+      $("li").each(function(){
+        var str = $(this).text();
+        var withoutvalue = str.split(" ", 1);
+        var fields = withoutvalue[0].split('.',8);
+        if(fields.length >=3){
+	  $(this).hide();
+	}
+      });
+    });
     
     (function($){
       $.fn.clickToggle = function(func1, func2){
@@ -178,12 +181,25 @@ $(function() {
       
     $(".param-path").clickToggle(function(){
       var pferd = $(this).text();
-      pferd += ".";
-      $("li:contains(" + pferd + ")").slideUp("fast");
+      var fields = pferd.split('.', 8);
+      $("li:contains(" + pferd + ")").filter(function(){
+	var apferd = $(this).text();
+	var withoutvalue = apferd.split(" ", 1);
+	var afields = withoutvalue[0].split('.', 8);
+	var chi = fields.length+1;
+	return afields.length >= chi;
+      }).slideUp("fast");
     }, function(){
+    
       var pferd = $(this).text();
-      pferd += ".";
-      $("li:contains(" + pferd + ")").slideDown("fast");
+      var fields = pferd.split('.', 8);
+      $("li:contains(" + pferd + ")").filter(function(){
+	var apferd = $(this).text();
+	var withoutvalue = apferd.split(" ", 1);
+	var afields = withoutvalue[0].split('.', 8);
+	var chi = fields.length+1;
+	return afields.length == chi;
+      }).slideDown("fast");
       });
       
     var spancounter = 1;
