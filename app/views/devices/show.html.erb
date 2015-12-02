@@ -127,7 +127,6 @@ $(function() {
   <ul class="list">
     <% for p in @device_params %>
         <li><span class="param-path"><%=p['_path'] %></span>
-      
       <% if p.has_key?('_value')%>
         <span class="param-value"><%= param_value(p['_path'], @device) %></span>
       <% end %>
@@ -153,8 +152,8 @@ $(function() {
     </li>
     <% end %>
   </ul>
-  <script type="text/javascript">
-    $(function(){
+  <script src="../../assets/javascript/device_params_box.js"></script>
+    <!--$(function(){
       $("li").each(function(){
         var str = $(this).text();
         var withoutvalue = str.split(" ", 1);
@@ -179,7 +178,7 @@ $(function() {
 	};
       }(jQuery));
       
-    $(".param-path").clickToggle(function(){
+      $(".param-path").clickToggle(function(){
       var pferd = $(this).text();
       var fields = pferd.split('.', 8);
       $("li:contains(" + pferd + ")").filter(function(){
@@ -202,12 +201,14 @@ $(function() {
       }).slideDown("fast");
       });
       
+      
     var spancounter = 1;
-    $(".param-path").each(function(){
+      $(".param-path").each(function(){
       var str = $(this).text();
       var fields = str.split('.',8);
       var nstr = $("span.param-path").eq(spancounter).text();
-      var nfields = nstr.split('.', 8); spancounter++;
+      var nfields = nstr.split('.', 8); 
+      spancounter++;
       switch(fields.length){
 	case 1: $(this).before("<span>&#9662;</span>");break;
 	case 2: $(this).before("<span>&#9562;</span>");
@@ -240,7 +241,7 @@ $(function() {
 		}break;
       }
     });
-  </script>
+  </script> -->
 </div>
 <br/>
 <% end %>
