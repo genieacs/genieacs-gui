@@ -95,7 +95,23 @@ window.addRemoveTagConfiguration = (container, tag = '', fade = true) ->
 window.addAddObjectConfiguration = (container, name = '', object = '', fade = true) ->
   html = """<div configurationType="add_object">
       Add object
-      <input type="text" _name="object" value="#{object}" />
+	<select class="items" type="text" _name="object" value="#{object}">
+		
+	</select>
+	<script type="text/javascript">
+	$.getJSON('/objects.json', function(obj){
+		$.each(obj, function(index, value){
+			$.each(value, function(k, l){
+				if(k == "_id"){
+				$('.items')
+					.append($('<option>', {value : l })
+					.text(l));
+				}
+			});
+		});
+	});
+	</script>
+      <!-- <input type="text" _name="object" value="#{object}" /> -->
       to
       <input type="text" _name="name" value="#{name}" />
       <a href="#" class="action" onclick="fadeOutAndRemove($(this).parent());return false;">&nbsp;x&nbsp;</a>
@@ -186,7 +202,7 @@ window.updateConfigurations = (id) ->
         configurations.push({type: 'delete_tag', tag: tag})
       when 'add_object'
         name = $(this).children('input[_name="name"]').val().trim()
-        object = $(this).children('input[_name="object"]').val().trim()
+        object = $(this).children('select[_name="object"]').val().trim()
         configurations.push({type: 'add_object', name: name, object: object})
       when 'delete_object'
         name = $(this).children('input[_name="name"]').val().trim()
