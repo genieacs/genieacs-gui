@@ -126,8 +126,7 @@ $(function() {
   <input class="search" type="search" placeholder="Type to search..." />
   <ul class="list">
     <% for p in @device_params %>
-    <li>
-      <span class="param-path"><%= p['_path'] %></span>
+    <li><span class="param-path"><%=p['_path'] %></span>
       <% if p.has_key?('_value')%>
         <span class="param-value"><%= param_value(p['_path'], @device) %></span>
       <% end %>
@@ -153,6 +152,25 @@ $(function() {
     </li>
     <% end %>
   </ul>
+  <script>
+    $(".search").focusin(function(){
+      $("li").show()
+    });
+    $(".search").focusout(function(){
+      if($(this).val()){
+	$("li:contains(" + str +")").show()
+      }else if(!$(this).val()){
+	$("li").each(function(){
+	  str = $(this).text()
+	  withoutvalue = str.split(' ', 1)
+	  fields = withoutvalue[0].split('.', 8)
+	  if(fields.length >= 3){
+	    $(this).hide()
+	  }
+	});
+      }
+    });
+  </script>
 </div>
 <br/>
 <% end %>
