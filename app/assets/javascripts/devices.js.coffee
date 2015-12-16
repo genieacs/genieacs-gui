@@ -1,5 +1,105 @@
 pending = []
 
+$(document).on 'page:change', ->
+
+  $ ->
+    $('li').each ->
+      str = $(this).text()
+      withoutvalue = str.split(' ', 1)
+      fields = withoutvalue[0].split('.', 8)
+      if fields.length >= 3
+        $(this).hide()
+      return
+    return
+
+  (($) ->
+
+    $.fn.clickToggle = (func1, func2) ->
+      funcs = [
+        func1
+        func2
+      ]
+      @data 'toggleclicked', 0
+      @click ->
+        data = $(this).data()
+        tc = data.toggleclicked
+        $.proxy(funcs[tc], this)()
+        data.toggleclicked = (tc + 1) % 2
+        return
+      this
+
+    return
+  ) jQuery
+
+  $ ->
+    $('.param-path').clickToggle (->
+      pferd = $(this).text()
+      fields = pferd.split('.', 8)
+      $('li:contains(' + pferd + ')').filter(->
+        apferd = $(this).text()
+        withoutvalue = apferd.split(' ', 1)
+        afields = withoutvalue[0].split('.', 8)
+        chi = fields.length + 1
+        afields.length >= chi
+      ).slideUp 'fast'
+      return
+    ), ->
+      pferd = $(this).text()
+      fields = pferd.split('.', 8)
+      $('li:contains(' + pferd + ')').filter(->
+        apferd = $(this).text()
+        withoutvalue = apferd.split(' ', 1)
+        afields = withoutvalue[0].split('.', 8)
+        chi = fields.length + 1
+        afields.length == chi
+      ).slideDown 'fast'
+      return
+    return
+    
+  spancounter = 1
+  $ ->
+    $('.param-path').each ->
+      str = $(this).text()
+      fields = str.split('.', 8)
+      nstr = $('span.param-path').eq(spancounter).text()
+      nfields = nstr.split('.', 8)
+      spancounter++
+      switch fields.length
+        when 1
+          $(this).before '<span>&#9662;</span>'
+        when 2
+          $(this).before '<span>&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 3
+          $(this).before '<span>&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 4
+          $(this).before '<span>&emsp;&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 5
+          $(this).before '<span>&emsp;&emsp;&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 6
+          $(this).before '<span>&emsp;&emsp;&emsp;&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 7
+          $(this).before '<span>&emsp;&emsp;&emsp;&emsp;&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+        when 8
+          $(this).before '<span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&#9562;</span>'
+          if fields.length < nfields.length
+            $(this).before '<span>&#9662;</span>'
+      return
+    return
+
+
+
 getFriendlyParamNames = (params, nameIndex = -1) ->
   shortNames = []
   for n in params
