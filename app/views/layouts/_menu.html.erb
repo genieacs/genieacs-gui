@@ -29,4 +29,9 @@
     <%= link_to 'Files', files_path %>
   </li>
   <% end %>
+  <% if can?(:read, 'users') %>
+  <li class="<%= params[:controller] == 'users' ? 'active' : ''%>" >
+    <%= link_to 'Users', users_path %>
+  </li>
+  <% end %>
 </ul>
