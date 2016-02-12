@@ -34,4 +34,9 @@
     <%= link_to 'Users', users_path %>
   </li>
   <% end %>
+  <% if can?(:read, 'roles') %>
+  <li class="<%= params[:controller] == 'roles' ? 'active' : ''%>" >
+    <%= link_to 'Roles', roles_path %>
+  </li>
+  <% end %>
 </ul>

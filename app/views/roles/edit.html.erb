@@ -1,0 +1,21 @@
+<%
+content_for :title do 'Edit Role ' + @role.name end
+%>
+<h1>Editing role</h1>
+
+<%= render 'form' %>
+
+<h2>Privileges</h2>
+
+<table class="records">
+  <tr>
+    <th>Action</th>
+    <th>Weight</th>
+    <th>Resource</th>
+    <th></th>
+  </tr>
+  <%= render @role.privileges %>
+  <tr>
+    <td colspan="4"><%= render 'privileges/form' %></td>
+  </tr>
+</table>

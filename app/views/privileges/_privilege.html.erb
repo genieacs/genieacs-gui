@@ -1,0 +1,6 @@
+  <tr>
+    <td><%= privilege.action %></td>
+    <td><%= privilege.weight %></td>
+    <td><%= privilege.resource %></td>
+    <td class="action"><%= link_to 'Destroy', [privilege.role, privilege], method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'privileges') %></td>
+  </tr>

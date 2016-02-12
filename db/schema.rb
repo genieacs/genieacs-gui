@@ -11,7 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202145722) do
+ActiveRecord::Schema.define(version: 20160219094206) do
+
+  create_table "privileges", force: true do |t|
+    t.string   "action"
+    t.integer  "weight"
+    t.text     "resource"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "role_id"
+  end
+
+  add_index "privileges", ["role_id"], name: "index_privileges_on_role_id"
+
+  create_table "roles", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_roles", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "username"
