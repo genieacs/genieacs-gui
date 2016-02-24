@@ -41,7 +41,9 @@ GenieacsGui::Application.routes.draw do
 
   get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+/ }
 
-  resources :users
+  resources :users do
+    resources :user_roles
+  end
   resources :roles do
     resources :privileges
   end

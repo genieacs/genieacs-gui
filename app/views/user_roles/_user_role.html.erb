@@ -1,0 +1,4 @@
+  <tr>
+    <td><%= user_role.role.name %></td>
+    <td class="action"><%= link_to 'Destroy', [user_role.user, user_role], method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'user_roles') %></td>
+  </tr>

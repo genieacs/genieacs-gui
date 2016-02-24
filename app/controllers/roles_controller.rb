@@ -11,8 +11,7 @@ class RolesController < ApplicationController
   
   def edit
     @role = Role.find(params['id'])
-    @privileges = @role.privileges.all
-    @total = @privileges.count
+    @total = @role.privileges.count
   end
   
   def create
