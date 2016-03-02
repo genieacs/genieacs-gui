@@ -55,6 +55,8 @@ class FilesController < ApplicationController
       req['oui'] = params[:oui].strip
       req['productClass'] = params[:product_class].strip
       req['version'] = params[:version].strip
+      req['username'] = params[:username].strip
+      req['password'] = params[:password].strip
       res = http.request(req)
 
       if res.code == '201'
