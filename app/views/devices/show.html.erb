@@ -6,12 +6,7 @@ content_for :title do 'Device ' + @device['_id'] end
 var pending = {};
 
 $(function() {
-  var options = {
-    valueNames: ['param-path', 'param-value'],
-    page: 4000
-  };
-
-  var featureList = new List('device-params', options);
+  setdeviceautocomplete();
   refreshPending();
 });
 </script>
