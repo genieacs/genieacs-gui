@@ -17,6 +17,18 @@ filters = {
   <label for="weight">Weight</label><br />
   <input id="weight" name="weight" type="text" value="<%= @preset['weight'] %>" />
 </div>
+<br/>
+<div class="field">
+  <div style="float:left">
+    <label for="version">Version</label><br />
+    <input id="versionselect" name="versionselec" type="text" onblur="getpc();return false;"/>
+  </div>
+  <div>
+    <label for="version">Product Class</label><br />
+    <input id="productclassselect" name="productclassselec" type="text"/>
+  </div>
+  <button type="button" id="choose" onclick="parampush();">choose</button><p id="notfound" style="display:inline"></p>
+</div>
 <h2>Precondition</h2>
 <div id="precondition">
   <% precondition = @preset['precondition'].is_a?(Hash) ? @preset['precondition'].to_json : @preset['precondition'] %>
@@ -42,5 +54,6 @@ filters = {
 $(function() {
   initFilters('precondition');
   initConfigurations('configurations');
+  setautocomplete();
 });
 </script>

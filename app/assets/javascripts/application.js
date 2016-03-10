@@ -11,9 +11,9 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery-ui/autocomplete
 //= require jquery_ujs
 //= require turbolinks
-//= require list.min
 //= require raphael-min
 //= require pie
 //= require_tree .

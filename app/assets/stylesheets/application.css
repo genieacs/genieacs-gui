@@ -10,5 +10,12 @@
  *
  *= require reset
  *= require_self
+ *= require jquery-ui/autocomplete
  *= require_tree .
  */
+
+.ui-autocomplete{
+	max-height:150px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
