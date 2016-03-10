@@ -114,31 +114,30 @@ class DevicesController < ApplicationController
   def update
     if params.include? 'refresh_summary'
       can?(:read, 'devices/refresh_summary') do
-        parameterNames = []
-        objectNames = []
-        for k, v in Rails.configuration.summary_parameters
-          if v.is_a?(String)
-            parameterNames << v
-          else
-            objectNames << v['_object']
-          end
-        end
+        to_refresh = ActiveSupport::JSON.decode(params['refresh_summary'])
 
-        for o in objectNames
+        for o in to_refresh['objects']
           task = {'name' => 'refreshObject', 'objectName' => o}
           http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
-        task = {'name' => 'getParameterValues', 'parameterNames' => parameterNames}
+
+        for o in to_refresh['custom_commands']
+          task = {'name' => 'customCommand', 'command' => "#{o[16..-1]} get"}
+          http = create_api_conn()
+          res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
+        end
+
+        task = {'name' => 'getParameterValues', 'parameterNames' => to_refresh['parameters']}
         http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))
 
         if res.code == '200'
           flash[:success] = 'Device refreshed'
         elsif res.code == '202'
-          flash[:warning] = 'Device is offline'
+          flash[:warning] = res.message
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -152,7 +151,7 @@ class DevicesController < ApplicationController
         if res.code == '200'
           flash[:success] = 'Tag added'
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -166,7 +165,7 @@ class DevicesController < ApplicationController
         if res.code == '200'
           flash[:success] = 'Tag removed'
         else
-          flash[:error] = "Unexpected error (#{res.code})"
+          flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
         end
       end
     end
@@ -211,9 +210,9 @@ class DevicesController < ApplicationController
             if res.code == '200'
               flash[:success] = 'Tasks committed'
             elsif res.code == '202'
-              flash[:warning] = 'Tasks added to queue and will be committed when device is online'
+              flash[:warning] = res.message
             else
-              flash[:error] = "Unexpected error (#{res.code})"
+              flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
             end
           end
         end

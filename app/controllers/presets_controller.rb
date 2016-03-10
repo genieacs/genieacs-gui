@@ -75,7 +75,7 @@ class PresetsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Preset saved'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :action => :index
@@ -91,7 +91,7 @@ class PresetsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Preset deleted'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :action => :index

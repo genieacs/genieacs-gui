@@ -40,7 +40,7 @@ class FaultsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Task updated'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :back
@@ -56,7 +56,7 @@ class FaultsController < ApplicationController
       if res.code == '200'
         flash[:success] = 'Faulty task deleted'
       else
-        flash[:error] = "Unexpected error (#{res.code})"
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
       redirect_to :back

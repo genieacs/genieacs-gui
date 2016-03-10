@@ -7,7 +7,7 @@ class HomeController < ApplicationController
         require 'net/http'
         http = create_api_conn()
 
-        graphs = ActiveSupport::JSON.decode(ERB.new(File.read('config/graphs.json.erb')).result)
+        graphs = ActiveSupport::JSON.decode(ERB.new(File.read(Rails.root.join('config/graphs.json.erb'))).result)
         for group_name, group_graphs in graphs
           for graph_name, graph in group_graphs
             for slice in graph

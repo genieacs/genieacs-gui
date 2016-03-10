@@ -35,24 +35,22 @@ window.fadeOutAndRemove = (el) ->
 
 window.initFilters = (id) ->
   f = $("##{id}")
-  query = JSON.parse(f.children('input[name=query]').attr('value'))
   container_selector = "##{id} > .filters_container"
   container = $(container_selector)
 
-  for q,v of query
-    if v instanceof Object
-      for op,v2 of v
-        if v2 instanceof Object
-          op = "$eq"
-          q = Object.keys(v2)[0]
-          v2 = v2[q]
+  recursive = (query) ->
+    for q,v of query
+      if q[0] == '$' # this is an operator
+        if q != '$and' # only $and operator is supported
+          throw new Error("The logical operator #{q} is not supported in precondition query.")
+        recursive(v2) for v2 in v
+      else if v instanceof Object
+        for op,v2 of v
+          addFilter(container, q, op, v2, false)
+      else
+        addFilter(container, q, '', v, false)
 
-          if v2 instanceof Object
-            op = Object.keys(v2)[0]
-            v2 = v2[op]
-        addFilter(container, q, op, v2, false)
-    else
-      addFilter(container, q, '', v, false)
+  recursive(JSON.parse(f.children('input[name=query]').attr('value')))
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
@@ -87,13 +85,14 @@ window.updateFilters = (id) ->
   # builds a mongodb query in the shortest possible form
   for name,p of params
     if p.length > 1
-      hasEq = false
-      for s in p
-        if s[0] == ''
-          hasEq = true
+      useAnd = false
+      p.sort()
+      for s, i in p
+        if s[0] == '' or s[0] == p[i-1]?[0]
+          useAnd = true
           break
 
-      if hasEq
+      if useAnd
         query['$and'] = [] if not query['$and']?
         for s in p
           o = {}
