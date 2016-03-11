@@ -30,14 +30,14 @@
   </li>
   <% end %>
   <% if Rails.configuration.auth_method == :db %>
-  <% if can?(:read, 'users') %>
-  <li class="<%= params[:controller] == 'users' ? 'active' : ''%>" >
-    <%= link_to 'Users', users_path %>
+  <% if can?(:read, 'roles') %>
+  <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >
+    <%= link_to 'Roles', roles_path %>
   </li>
   <% end %>
-  <% if can?(:read, 'roles') %>
-  <li class="<%= params[:controller] == 'roles' ? 'active' : ''%>" >
-    <%= link_to 'Roles', roles_path %>
+  <% if can?(:read, 'users') %>
+  <li class="admin <%= params[:controller] == 'users' ? 'active' : ''%>" >
+    <%= link_to 'Users', users_path %>
   </li>
   <% end %>
   <% end %>

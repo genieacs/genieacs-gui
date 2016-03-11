@@ -39,6 +39,7 @@ i {
     overflow: visible;
     display: block;
     margin-left: 10px;
+    margin-right: 10px;
 
     li {
       margin-top: 2px;
@@ -56,6 +57,11 @@ i {
       &.active, &:hover {
         border-bottom: 2px solid white;
         background-color: white; }
+
+      &.admin {
+        float: right;
+        margin-left: 2px;
+        margin-right: 2px; }
 
       a, a:visited, a:hover {
         display: inline-block;
