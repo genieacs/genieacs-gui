@@ -1,16 +1,20 @@
 class PrivilegesController < ApplicationController
   
   def create
-    @role = Role.find(params[:role_id])
-    @privilege = @role.privileges.create(privilege_params)
-    redirect_to edit_role_path(@role)
+    can?(:create, 'privileges') do
+      @role = Role.find(params[:role_id])
+      @privilege = @role.privileges.create(privilege_params)
+      redirect_to edit_role_path(@role)
+    end
   end
   
   def destroy
-    @role = Role.find(params[:role_id])
-    @privilege = @role.privileges.find(params['id'])
-    @privilege.destroy
-    redirect_to edit_role_path(@role)
+    can?(:delete, 'privileges') do
+      @role = Role.find(params[:role_id])
+      @privilege = @role.privileges.find(params['id'])
+      @privilege.destroy
+      redirect_to edit_role_path(@role)
+    end
   end
 
   private
