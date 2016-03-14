@@ -18,6 +18,8 @@ Privilege.create(action: 'update', weight: 1, resource: '/', role_id: 2)
 Privilege.create(action: 'delete', weight: 1, resource: '/', role_id: 2)
 
 Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 3)
+Privilege.create(action: 'read', weight: -1, resource: '/users', role_id: 3)
+Privilege.create(action: 'read', weight: -1, resource: '/roles', role_id: 3)
 
 User.create(username: 'admin', password: 'admin')
 User.create(username: 'user', password: 'user')
