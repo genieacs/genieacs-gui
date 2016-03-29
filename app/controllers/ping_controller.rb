@@ -1,7 +1,7 @@
 class PingController < ApplicationController
   def index
     require 'net/http'
-    http = Net::HTTP.new(Rails.configuration.genieacs_api_host, 7557)
+    http = create_api_conn()
     res = http.send_request(request.method, "/ping/#{params[:ip]}", nil)
 
     self.response.status = res.code
