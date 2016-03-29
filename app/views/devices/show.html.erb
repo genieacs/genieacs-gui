@@ -1,6 +1,8 @@
 <%
 can_edit_parameters = can?(:update, 'devices/parameters')
 content_for :title do 'Device ' + @device['_id'] end
+connUrl = @device['InternetGatewayDevice']['ManagementServer']['ConnectionRequestURL']['_value'] rescue @device['Device']['ManagementServer']['ConnectionRequestURL']['_value'] rescue ''
+pingIp = URI.parse(connUrl).host
 %>
 <script type="text/javascript">
 var pending = {};
@@ -64,7 +66,7 @@ $(function() {
   <% if can?(:read, 'devices/refresh_summary') %>
   &mdash;
   <a href="#" class="action" onclick='refreshSummary(<%= to_refresh.to_json.html_safe %>); return false;'>Refresh</a>,
-  <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] rescue '' %>');return false;">Ping</a>
+  <a href="#" class="action" onclick="pingDevice('<%= pingIp or '' %>');return false;">Ping</a>
   <% end %>
 </p>
 

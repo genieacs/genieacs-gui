@@ -142,6 +142,10 @@ window.removeTag = (tag) ->
   submitUpdate('remove_tag', tag)
 
 window.pingDevice = (ip) ->
+  if !ip or ip == '(null)'
+    alert('No IP address')
+    return
+
   $.get("/ping/#{ip}", (data) ->
     alert(data)
   ).fail(() ->
