@@ -2,6 +2,7 @@ class DevicesController < ApplicationController
   require 'net/http'
   require 'json'
   require 'util'
+  require 'ipaddress'
 
   def flatten_params(params, prefix = '')
     output = []

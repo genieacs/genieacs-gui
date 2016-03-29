@@ -64,7 +64,7 @@ $(function() {
   <% if can?(:read, 'devices/refresh_summary') %>
   &mdash;
   <a href="#" class="action" onclick='refreshSummary(<%= to_refresh.to_json.html_safe %>); return false;'>Refresh</a>,
-  <a href="#" class="action" onclick="pingDevice('<%= @device['summary.ip']['_value'] rescue '' %>');return false;">Ping</a>
+  <a href="#" class="action" onclick="pingDevice('<%= IPAddress::IPv4::extract @device['summary.connectionUrl']['_value'] rescue '' %>');return false;">Ping</a>
   <% end %>
 </p>
 
