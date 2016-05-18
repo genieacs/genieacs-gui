@@ -220,7 +220,63 @@ prompt = (paramName, paramType, defaultValue, options, callback) ->
   buttons.append(ok).append(' ').append(cancel)
   return false
 
+
+selectText = (container) ->
+  if document.selection
+    range = document.body.createTextRange()
+    range.moveToElementText(container)
+    range.select()
+  else if window.getSelection
+    range = document.createRange()
+    range.selectNode(container);
+    window.getSelection().addRange(range)
+
+
+window.showLongValue = (container) ->
+  if container.outerWidth() == container[0].scrollWidth or container[0].scrollWidth == 0
+    selectText(container.get(0))
+    return
+
+  modalWrapper = $('<div class="modal-wrapper"></div>')
+  $('body').append(modalWrapper)
+
+  modal = $('<div class="modal long-value-modal"></div>')
+  modalWrapper.append(modal)
+
+  valueContainer = $("<textarea readonly=\"readonly\" cols=80>#{container.text()}</textarea>")
+
+  modal.append(valueContainer)
+
+  buttons = $('<div class="buttons"></div>')
+  modal.append(buttons)
+  close = $('<a href="#">Close</a>').click(() ->
+    modalWrapper.remove()
+    return false
+  )
+
+  buttons.append(close)
+  valueContainer.focus()
+  valueContainer.select()
+  return false
+
+
 $(document).keydown((e) ->
   if e.keyCode == 27
     $('.modal-wrapper').remove()
+)
+
+$(document).on('mousedown', '.param-value, .param-path', null, (event) ->
+  event.stopPropagation()
+  $(document).on('mouseup mousemove', '.param-value, .param-path', null, handler = (event) ->
+    $(document).off('mouseup mousemove', '.param-value, .param-path', handler)
+    if event.type == 'mouseup'
+      showLongValue($(this))
+  )
+)
+
+$(document).on('click', '.modal-wrapper', null, (e) ->
+  if( e.target != this )
+       return false;
+
+  $(this).remove()
 )

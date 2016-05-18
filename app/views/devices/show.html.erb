@@ -131,7 +131,7 @@ $(function() {
     <li>
       <span class="param-path"><%= p['_path'] %></span>
       <% if p.has_key?('_value')%>
-        <span class="param-value"><%= param_value(p['_path'], @device) %></span>
+        <%= param_value(p['_path'], @device) %>
       <% end %>
       <span class="actions">
         <% if p.has_key?('_object') %>

@@ -51,11 +51,7 @@
       border-bottom: 1px dotted $color1;
 
       .param-path {
-        user-select: all;
         color: rgb(70,60,0);
-      }
-      .param-value {
-        user-select: all;
       }
       .value-writable {
         font-weight: bold;
@@ -100,6 +96,15 @@
     padding-right: 0.1em;
     content: "\25CF";
   }
+}
+
+.param-value {
+  white-space: nowrap;
+  max-width: 80ex;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 .param-value:empty:before {
@@ -168,6 +173,25 @@
     .buttons {
       margin-top: 10px;
       text-align: center;
+    }
+  }
+
+  .long-value-modal {
+    margin: 0;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+
+    textarea {
+      font-family: monospace;
+      margin: 0;
+      min-width: 200px;
+      max-width: 800px;
+      height: 150px;
+      min-height: 100px;
+      max-height: 400px;
+      border: 1px solid $color1;
+      border-radius: 4px;
     }
   }
 }
