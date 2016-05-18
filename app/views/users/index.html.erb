@@ -1,0 +1,29 @@
+<%
+content_for :title do 'User List' end
+%>
+<h1>Listing users</h1>
+
+<h2>Showing <%= @total %> users</h2>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= user.username %></td>
+    <td class="action"><%= link_to 'Edit', edit_user_path(user) if can?(:update, 'users') %></td>
+    <td class="action"><%= link_to 'Destroy', user_path(user), method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'users') %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= render partial: 'pagination' %>
+
+<br />
+
+<%= link_to 'New user', new_user_path if can?(:create, 'users') %>

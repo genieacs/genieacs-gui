@@ -1,0 +1,3 @@
+<%= form_for([@role, @role.privileges.build]) do |f| %>
+    <%= f.text_field :action %> <%= f.text_field :weight %> <%= f.text_field :resource %> <%= f.submit "Add Privilege" %>
+<% end %>

@@ -1,0 +1,3 @@
+<%= form_for([@user, @user.user_roles.build]) do |f| %>
+    <%= f.select :role_id, Role.all.collect {|x| [x.name, x.id]}, {}, {} %> <%= f.submit "Add Role" %>
+<% end %>

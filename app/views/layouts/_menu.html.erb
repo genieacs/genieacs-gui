@@ -29,4 +29,16 @@
     <%= link_to 'Files', files_path %>
   </li>
   <% end %>
+  <% if Rails.configuration.auth_method == :db %>
+  <% if can?(:read, 'roles') %>
+  <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >
+    <%= link_to 'Roles', roles_path %>
+  </li>
+  <% end %>
+  <% if can?(:read, 'users') %>
+  <li class="admin <%= params[:controller] == 'users' ? 'active' : ''%>" >
+    <%= link_to 'Users', users_path %>
+  </li>
+  <% end %>
+  <% end %>
 </ul>

@@ -67,6 +67,11 @@ class ApplicationController < ActionController::Base
   end
 
   def get_permissions
+    case Rails.configuration.auth_method
+    when :db
+      fetch_permissions_from_db
+    end
+
     roles = ['anonymous']
     if current_user
       roles.concat(Rails.configuration.users[current_user]['roles'])
@@ -83,6 +88,30 @@ class ApplicationController < ActionController::Base
         end
       end
       normalize_permissions(permissions)
+    end
+  end
+
+  def fetch_permissions_from_db
+    roles = Role.all
+    Rails.configuration.permissions = {}
+
+    roles.each do |role|
+      Rails.configuration.permissions[role.name] = Array.new
+      role.privileges.each do |privilege|
+        Rails.configuration.permissions[role.name].push([privilege.action, privilege.weight, privilege.resource])
+      end
+    end
+
+    users = User.all
+    Rails.configuration.users = {}
+
+    users.each do |user|
+      Rails.configuration.users[user.username] = Hash.new
+      Rails.configuration.users[user.username]["password"] = user.password
+      Rails.configuration.users[user.username]["roles"] = Array.new
+      user.roles.each do |role|
+        Rails.configuration.users[user.username]["roles"].push(role.name)
+      end
     end
   end
 

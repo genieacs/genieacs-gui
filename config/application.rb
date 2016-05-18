@@ -21,5 +21,11 @@ module GenieacsGui
     # config.i18n.default_locale = :de
 
     config.page_size = 10
+
+    # Set preferred authentication method to use
+    # :yml = use roles from roles.yml and users from users.yml
+    config.auth_method = :yml
+    # :db = use roles and users stored in the database
+    #config.auth_method = :db
   end
 end

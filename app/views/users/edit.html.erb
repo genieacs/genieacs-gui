@@ -1,0 +1,19 @@
+<%
+content_for :title do 'Edit User ' + @user.username end
+%>
+<h1>Editing user</h1>
+
+<%= render 'form' %>
+
+<h2>Roles</h2>
+
+<table class="records">
+  <tr>
+    <th>Action</th>
+    <th></th>
+  </tr>
+  <%= render @user.user_roles %>
+  <tr>
+    <td colspan="2"><%= render 'user_roles/form' %></td>
+  </tr>
+</table>
