@@ -224,11 +224,12 @@ class DevicesController < ApplicationController
   end
 
   def destroy
-    deviceId = params[:id]
-    http = create_api_conn()
-    res = http.delete("/devices/#{URI::escape(deviceId)}")
-    if res.code != '200'
-      flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
+    can?(:delete, '/devices/') do
+      http = create_api_conn()
+      res = http.delete("/devices/#{URI::escape(params[:id])}")
+      if res.code != '200'
+        flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
+      end
     end
 
     redirect_to :controller => 'devices', :action => 'index'
