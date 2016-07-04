@@ -1,0 +1,32 @@
+
+<% if can?(:read, 'tasks') %>
+<h2>Task queue</h2>
+<table id="task-queue" class="records">
+  <tr>
+    <th>Task</th>
+    <th>Time</th>
+    <th>Retries</th>
+    <th>Fault</th>
+    <th></th>
+  </tr>
+  <% for t in @tasks %>
+  <tr>
+  <td><%= t['name'] %></td>
+  <td><%= t['timestamp'] %></td>
+  <td><%= t['retries'].to_i %></td>
+  <td><%= task_fault(t) %></td>
+  <td style="text-align:right;">
+    <% if can?(:update, 'tasks/retry') %>
+    <%= link_to 'Retry', "/faults/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
+    <% end %>
+    <% if can?(:delete, 'tasks') %>
+    <%= link_to 'Destroy', "/faults/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </td>
+  </tr>
+  <% end %>
+  <% if @tasks.empty? %>
+  <tr class="no-records"><td colspan="0">Empty</td></tr>
+  <% end %>
+</table>
+<% end %>

@@ -1,0 +1,15 @@
+<%
+  connUrl = @device['InternetGatewayDevice']['ManagementServer']['ConnectionRequestURL']['_value'] rescue @device['Device']['ManagementServer']['ConnectionRequestURL']['_value'] rescue ''
+  pingIp = URI.parse(connUrl).host
+%>
+<p>
+  <b>Last inform:</b>
+  <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
+  <span class="<%= cls %>" title="<%=@device['summary.lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
+  <% if can?(:read, 'devices/refresh_summary') %>
+  &mdash;
+  <a href="#" class="action" onclick='refreshSummary(<%= to_refresh.to_json.html_safe %>); return false;'>Refresh</a>,
+  <a href="#" class="action" onclick="pingDevice('<%= pingIp or '' %>');return false;">Ping</a>
+  <% end %>
+</p>
+<br />

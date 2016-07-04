@@ -1,0 +1,13 @@
+<div class="tags">
+<strong>Tags:</strong>
+<% tags.each do |t| %>
+<span class="tag"><%= t %>
+  <% if can?(:delete, 'devices/tags') %>
+  <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
+  <% end %>
+</span>
+<% end %>
+<% if can?(:create, 'devices/tags') %>
+<a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
+<% end %>
+</div>

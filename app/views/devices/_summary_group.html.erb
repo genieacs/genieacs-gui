@@ -1,0 +1,22 @@
+<div class="summary">
+<% for k, v in params %>
+  <% if v.is_a? Hash %>
+    <% if v.has_key? '_object' and (object = get_param(v['_object'], @device)) != nil %>
+      <h2><%= k %></h2>
+      <%= render partial: 'object_table', locals: {params: v, object: object} %>
+    <% end %>
+  <% else %>
+    <% if (p = get_param(v, @device)) != nil %>
+      <p>
+        <strong><%= k %>:</strong>
+        <%= param_value(v, @device) %>
+        <% if p['_writable'] and can_edit_parameters %>
+          &mdash;
+          <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
+          <a href="#" onclick='editParam("<%= v %>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
+        <% end %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>
+</div>
