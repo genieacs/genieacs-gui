@@ -1,0 +1,36 @@
+<% if can?(:read, 'devices/parameters') %>
+<h2>Device parameters</h2>
+<div id="device-params">
+  <input class="search" type="search" placeholder="Type to search..." />
+  <ul class="list">
+    <% for p in @device_params %>
+    <li>
+      <span class="param-path"><%= p['_path'] %></span>
+      <% if p.has_key?('_value')%>
+        <%= param_value(p['_path'], @device) %>
+      <% end %>
+      <span class="actions">
+        <% if p.has_key?('_object') %>
+          <% if p['_writable'] %>
+            <a href="#" onclick="addObject('<%= p['_path']%>');return false;">Add</a>
+          <% end %>
+          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
+        <% elsif p.has_key?('_instance') %>
+          <% if p['_writable'] %>
+            <a href="#" onclick="deleteObject('<%= p['_path']%>');return false;">Delete</a>
+          <% end %>
+          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
+        <% else %>
+          <% if p['_writable'] and can_edit_parameters %>
+            <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
+            <a href="#" onclick='editParam("<%= p['_path']%>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
+          <% end %>
+          <a href="#" onclick="refreshParam('<%= p['_path']%>');return false;">Refresh</a>
+        <% end %>
+      </span>
+    </li>
+    <% end %>
+  </ul>
+</div>
+<br/>
+<% end %>

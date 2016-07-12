@@ -1,8 +1,6 @@
 <%
 can_edit_parameters = can?(:update, 'devices/parameters')
 content_for :title do 'Device ' + @device['_id'] end
-connUrl = @device['InternetGatewayDevice']['ManagementServer']['ConnectionRequestURL']['_value'] rescue @device['Device']['ManagementServer']['ConnectionRequestURL']['_value'] rescue ''
-pingIp = URI.parse(connUrl).host
 %>
 <script type="text/javascript">
 var pending = {};
@@ -20,30 +18,14 @@ $(function() {
 
 <h1>Device: <%= @device['_id'] %></h1>
 
-<div class="tags">
-<% tags = @device['_tags'] || [] %>
-<strong>Tags:</strong>
-<% tags.each do |t| %>
-<span class="tag"><%= t %>
-  <% if can?(:delete, 'devices/tags') %>
-  <a class="delete action" href="#" onclick="removeTag('<%= t %>');return false;">&nbsp;x&nbsp;</a>
-  <% end %>
-</span>
-<% end %>
-<% if can?(:create, 'devices/tags') %>
-<a class="action" href="#" onclick="addTag();return false;">&nbsp;+&nbsp;</a>
-<% end %>
-</div>
+<%= render partial: 'tags', locals: {tags: @device['_tags'] || []} %>
 
 <%
-  summary_parameters = {}
-  summary_objects = {}
   to_refresh = {'parameters' => [], 'objects' => [], 'custom_commands' => []}
 
   for k, v in Rails.configuration.summary_parameters
     if v.is_a?(String)
       if (p = get_param(v, @device)) != nil
-        summary_parameters[k] = v
         if v.start_with?('_customCommands')
           to_refresh['custom_commands'] << v
         else
@@ -52,138 +34,19 @@ $(function() {
       end
     else
       if get_param(v['_object'], @device) != nil
-        summary_objects[k] = v
         to_refresh['objects'] << v['_object']
       end
     end
   end
 %>
-
-<p>
-  <b>Last inform:</b>
-  <% cls = 'status-green' if (@now - @device['summary.lastInform'].to_time) < 60 %>
-  <span class="<%= cls %>" title="<%=@device['summary.lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, @device['summary.lastInform'], include_seconds: true) %> ago</span>
-  <% if can?(:read, 'devices/refresh_summary') %>
-  &mdash;
-  <a href="#" class="action" onclick='refreshSummary(<%= to_refresh.to_json.html_safe %>); return false;'>Refresh</a>,
-  <a href="#" class="action" onclick="pingDevice('<%= pingIp or '' %>');return false;">Ping</a>
-  <% end %>
-</p>
-
-<div class="summary">
-<% for k, v in summary_parameters %>
-  <p>
-    <strong><%= k %>:</strong>
-    <%= param_value(v, @device) %>
-    <% if (p = get_param(v, @device))['_writable'] and can_edit_parameters %>
-    &mdash;
-    <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
-    <a href="#" onclick='editParam("<%= v %>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
-    <% end %>
-  </p>
-<% end %>
-<% for k, v in summary_objects %>
-    <h2><%= k %></h2>
-    <%= render partial: 'object_table', locals: {params: v} %>
-<% end %>
-</div>
-
-<% if can?(:read, 'tasks') %>
-<h2>Task queue</h2>
-<table id="task-queue" class="records">
-  <tr>
-    <th>Task</th>
-    <th>Time</th>
-    <th>Retries</th>
-    <th>Fault</th>
-    <th></th>
-  </tr>
-  <% for t in @tasks %>
-  <tr>
-  <td><%= t['name'] %></td>
-  <td><%= t['timestamp'] %></td>
-  <td><%= t['retries'].to_i %></td>
-  <td><%= task_fault(t) %></td>
-  <td style="text-align:right;">
-    <% if can?(:update, 'tasks/retry') %>
-    <%= link_to 'Retry', "/faults/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
-    <% end %>
-    <% if can?(:delete, 'tasks') %>
-    <%= link_to 'Destroy', "/faults/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
-    <% end %>
-  </td>
-  </tr>
-  <% end %>
-  <% if @tasks.empty? %>
-  <tr class="no-records"><td colspan="0">Empty</td></tr>
-  <% end %>
-</table>
-<% end %>
+<%= render partial: 'last_inform', locals: {to_refresh: to_refresh} %>
+<%= render partial: 'summary_group', locals: {can_edit_parameters: can_edit_parameters, params: Rails.configuration.summary_parameters} %>
+<%= render partial: 'tasks' %>
 
 <div style="clear:both;"></div>
 
-<% if can?(:read, 'devices/parameters') %>
-<h2>Device parameters</h2>
-<div id="device-params">
-  <input class="search" type="search" placeholder="Type to search..." />
-  <ul class="list">
-    <% for p in @device_params %>
-    <li>
-      <span class="param-path"><%= p['_path'] %></span>
-      <% if p.has_key?('_value')%>
-        <%= param_value(p['_path'], @device) %>
-      <% end %>
-      <span class="actions">
-        <% if p.has_key?('_object') %>
-          <% if p['_writable'] %>
-            <a href="#" onclick="addObject('<%= p['_path']%>');return false;">Add</a>
-          <% end %>
-          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
-        <% elsif p.has_key?('_instance') %>
-          <% if p['_writable'] %>
-            <a href="#" onclick="deleteObject('<%= p['_path']%>');return false;">Delete</a>
-          <% end %>
-          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
-        <% else %>
-          <% if p['_writable'] and can_edit_parameters %>
-            <% options = Rails.configuration.parameters_edit[p['_path'].gsub(/\.\d+\./, '..')] %>
-            <a href="#" onclick='editParam("<%= p['_path']%>", "<%= p['_type'] %>", <%= p['_value'].to_json.html_safe %>, <%= options.to_json.html_safe %>);return false;'>Edit</a>
-          <% end %>
-          <a href="#" onclick="refreshParam('<%= p['_path']%>');return false;">Refresh</a>
-        <% end %>
-      </span>
-    </li>
-    <% end %>
-  </ul>
-</div>
-<br/>
-<% end %>
-
-<p>
-<% if can?(:update, 'devices/reboot') %>
-<div><a id="reboot" href="#" onclick="reboot();return false;">Reboot</a></div>
-<% end %>
-<% if can?(:update, 'devices/factory_reset') %>
-<div><a id="factory-reset" href="#" onclick="factoryReset();return false;">Factory reset</a></div>
-<% end %>
-<% if can?(:update, 'devices/download') %>
-<div class="filter_selection">
-  <a id="push-file" href="#">Push file &raquo;</a>
-  <div class="popup" style="bottom: 0;">
-    <% for f in @files %>
-    <a href="#" onclick="pushFile('<%= f['_id'] %>', '<%= f['filename'] %>');return false;"><%= f['filename'] %> (<%= f['metadata']['fileType'] %>)</a><br/>
-    <% end %>
-  </div>
-</div>
-<% end %>
-<% if can?(:create, 'files') %>
-<div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: (@device['summary.softwareVersion']['_value'].html_safe rescue '') }}  %></div>
-<% end %>
-
-<% if can?(:delete, 'devices') %>
-<div><%= link_to 'Delete', nil, method: :delete, data: {confirm: 'Are you sure you want to delete this device?'} %></div>
-<% end %>
-</p>
+<%= render partial: 'params', locals: {can_edit_parameters: can_edit_parameters} %>
+<%= render partial: 'commands' %>
 
 <div id="pending">
   <h>Pending tasks</h>
