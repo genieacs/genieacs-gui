@@ -69,6 +69,7 @@ class PresetsController < ApplicationController
       preset['weight'] = params['weight'].to_i
       preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
+      preset['schedule'] = params['schedule']
 
       http = create_api_conn()
       res = http.put("/presets/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(preset))

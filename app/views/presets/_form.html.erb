@@ -15,7 +15,12 @@ filters = {
 <br/>
 <div class="field">
   <label for="weight">Weight</label><br />
-  <input id="weight" name="weight" type="text" value="<%= @preset['weight'] %>" />
+  <input id="weight" name="weight" type="text" value="<%= @preset['weight'] or 0 %>" />
+</div>
+<br/>
+<div class="field">
+   <label for="schedule">Schedule</label><br />
+   <input id="schedule" name="schedule" type="text" value="<%= @preset['schedule'] %>" placeholder="e.g. 3600 0 3 * * 1-5" />
 </div>
 <h2>Precondition</h2>
 <div id="precondition">
