@@ -20,7 +20,12 @@ filters = {
 <br/>
 <div class="field">
    <label for="schedule">Schedule</label><br />
-   <input id="schedule" name="schedule" type="text" value="<%= @preset['schedule'] %>" placeholder="e.g. 3600 0 3 * * 1-5" />
+   <input id="schedule" name="schedule" type="text" value="<%= @preset['schedule'] %>" placeholder="e.g. &quot;3600 0 3 * * 1-5&quot;" />
+</div>
+<br/>
+<div class="field">
+  <label for="events">Events</label><br />
+  <input id="events" name="events" type="text" value="<%= events_to_string(@preset['events']) %>" placeholder="e.g. &quot;1 BOOT, -0 BOOTSTRAP&quot;" />
 </div>
 <h2>Precondition</h2>
 <div id="precondition">

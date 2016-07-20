@@ -24,6 +24,30 @@ class PresetsController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)
   end
 
+  def events_to_string(events)
+    begin
+      events.collect {|k,v| "#{'-' if not v}#{k}"}.join(', ')
+    rescue
+      ''
+    end
+  end
+
+  def events_to_object(events)
+    obj = {}
+    events.split(',').each do |v|
+      v.strip!
+      if v[0] == '-'
+        obj[v[1..-1].strip] = false
+      else
+        obj[v] = true
+      end
+    end
+    return obj
+  end
+
+  helper_method :events_to_object
+  helper_method :events_to_string
+
   # GET /presets
   # GET /presets.json
   def index
@@ -70,6 +94,7 @@ class PresetsController < ApplicationController
       preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
       preset['schedule'] = params['schedule']
+      preset['events'] = events_to_object(params['events'])
 
       http = create_api_conn()
       res = http.put("/presets/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(preset))
