@@ -1,4 +1,4 @@
-class Privilege < ActiveRecord::Base
+class Privilege < ApplicationRecord
   belongs_to :role
   validates :action, presence: true,
                     length: { minimum: 4 }

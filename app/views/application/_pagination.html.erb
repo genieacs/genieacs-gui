@@ -16,7 +16,7 @@
     <% if current_page == 1 %>
       <span>&#8592; Previous</span>
     <% else %>
-      <%= link_to '&#8592; Previous'.html_safe, params.merge(:page => current_page - 1) %>
+      <%= link_to '&#8592; Previous'.html_safe, params.permit(:query, :sort).merge(page: current_page - 1) %>
     <% end %>
 
     <% for i in pages %>
@@ -25,13 +25,13 @@
       <% elsif i == 0 %>
         ...
       <% else %>
-        <%= link_to i, params.merge(:page => i) %>
+        <%= link_to i, params.permit(:query, :sort).merge(page: i) %>
       <% end %>
     <% end %>
     <% if current_page == total_pages %>
       <span>Next &#8594;</span>
     <% else %>
-    <%= link_to 'Next &#8594;'.html_safe, params.merge(:page => current_page + 1) %>
+    <%= link_to 'Next &#8594;'.html_safe, params.permit(:query, :sort).merge(page: current_page + 1) %>
     <% end %>
   <% end %>
 </div>

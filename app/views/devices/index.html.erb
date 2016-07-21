@@ -52,10 +52,10 @@ filters = {
 
 <%= render partial: 'pagination' %>
 
-<%= link_to 'Download', params.except(:page).merge(:format => :csv) %>
+<%= link_to 'Download', params.permit(:query, :sort).merge(:format => :csv) %>
 
 <script type="text/javascript">
 $(function() {
-  initFilters('filters');  
+  initFilters('filters');
 });
 </script>
