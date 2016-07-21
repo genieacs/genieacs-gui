@@ -34,6 +34,18 @@ GenieacsGui::Application.routes.draw do
   post 'objects' => 'objects#update'
   delete 'objects/:id' => 'objects#destroy'
 
+  get 'provisions' => 'provisions#index'
+  get 'provisions/new' => 'provisions#new'
+  get 'provisions/:id/edit' => 'provisions#edit'
+  post 'provisions' => 'provisions#update'
+  delete 'provisions/:id' => 'provisions#destroy'
+
+  get 'virtual_parameters' => 'virtual_parameters#index'
+  get 'virtual_parameters/new' => 'virtual_parameters#new'
+  get 'virtual_parameters/:id/edit' => 'virtual_parameters#edit'
+  post 'virtual_parameters' => 'virtual_parameters#update'
+  delete 'virtual_parameters/:id' => 'virtual_parameters#destroy'
+
   get 'files' => 'files#index'
   get 'files/new' => 'files#new'
   post 'files' => 'files#upload'

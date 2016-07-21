@@ -24,6 +24,16 @@
     <%= link_to 'Objects', objects_path %>
   </li>
   <% end %>
+  <% if can?(:read, 'provisions') %>
+  <li class="<%= params[:controller] == 'provisions' ? 'active' : ''%>" >
+    <%= link_to 'Provisions', provisions_path %>
+  </li>
+  <% end %>
+  <% if can?(:read, 'virtual_parameters') %>
+  <li class="<%= params[:controller] == 'virtual_parameters' ? 'active' : ''%>" >
+    <%= link_to 'Virtual Parameters', virtual_parameters_path %>
+  </li>
+  <% end %>
   <% if can?(:read, 'files') %>
   <li class="<%= params[:controller] == 'files' ? 'active' : ''%>" >
     <%= link_to 'Files', files_path %>

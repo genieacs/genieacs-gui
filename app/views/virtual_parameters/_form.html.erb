@@ -1,0 +1,17 @@
+<form method="POST" action="/virtual_parameters">
+<%= token_tag form_authenticity_token %>
+<div class="field">
+  <label for="name">Name</label><br />
+  <input id="name" name="name" type="text" <%= 'readonly' if @virtual_parameter.include? '_id' %> value="<%= @virtual_parameter['_id'] %>" />
+</div>
+
+<br/>
+<div class="field">
+  <label for="weight">Script</label><br />
+  <textarea id="script" name="script" cols="80" rows="24"><%= h @virtual_parameter['script'] %></textarea>
+</div>
+
+<br/>
+<div class="actions">
+  <input type="submit" value="Save" />
+</div>

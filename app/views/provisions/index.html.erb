@@ -1,0 +1,29 @@
+<%
+content_for :title do 'Provision List' end
+%>
+<h1>Listing provisions</h1>
+
+<h2>Showing <%= @total %> provisions</h2>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @provisions.each do |provision| %>
+  <tr>
+    <td><%= provision['_id'] %></td>
+    <td class="action"><%= link_to 'Edit', "/provisions/#{provision['_id']}/edit" if can?(:update, 'provisions') %></td>
+    <td class="action"><%= link_to 'Destroy', "/provisions/#{provision['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'provisions') %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= render partial: 'pagination' %>
+
+<br />
+
+<%= link_to 'New provision', '/provisions/new' if can?(:create, 'provisions') %>

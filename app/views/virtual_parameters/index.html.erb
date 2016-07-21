@@ -1,0 +1,29 @@
+<%
+content_for :title do 'Virtual Parameter List' end
+%>
+<h1>Listing virtual parameters</h1>
+
+<h2>Showing <%= @total %> virtual parameters</h2>
+
+<table class="records">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @virtual_parameters.each do |virtual_parameter| %>
+  <tr>
+    <td><%= virtual_parameter['_id'] %></td>
+    <td class="action"><%= link_to 'Edit', "/virtual_parameters/#{virtual_parameter['_id']}/edit" if can?(:update, 'virtual_parameters') %></td>
+    <td class="action"><%= link_to 'Destroy', "/virtual_parameters/#{virtual_parameter['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'virtual_parameters') %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= render partial: 'pagination' %>
+
+<br />
+
+<%= link_to 'New virtual parameter', '/virtual_parameters/new' if can?(:create, 'virtual_parameters') %>
