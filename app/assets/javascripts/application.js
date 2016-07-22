@@ -15,5 +15,6 @@
 //= require turbolinks
 //= require list.min
 //= require raphael-min
+//= require csv.min
 //= require pie
 //= require_tree .

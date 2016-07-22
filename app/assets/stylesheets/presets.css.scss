@@ -14,4 +14,10 @@
   input[_name=tag], input[_name=object] {
     width: 150px;
   }
+  input[_name=provision] {
+    width: 100px;
+  }
+  input[_name=args] {
+    width: 400px;
+  }
 }

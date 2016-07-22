@@ -1,3 +1,15 @@
+window.addProvision = (container, name = '', args = [], fade = true) ->
+  el = $('<div configurationType="provision">')
+  el.append('Provision name: ')
+  el.append($('<input/>', {type: 'text', _name: 'provision', value: name}))
+  el.append(' Arguments: ')
+  el.append($('<input/>', {type: 'text', _name: 'args', value: CSV.encode([args])}))
+  el.append('<a href="#" class="action" onclick="fadeOutAndRemove($(this).parent());return false;">&nbsp;x&nbsp;</a>')
+
+  $(container).append(el)
+  el.hide().fadeIn(300) if fade
+
+
 window.addValueConfiguration = (container, name = '', value = '', fade = true) ->
   html = """<div configurationType="value">
       Set
@@ -146,10 +158,13 @@ window.initConfigurations = (id) ->
         addCustomCommandAgeConfiguration(container_selector, c['command'], c['age'], false)
       when 'software_version'
         addSoftwareVersionConfiguration(container_selector, c['software_version'], false)
+      when 'provision'
+        addProvision(container_selector, c['name'], c['args'], false)
 
   popup = """
     <a href="#" class="action">&nbsp;+&nbsp;</a>
     <div class="popup">
+      <a href="#" class="action" onclick="addProvision('#{container_selector}');return false;">Provision</a><br/>
       <a href="#" class="action" onclick="addValueConfiguration('#{container_selector}');return false;">Set</a><br/>
       <a href="#" class="action" onclick="addAgeConfiguration('#{container_selector}');return false;">Refresh</a><br/>
       <a href="#" class="action" onclick="addAddTagConfiguration('#{container_selector}');return false;">Add tag</a><br/>
@@ -203,5 +218,9 @@ window.updateConfigurations = (id) ->
       when 'software_version'
         softwareVersion = $(this).children('input[_name="software_version"]').val().trim()
         configurations.push({type: 'software_version', software_version: softwareVersion})
+      when 'provision'
+        name = $(this).children('input[_name="provision"]').val().trim()
+        args = CSV.parse($(this).children('input[_name="args"]').val().trim())[0]
+        configurations.push({type: 'provision', name: name, args: args})
   )
   $("##{id} > input[name=configurations]").attr('value', JSON.stringify(configurations))
