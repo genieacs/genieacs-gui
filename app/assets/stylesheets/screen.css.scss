@@ -237,7 +237,7 @@ input[type="submit"], input[type="button"], .button {
     color: $color2;
   } }
 
-select, input {
+select, input, textarea, .CodeMirror {
   border-radius: 4px;
   color: $color5;
   background-color: white;

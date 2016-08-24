@@ -17,4 +17,6 @@
 //= require raphael-min
 //= require csv.min
 //= require pie
+//= require codemirror
+//= require codemirror-javascript
 //= require_tree .
