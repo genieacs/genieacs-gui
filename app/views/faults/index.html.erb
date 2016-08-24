@@ -8,8 +8,9 @@ content_for :title do 'Fault List' end
 <script type="text/javascript">
 filters = {
   'device' : 'Device',
-  'name' : 'Task',
-  'timestamp' : 'Date'
+  'channel' : 'Channel',
+  'retries' : 'Retries',
+  'timestamp' : 'Timestamp'
 }
 </script>
 <b>Filters</b>
@@ -30,29 +31,21 @@ filters = {
 <table class="records">
   <tr>
     <th>Device</th>
-    <th>Task</th>
+    <th>Channel</th>
     <th>Retries</th>
+    <th>Fault</th>
     <th>Date</th>
-    <th></th>
     <th></th>
   </tr>
 
-<% @faults.each do |task| %>
+<% @faults.each do |fault| %>
   <tr>
-    <td><a href="/devices/<%=u task['device'] %>"><%= task['device'] %></a></td>
-    <td><%= task['name'] %></td>
-    <td>
-      <% if task['retries'].blank? %>
-      <%= 0 %>
-      <% else %>
-      <%= task['retries'] %>
-      <% end %>
-    </td>
-    <td>
-      <%= task['timestamp'] %>
-    </td>
-    <td class="action"><%= link_to 'Retry', "/faults/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if can_retry %></td>
-    <td class="action"><%= link_to 'Destroy', "/faults/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
+    <td><a href="/devices/<%=u fault['device'] %>"><%= fault['device'] %></a></td>
+    <td><%= fault['channel'] %></td>
+    <td><%= fault['retries'] %></td>
+    <td><%= task_fault(fault) %></td>
+    <td><%= fault['timestamp'].to_time().in_time_zone() %></td>
+    <td class="action"><%= link_to 'Destroy', "/faults/#{fault['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
   </tr>
 <% end %>
 </table>

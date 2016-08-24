@@ -19,8 +19,9 @@ GenieacsGui::Application.routes.draw do
   delete 'devices/:id' => 'devices#destroy'
 
   get 'faults' => 'faults#index'
-  post 'faults/:id/retry' => 'faults#retry'
   delete 'faults/:id' => 'faults#destroy'
+  post 'tasks/:id/retry' => 'faults#retry_task'
+  delete 'tasks/:id' => 'faults#destroy_task'
 
   get 'presets' => 'presets#index'
   get 'presets/new' => 'presets#new'

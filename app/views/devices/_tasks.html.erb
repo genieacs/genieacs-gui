@@ -17,10 +17,10 @@
   <td><%= task_fault(t) %></td>
   <td style="text-align:right;">
     <% if can?(:update, 'tasks/retry') %>
-    <%= link_to 'Retry', "/faults/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
+    <%= link_to 'Retry', "/tasks/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
     <% end %>
     <% if can?(:delete, 'tasks') %>
-    <%= link_to 'Destroy', "/faults/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Destroy', "/tasks/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
   </td>
   </tr>
