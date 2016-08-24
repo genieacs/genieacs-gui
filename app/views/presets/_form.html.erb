@@ -14,6 +14,11 @@ filters = {
 </div>
 <br/>
 <div class="field">
+  <label for="channel">Channel</label><br />
+  <input id="channel" name="channel" type="text" value="<%= @preset['channel'] %>" />
+</div>
+<br/>
+<div class="field">
   <label for="weight">Weight</label><br />
   <input id="weight" name="weight" type="text" value="<%= @preset['weight'] or 0 %>" />
 </div>

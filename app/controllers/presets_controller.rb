@@ -90,6 +90,7 @@ class PresetsController < ApplicationController
   def update
     can?(:update, 'presets') do
       preset = {}
+      preset['channel'] = params['channel']
       preset['weight'] = params['weight'].to_i
       preset['precondition'] = params['query']
       preset['configurations'] = ActiveSupport::JSON.decode(params['configurations'])
