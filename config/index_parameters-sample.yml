@@ -1,7 +1,6 @@
-Serial number: summary.serialNumber
-Product class: summary.productClass
-Software version: summary.softwareVersion
-MAC: summary.mac
-IP: summary.ip
-WLAN SSID: summary.wlanSsid
-
+Serial number: InternetGatewayDevice.DeviceInfo.SerialNumber
+Product class: InternetGatewayDevice.DeviceInfo.ProductClass
+Software version: InternetGatewayDevice.DeviceInfo.SoftwareVersion
+MAC: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1.MACAddress
+IP: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1.ExternalIPAddress
+WLAN SSID: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID

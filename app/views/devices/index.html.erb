@@ -32,7 +32,7 @@ filters = {
     <% param_names.each do |label, path| %>
       <th><a href="#" class="action" onclick="sort('filters', '<%= path %>');return false;"><%= label %><%= sort_symbol.html_safe if sort_param == path %></a></th>
     <% end %>
-    <th><a href="#" class="action" onclick="sort('filters', 'summary.lastInform');return false;">Last inform<%= sort_symbol.html_safe if sort_param == 'summary.lastInform' %></a></th>
+    <th><a href="#" class="action" onclick="sort('filters', '_lastInform');return false;">Last inform<%= sort_symbol.html_safe if sort_param == '_lastInform' %></a></th>
     <th></th>
   </tr>
 
@@ -42,8 +42,8 @@ filters = {
       <td><%= param_value(path, device) %></td>
     <% end %>
     <td>
-      <% cls = 'status-green' if (@now - device['summary.lastInform'].to_time) < 300 %>
-      <span class="<%= cls %>" title="<%=device['summary.lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, device['summary.lastInform'], include_seconds: true) %> ago</span>
+      <% cls = 'status-green' if (@now - device['_lastInform'].to_time) < 300 %>
+      <span class="<%= cls %>" title="<%=device['_lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, device['_lastInform'], include_seconds: true) %> ago</span>
     </td>
     <td class="action"><%= link_to 'Show', "/devices/#{u(device['_id'])}" %></td>
   </tr>

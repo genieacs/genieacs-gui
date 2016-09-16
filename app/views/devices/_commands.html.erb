@@ -16,7 +16,8 @@
 </div>
 <% end %>
 <% if can?(:create, 'files') %>
-<div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: (@device['summary.softwareVersion']['_value'].html_safe rescue '') }}  %></div>
+<% software_version = @device['InternetGatewayDevice']['DeviceInfo']['SoftwareVersion']['_value'] rescue @device['Device']['DeviceInfo']['SoftwareVersion']['_value'] rescue '' %>
+<div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: software_version.html_safe }} %></div>
 <% end %>
 
 <% if can?(:delete, 'devices') %>

@@ -1,13 +1,13 @@
-Serial number: summary.serialNumber
-Product class: summary.productClass
-OUI: summary.oui
-Manufacturer: summary.manufacturer
-Hardware version: summary.hardwareVersion
-Software version: summary.softwareVersion
-MAC: summary.mac
-IP: summary.ip
-WLAN SSID: summary.wlanSsid
-WLAN passphrase: summary.wlanPassphrase
+Serial number: InternetGatewayDevice.DeviceInfo.SerialNumber
+Product class: InternetGatewayDevice.DeviceInfo.ProductClass
+OUI: InternetGatewayDevice.DeviceInfo.ManufacturerOUI
+Manufacturer: InternetGatewayDevice.DeviceInfo.Manufacturer
+Hardware version: InternetGatewayDevice.DeviceInfo.HardwareVersion
+Software version: InternetGatewayDevice.DeviceInfo.SoftwareVersion
+MAC: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1.MACAddress
+IP: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1.ExternalIPAddress
+WLAN SSID: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID
+WLAN passphrase: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase
 Hosts:
     _object: InternetGatewayDevice.LANDevice.1.Hosts.Host
     Host name: HostName
