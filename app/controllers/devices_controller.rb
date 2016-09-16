@@ -37,14 +37,15 @@ class DevicesController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)
   end
 
-  def find_devices(query, skip = 0, limit = Rails.configuration.page_size, sort = nil)
+  def find_devices(query, skip = nil, limit = nil, sort = nil)
     projection = ['_lastInform'] + Rails.configuration.index_parameters.values
     q = {
       'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit,
       'projection' => projection.join(','),
     }
+
+    q['skip'] = skip if skip
+    q['limit'] = limit if limit
     q['sort'] = ActiveSupport::JSON.encode(sort) if sort
     http = create_api_conn()
     res = http.get("/devices/?#{q.to_query}")
@@ -69,7 +70,7 @@ class DevicesController < ApplicationController
         @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
       end
       if request.format == Mime::CSV
-        @devices = find_devices(@query, 0, 0)
+        @devices = find_devices(@query)
       else
         @devices = find_devices(@query, skip, Rails.configuration.page_size, sort)
       end
