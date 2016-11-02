@@ -39,7 +39,7 @@ class FaultsController < ApplicationController
   def destroy
     can?(:delete, 'faults') do
       http = create_api_conn()
-      res = http.delete("/faults/#{params[:id]}", nil)
+      res = http.delete("/faults/#{URI.escape(params[:id])}", nil)
       if res.code == '200'
         flash[:success] = 'Fault deleted'
       else

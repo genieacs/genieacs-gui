@@ -45,7 +45,7 @@ filters = {
     <td><%= fault['retries'] %></td>
     <td><%= task_fault(fault) %></td>
     <td><%= fault['timestamp'].to_time().in_time_zone() %></td>
-    <td class="action"><%= link_to 'Destroy', "/faults/#{fault['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
+    <td class="action"><%= link_to 'Destroy', "/faults/#{u(fault['_id'])}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
   </tr>
 <% end %>
 </table>
