@@ -12,12 +12,11 @@
       <span class="actions">
         <% if p['_object'] %>
           <% if p['_writable'] %>
-            <a href="#" onclick="addObject('<%= p['_path']%>');return false;">Add</a>
-          <% end %>
-          <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
-        <% elsif p.has_key?('_instance') %>
-          <% if p['_writable'] %>
-            <a href="#" onclick="deleteObject('<%= p['_path']%>');return false;">Delete</a>
+            <% if /\.[\d]+$/ =~ p['_path'] %>
+              <a href="#" onclick="deleteObject('<%= p['_path']%>');return false;">Delete</a>
+            <% else %>
+              <a href="#" onclick="addObject('<%= p['_path']%>');return false;">Add</a>
+            <% end %>
           <% end %>
           <a href="#" onclick="refreshObject('<%= p['_path']%>');return false;">Refresh</a>
         <% else %>
