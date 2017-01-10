@@ -2,7 +2,9 @@ class RolesController < ApplicationController
   
   def index
     can?(:read, 'roles') do
-      @roles = Role.all
+      off = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
+      lim = Rails.configuration.page_size
+      @roles = Role.limit(lim).offset(off)
       @total = Role.count
     end
   end
