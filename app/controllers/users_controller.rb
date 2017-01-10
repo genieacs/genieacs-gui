@@ -2,7 +2,9 @@ class UsersController < ApplicationController
   
   def index
     can?(:read, 'users') do
-      @users = User.all
+      off = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
+      lim = Rails.configuration.page_size
+      @users = User.limit(lim).offset(off)
       @total = User.count
     end
   end
