@@ -46,7 +46,7 @@ class FaultsController < ApplicationController
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
-      redirect_to :back
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -61,7 +61,7 @@ class FaultsController < ApplicationController
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
-      redirect_to :back
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -77,7 +77,7 @@ class FaultsController < ApplicationController
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
       end
 
-      redirect_to :back
+      redirect_back(fallback_location: root_path)
     end
   end
 end
