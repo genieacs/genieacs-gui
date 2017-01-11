@@ -37,6 +37,19 @@ class DevicesController < ApplicationController
     return ActiveSupport::JSON.decode(res.body)
   end
 
+  def get_device_faults(device_id)
+    query = {
+      'query' => ActiveSupport::JSON.encode({'device' => device_id})
+    }
+    http = create_api_conn()
+    res = ActiveSupport::JSON.decode(http.get("/faults/?#{query.to_query}").body)
+    faults = {}
+    res.each do |f|
+      faults[f['channel']] = f
+    end
+    return faults
+  end
+
   def find_devices(query, skip = nil, limit = nil, sort = nil)
     projection = ['_lastInform'] + Rails.configuration.index_parameters.values
     q = {
@@ -104,6 +117,7 @@ class DevicesController < ApplicationController
       @device_params = flatten_params(@device)
       @files = get_files_for_device(@device['_deviceId']['_OUI'], @device['_deviceId']['_ProductClass'])
       @tasks = get_device_tasks(params[:id])
+      @faults = get_device_faults(params[:id])
 
       respond_to do |format|
         format.html # show.html.erb

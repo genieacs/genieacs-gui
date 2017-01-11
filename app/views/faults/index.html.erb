@@ -32,8 +32,10 @@ filters = {
   <tr>
     <th>Device</th>
     <th>Channel</th>
+    <th>Code</th>
+    <th>Message</th>
+    <th>Detail</th>
     <th>Retries</th>
-    <th>Fault</th>
     <th>Date</th>
     <th></th>
   </tr>
@@ -42,8 +44,10 @@ filters = {
   <tr>
     <td><a href="/devices/<%=u fault['device'] %>"><%= fault['device'] %></a></td>
     <td><%= fault['channel'] %></td>
+    <td><%= fault['code'] %></td>
+    <td><%= fault['message'] %></td>
+    <td class="long-text-always"><%= fault_detail(fault) %></td>
     <td><%= fault['retries'] %></td>
-    <td><%= task_fault(fault) %></td>
     <td><%= fault['timestamp'].to_time().in_time_zone() %></td>
     <td class="action"><%= link_to 'Destroy', "/faults/#{u(fault['_id'])}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
   </tr>

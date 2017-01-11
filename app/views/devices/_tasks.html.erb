@@ -5,22 +5,27 @@
   <tr>
     <th>Task</th>
     <th>Time</th>
+    <th>Fault code</th>
+    <th>Fault message</th>
+    <th>Fault detail</th>
     <th>Retries</th>
-    <th>Fault</th>
     <th></th>
   </tr>
-  <% for t in @tasks %>
+  <% for task in @tasks %>
+  <% fault = @faults["task_#{task['_id']}"] %>
   <tr>
-  <td><%= t['name'] %></td>
-  <td><%= t['timestamp'] %></td>
-  <td><%= t['retries'].to_i %></td>
-  <td><%= task_fault(t) %></td>
+  <td><%= task['name'] %></td>
+  <td><%= task['timestamp'] %></td>
+  <td><%= fault['code'] rescue '' %></td>
+  <td><%= fault['message'] rescue ''%></td>
+  <td class="long-text-always"><%= fault_detail(fault) rescue '' %></td>
+  <td><%= fault['retries'].to_i rescue '' %></td>
   <td style="text-align:right;">
     <% if can?(:update, 'tasks/retry') %>
-    <%= link_to 'Retry', "/tasks/#{t['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if t.has_key?('fault') %>
+    <%= link_to 'Retry', "/tasks/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if fault %>
     <% end %>
     <% if can?(:delete, 'tasks') %>
-    <%= link_to 'Destroy', "/tasks/#{t['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Destroy', "/tasks/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
   </td>
   </tr>

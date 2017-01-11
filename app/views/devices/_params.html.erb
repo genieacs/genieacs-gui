@@ -5,7 +5,7 @@
   <ul class="list">
     <% for p in @device_params %>
     <li>
-      <span class="param-path"><%= p['_path'] %></span>
+      <span class="long-text param-path"><%= p['_path'] %></span>
       <% if p.has_key?('_value')%>
         <%= param_value(p['_path'], @device) %>
       <% end %>

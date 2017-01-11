@@ -1,0 +1,14 @@
+.long-text, .long-text-always {
+  white-space: nowrap;
+  max-width: 22em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.long-text-always::after {
+  content: "...";
+}
+
+.long-text-always:empty::after {
+  content: "";
+}

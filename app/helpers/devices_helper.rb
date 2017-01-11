@@ -21,7 +21,7 @@ module DevicesHelper
   end
 
   def param_value(path, device)
-    classes = ['param-value']
+    classes = ['long-text', 'param-value']
 
     begin
       param = get_param(path, device)
