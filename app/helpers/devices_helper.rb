@@ -52,6 +52,6 @@ module DevicesHelper
       cls = 'class="' + classes.join(' ') + '"'
     end
 
-    "<span #{cls} #{tooltip}>#{val}</span>".html_safe
+    "<span #{cls} #{tooltip}>#{CGI::escapeHTML(val.to_s)}</span>".html_safe
   end
 end
