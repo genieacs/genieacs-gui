@@ -25,17 +25,9 @@ $(function() {
 
   for k, v in Rails.configuration.summary_parameters
     if v.is_a?(String)
-      if (p = get_param(v, @device)) != nil
-        if v.start_with?('_customCommands')
-          to_refresh['custom_commands'] << v
-        else
-          to_refresh['parameters'] << v
-        end
-      end
+      to_refresh['parameters'] << v
     else
-      if get_param(v['_object'], @device) != nil
-        to_refresh['objects'] << v['_object']
-      end
+      to_refresh['objects'] << v['_object']
     end
   end
 %>
