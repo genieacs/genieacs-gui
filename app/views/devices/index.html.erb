@@ -9,7 +9,9 @@
 <script type="text/javascript">
 filters = {
 <% for k,v in Rails.configuration.device_filters %>
-  '<%= v %>' : '<%= k %>',
+  <% for vv in v %>
+  '<%= vv %>' : '<%= if v.length == 1 then k else vv end %>',
+  <% end %>
 <% end %>
 }
 </script>
@@ -29,8 +31,8 @@ filters = {
 <h2>Showing <%= @total %> devices</h2>
 <table class="records">
   <tr>
-    <% param_names.each do |label, path| %>
-      <th><a href="#" class="action" onclick="sort('filters', '<%= path %>');return false;"><%= label %><%= sort_symbol.html_safe if sort_param == path %></a></th>
+    <% param_names.each do |label, paths| %>
+      <th><a href="#" class="action" onclick="sort('filters', '<%= paths[0] %>');return false;"><%= label %><%= sort_symbol.html_safe if sort_param == paths[0] %></a></th>
     <% end %>
     <th><a href="#" class="action" onclick="sort('filters', '_lastInform');return false;">Last inform<%= sort_symbol.html_safe if sort_param == '_lastInform' %></a></th>
     <th></th>
@@ -38,8 +40,15 @@ filters = {
 
 <% @devices.each do |device| %>
   <tr>
-    <% param_names.each do |label, path| %>
-      <td><%= param_value(path, device) %></td>
+    <% param_names.each do |label, paths| %>
+      <%
+        value = nil
+        for path in paths
+          value = param_value(path, device)
+          break if value != nil
+        end
+      %>
+      <td><%= value %></td>
     <% end %>
     <td>
       <% cls = 'status-green' if (@now - device['_lastInform'].to_time) < 300 %>

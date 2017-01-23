@@ -51,7 +51,7 @@ class DevicesController < ApplicationController
   end
 
   def find_devices(query, skip = nil, limit = nil, sort = nil)
-    projection = ['_lastInform'] + Rails.configuration.index_parameters.values
+    projection = ['_lastInform'] + Rails.configuration.index_parameters.values.flatten
     q = {
       'query' => ActiveSupport::JSON.encode(query),
       'projection' => projection.join(','),

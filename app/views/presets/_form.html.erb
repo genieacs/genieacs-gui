@@ -1,8 +1,10 @@
 <script type="text/javascript">
 filters = {
-<% for k,v in Rails.configuration.device_filters %>
-  '<%= v %>' : '<%= k %>',
-<% end %>
+  <% for k,v in Rails.configuration.device_filters %>
+    <% for vv in v %>
+    '<%= vv %>' : '<%= if v.length == 1 then k else vv end %>',
+    <% end %>
+  <% end %>
 }
 </script>
 

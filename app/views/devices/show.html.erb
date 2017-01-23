@@ -24,10 +24,12 @@ $(function() {
   to_refresh = {'parameters' => [], 'objects' => [], 'custom_commands' => []}
 
   for k, v in Rails.configuration.summary_parameters
-    if v.is_a?(String)
-      to_refresh['parameters'] << v
-    else
-      to_refresh['objects'] << v['_object']
+    v.each do |vv|
+      if vv.is_a?(String)
+        to_refresh['parameters'] << vv
+      else
+        to_refresh['objects'] << vv['_object']
+      end
     end
   end
 %>

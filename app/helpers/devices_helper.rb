@@ -23,11 +23,8 @@ module DevicesHelper
   def param_value(path, device)
     classes = ['long-text', 'param-value']
 
-    begin
-      param = get_param(path, device)
-    rescue
-      return ''
-    end
+    param = get_param(path, device)
+    return nil if param == nil
 
     if param.is_a?(Hash)
       val = param.include?('_orig')? param['_orig'] : param['_value']
