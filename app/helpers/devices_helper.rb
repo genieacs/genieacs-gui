@@ -36,10 +36,11 @@ module DevicesHelper
       val = param
     end
 
+    valHtml = CGI::escapeHTML(val.to_s)
     bare_path = path.gsub(/\.\d+\./, '..')
     if Rails.configuration.parameter_renderers.has_key?(bare_path)
       begin
-        val = ParameterRenderers::send(Rails.configuration.parameter_renderers[bare_path], val)
+        valHtml = ParameterRenderers::send(Rails.configuration.parameter_renderers[bare_path], val)
       rescue => e
         logger.error("Exception in renderer '#{Rails.configuration.parameter_renderers[path]}' for value '#{val}': #{e}")
       end
@@ -49,6 +50,6 @@ module DevicesHelper
       cls = 'class="' + classes.join(' ') + '"'
     end
 
-    "<span #{cls} #{tooltip}>#{CGI::escapeHTML(val.to_s)}</span>".html_safe
+    "<span #{cls} #{tooltip}>#{valHtml}</span>".html_safe
   end
 end
