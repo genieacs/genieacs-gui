@@ -8,6 +8,9 @@ content_for :title do 'Preset List' end
 <table class="records">
   <tr>
     <th>Name</th>
+    <th>Channel</th>
+    <th>Weight</th>
+    <th>Events</th>
     <th></th>
     <th></th>
     <th></th>
@@ -15,8 +18,12 @@ content_for :title do 'Preset List' end
 
 <% @presets.each do |preset| %>
   <% precondition = preset['precondition'].is_a?(Hash) ? preset['precondition'].to_json : preset['precondition'] %>
+  <% events = preset['events'].is_a?(Hash) ? preset['events'].keys.join(", ") : "" %>
   <tr>
     <td><%= preset['_id'] %></td>
+    <td><%= preset['channel'] %></td>
+    <td><%= preset['weight'] %></td>
+    <td><%= events %></td>
     <td class="action"><%= link_to 'Devices', {controller: 'devices', action: 'index', query: precondition || '{}'} %></td>
     <td class="action"><%= link_to 'Edit', {controller: 'presets', action: 'edit', id: preset['_id']} if can?(:update, 'presets') %></td>
     <td class="action"><%= link_to 'Destroy', {controller: 'presets', action: 'destroy', id: preset['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'presets') %></td>
