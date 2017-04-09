@@ -35,6 +35,10 @@ class UsersController < ApplicationController
   def update
     can?(:update, 'users') do
       @user = User.find(params['id'])
+      if user_params['password'].blank?
+        params['user'].delete('password')
+      end
+
       if @user.update(user_params)
         redirect_to users_path
       else
