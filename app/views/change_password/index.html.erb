@@ -1,0 +1,18 @@
+<%
+content_for :title do 'Change password' end
+%>
+<h1>Change password</h1>
+<p>
+<%= form_tag change_password_path do %>
+  <%= label_tag :username, 'Username' %>
+  <%= text_field_tag :username, nil, :autofocus => true %>
+<br/>
+  <%= label_tag :old_password, 'Old password' %>
+  <%= password_field_tag :old_password %>
+<br/>
+  <%= label_tag :new_password, 'New password' %>
+  <%= password_field_tag :new_password %>
+<br/><br/>
+  <%= submit_tag 'Change password' %>
+<% end %>
+</p>

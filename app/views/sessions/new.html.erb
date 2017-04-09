@@ -12,5 +12,8 @@ content_for :title do 'Login' end
   <%= password_field_tag :password %>
 <br/><br/>
   <%= submit_tag 'Log in' %>
+  <% if Rails.configuration.auth_method == :db %>
+  <%= link_to 'Change password', change_password_path %>
+  <% end %>
 <% end %>
 </p>

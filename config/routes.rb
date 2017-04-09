@@ -60,4 +60,9 @@ GenieacsGui::Application.routes.draw do
   resources :roles do
     resources :privileges
   end
+
+  if Rails.configuration.auth_method == :db
+    get 'change_password' => 'change_password#index'
+    post 'change_password' => 'change_password#update'
+  end
 end
