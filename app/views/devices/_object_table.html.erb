@@ -15,7 +15,7 @@
     <% if not v2.is_a?(String) %>
       <% (child_obj = v2.dup)['_object'] = "#{params['_object']}.#{k}.#{child_obj['_object']}" %>
       <td>
-        <%= render partial: 'object_table', locals: {params: child_obj} %>
+        <%= render partial: 'object_table', locals: {params: child_obj, object: get_param(child_obj['_object'], @device)} %>
       </td>
       <% next %>
     <% end %>
