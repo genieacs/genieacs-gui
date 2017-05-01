@@ -81,6 +81,20 @@ window.clearPending = () ->
   window.refreshPending();
 
 window.commitPending = () ->
+  # Merge when possible
+  i = pending.length
+  while --i > 0
+    cur = pending[i]
+    prev = pending[i - 1]
+    continue if cur.name != prev.name or cur.expiry != prev.expiry or cur.timestamp != prev.timestamp
+
+    if cur.name == 'getParameterValues'
+      prev.parameterNames = prev.parameterNames.concat(cur.parameterNames)
+      pending.splice(i, 1)
+    else if cur.name == 'setParameterValues'
+      prev.parameterValues = prev.parameterValues.concat(cur.parameterValues)
+      pending.splice(i, 1)
+
   submitUpdate('commit', pending)
 
 window.refreshParam = (paramName) ->
