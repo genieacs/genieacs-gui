@@ -16,6 +16,14 @@
   <%= text_field_tag 'version', params[:version] %>
 </div>
 <div>
+  <%= label_tag('username', 'Username:') %>
+  <%= text_field_tag 'username', params[:username] %>
+</div>
+<div>
+  <%= label_tag('password', 'Password:') %>
+  <%= password_field_tag 'password', params[:password] %>
+</div>
+<div>
   <%= label_tag('file', 'File:') %>
   <%= file_field_tag('file') %>
 </div>
