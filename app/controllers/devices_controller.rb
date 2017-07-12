@@ -2,6 +2,8 @@ class DevicesController < ApplicationController
   require 'net/http'
   require 'json'
   require 'util'
+  require 'csv'
+  include ActionController::Live
 
   def flatten_params(params, prefix = '')
     output = []
@@ -17,59 +19,35 @@ class DevicesController < ApplicationController
     return output
   end
 
-  def get_device(id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => id}),
-    }
-    http = create_api_conn()
-    res = http.get("/devices/?#{query.to_query}")
-    @now = res['Date'].to_time
-    return ActiveSupport::JSON.decode(res.body)[0]
-  end
-
-  def get_device_tasks(device_id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'device' => device_id}),
-      'sort' => ActiveSupport::JSON.encode({'timestamp' => 1})
-    }
-    http = create_api_conn()
-    res = http.get("/tasks/?#{query.to_query}")
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
-  def get_device_faults(device_id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'device' => device_id})
-    }
-    http = create_api_conn()
-    res = ActiveSupport::JSON.decode(http.get("/faults/?#{query.to_query}").body)
-    faults = {}
-    res.each do |f|
-      faults[f['channel']] = f
-    end
-    return faults
-  end
-
-  def find_devices(query, skip = nil, limit = nil, sort = nil)
+  def index_csv(query)
     projection = ['_lastInform'] + Rails.configuration.index_parameters.values.flatten
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'projection' => projection.join(','),
-    }
 
-    q['skip'] = skip if skip
-    q['limit'] = limit if limit
-    q['sort'] = ActiveSupport::JSON.encode(sort) if sort
-    http = create_api_conn()
-    res = http.get("/devices/?#{q.to_query}")
-    @total = res['Total'].to_i
-    @now = res['Date'].to_time
-    return ActiveSupport::JSON.decode(res.body)
+    response.headers['Content-Type'] = 'text/csv'
+
+    response.stream.write(Rails.configuration.index_parameters.keys.concat(["Last inform"]).to_csv())
+    query_resource(create_api_conn(), 'devices', query, projection) do |obj, index, total, timestamp|
+      line = []
+      Rails.configuration.index_parameters.each do |label, paths|
+        value = nil
+        for path in paths
+          p = helpers.get_param(path, obj)
+          if p != nil
+            value = p.is_a?(Hash) ? p['_value'] : p
+            break
+          end
+        end
+        line << value.to_s()
+      end
+      line << obj['_lastInform']
+      response.stream.write(line.to_csv())
+    end
+  ensure
+    response.stream.close
   end
 
   def index
     can?(:read, 'devices') do
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
       if params.include?(:sort)
         sort_param = params[:sort].start_with?('-') ? params[:sort][1..-1] : params[:sort]
         sort_dir = params[:sort].start_with?('-') ? -1 : 1
@@ -82,42 +60,47 @@ class DevicesController < ApplicationController
       if params.has_key?('query')
         @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
       end
-      if request.format == Mime::CSV
-        @devices = find_devices(@query)
-      else
-        @devices = find_devices(@query, skip, Rails.configuration.page_size, sort)
+
+      if request.format == Mime[:csv]
+        index_csv(@query)
+        return
       end
+
+      @devices = []
+      projection = ['_lastInform'] + Rails.configuration.index_parameters.values.flatten
+
+      res = query_resource(create_api_conn(), 'devices', @query, projection, skip, Rails.configuration.page_size, sort)
+      @total = res[:total]
+      @now = res[:timestamp]
+      @devices = res[:result]
 
       respond_to do |format|
         format.html # index.html.erb
-        format.csv
         format.json { render json: @devices }
       end
     end
-  end
-
-  def get_files_for_device(oui, product_class)
-    q = {
-      'query' => ActiveSupport::JSON.encode({
-        'metadata.oui' => oui,
-        'metadata.productClass' => product_class}),
-      'skip' => 0,
-      'limit' => 10
-    }
-    http = create_api_conn()
-    res = http.get("/files/?#{q.to_query}")
-    return ActiveSupport::JSON.decode(res.body)
   end
 
   # GET /devices/1
   # GET /devices/1.json
   def show
     can?(:read, 'devices') do
-      @device = get_device(params[:id])
-      @device_params = flatten_params(@device)
-      @files = get_files_for_device(@device['_deviceId']['_OUI'], @device['_deviceId']['_ProductClass'])
-      @tasks = get_device_tasks(params[:id])
-      @faults = get_device_faults(params[:id])
+      id = params[:id]
+      create_api_conn() do |http|
+        res = query_resource(http, 'devices', {'_id' => id})
+        if res[:result].size != 1
+          raise ActiveRecord::RecordNotFound
+        end
+        @now = res[:timestamp]
+        @device = res[:result][0]
+        @device_params = flatten_params(@device)
+        @files = query_resource(http, 'files', {'metadata.oui' => @device['_deviceId']['_OUI'], 'metadata.productClass' => @device['_deviceId']['_ProductClass']}, nil, nil, 10)[:result]
+        @tasks = query_resource(http, 'tasks', {'device' => id}, nil, nil, nil, {'timestamp' => 1})[:result]
+        @faults = {}
+        query_resource(http, 'faults', {'device' => id}) do |f|
+          @faults[f['channel']] = f if f
+        end
+      end
 
       respond_to do |format|
         format.html # show.html.erb
@@ -127,24 +110,23 @@ class DevicesController < ApplicationController
   end
 
   def update
+    http = create_api_conn()
+    http.start()
     if params.include? 'refresh_summary'
       can?(:read, 'devices/refresh_summary') do
         to_refresh = ActiveSupport::JSON.decode(params['refresh_summary'])
 
         for o in to_refresh['objects']
           task = {'name' => 'refreshObject', 'objectName' => o}
-          http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
 
         for o in to_refresh['custom_commands']
           task = {'name' => 'customCommand', 'command' => "#{o[16..-1]} get"}
-          http = create_api_conn()
           res = http.post("/devices/#{URI.escape(params[:id])}/tasks", ActiveSupport::JSON.encode(task))
         end
 
         task = {'name' => 'getParameterValues', 'parameterNames' => to_refresh['parameters']}
-        http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tasks?timeout=3000&connection_request", ActiveSupport::JSON.encode(task))
 
         if res.code == '200'
@@ -160,7 +142,6 @@ class DevicesController < ApplicationController
     if params.include? 'add_tag'
       can?(:create, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['add_tag']).strip
-        http = create_api_conn()
         res = http.post("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
@@ -174,7 +155,6 @@ class DevicesController < ApplicationController
     if params.include? 'remove_tag'
       can?(:delete, 'devices/tags') do
         tag = ActiveSupport::JSON.decode(params['remove_tag']).strip
-        http = create_api_conn()
         res = http.delete("/devices/#{URI.escape(params[:id])}/tags/#{URI::escape(tag)}", nil)
 
         if res.code == '200'
@@ -187,7 +167,6 @@ class DevicesController < ApplicationController
 
     if params.include? 'commit'
       tasks = ActiveSupport::JSON.decode(params['commit'])
-      http = create_api_conn()
 
       tasks.each_with_index do |t, i|
         case t['name']
@@ -234,6 +213,7 @@ class DevicesController < ApplicationController
       end
     end
 
+    http.finish()
     #redirect_to :action => :show
     redirect_to "/devices/#{URI.escape(params[:id])}"
   end

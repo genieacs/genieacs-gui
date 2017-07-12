@@ -3,27 +3,6 @@ class PresetsController < ApplicationController
   require 'json'
   require 'util'
 
-  def get_preset(id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => id}),
-    }
-    http = create_api_conn()
-    res = http.get("/presets/?#{query.to_query}")
-    return ActiveSupport::JSON.decode(res.body)[0]
-  end
-
-  def find_presets(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/presets/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   def events_to_string(events)
     begin
       events.collect {|k,v| "#{'-' if not v}#{k}"}.join(', ')
@@ -52,11 +31,11 @@ class PresetsController < ApplicationController
   # GET /presets.json
   def index
     can?(:read, 'presets') do
-      filters = nil
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
 
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
-
-      @presets = find_presets(filters, skip)
+      res = query_resource(create_api_conn(), 'presets', nil, nil, skip, Rails.configuration.page_size)
+      @presets = res[:result]
+      @total = res[:total]
 
       respond_to do |format|
         format.html # index.html.erb
@@ -81,7 +60,9 @@ class PresetsController < ApplicationController
   # GET /presets/1/edit
   def edit
     can?(:update, 'presets') do
-      @preset = get_preset(params[:id]) || {}
+      id = params[:id]
+      res = query_resource(create_api_conn(), 'presets', {'_id' => id})
+      @preset = res[:result][0] || {}
     end
   end
 

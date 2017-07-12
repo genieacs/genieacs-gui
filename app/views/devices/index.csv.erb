@@ -1,7 +1,0 @@
-<%
-  param_names = Rails.configuration.index_parameters
-%>
-"<%= param_names.keys.join('","').html_safe %>","Last inform"
-<% @devices.each do |device| %>
-  "<%= param_names.collect{|k,v| (p = get_param(v, device)).is_a?(String) ? p : p['_value'] rescue ''}.join('","').html_safe %>","<%= device['_lastInform'] %>"
-<% end %>

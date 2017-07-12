@@ -3,36 +3,15 @@ class ProvisionsController < ApplicationController
   require 'json'
   require 'util'
 
-  def get_provision(id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => id}),
-    }
-    http = create_api_conn()
-    res = http.get("/provisions/?#{query.to_query}")
-    return ActiveSupport::JSON.decode(res.body)[0]
-  end
-
-  def find_provisions(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/provisions/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   # GET /provisions
   # GET /provisions.json
   def index
     can?(:read, 'provisions') do
-      filters = nil
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
 
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
-
-      @provisions = find_provisions(filters, skip)
+      res = query_resource(create_api_conn(), 'provisions', nil, nil, skip, Rails.configuration.page_size)
+      @provisions = res[:result]
+      @total = res[:total]
 
       respond_to do |format|
         format.html # index.html.erb
@@ -57,7 +36,9 @@ class ProvisionsController < ApplicationController
   # GET /provisions/1/edit
   def edit
     can?(:update, 'provisions') do
-      @provision = get_provision(params[:id]) || {}
+      id = params[:id]
+      res = query_resource(create_api_conn(), 'provisions', {'_id' => id})
+      @provision = res[:result][0] || {}
     end
   end
 

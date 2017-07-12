@@ -3,36 +3,15 @@ class VirtualParametersController < ApplicationController
   require 'json'
   require 'util'
 
-  def get_virtual_parameter(id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => id}),
-    }
-    http = create_api_conn()
-    res = http.get("/virtual_parameters/?#{query.to_query}")
-    return ActiveSupport::JSON.decode(res.body)[0]
-  end
-
-  def find_virtual_parameters(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/virtual_parameters/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   # GET /virtual_parameters
   # GET /virtual_parameters.json
   def index
     can?(:read, 'virtual_parameters') do
-      filters = nil
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
 
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
-
-      @virtual_parameters = find_virtual_parameters(filters, skip)
+      res = query_resource(create_api_conn(), 'virtual_parameters', nil, nil, skip, Rails.configuration.page_size)
+      @virtual_parameters = res[:result]
+      @total = res[:total]
 
       respond_to do |format|
         format.html # index.html.erb
@@ -57,7 +36,9 @@ class VirtualParametersController < ApplicationController
   # GET /virtual_parameters/1/edit
   def edit
     can?(:update, 'virtual_parameters') do
-      @virtual_parameter = get_virtual_parameter(params[:id]) || {}
+      id = params[:id]
+      res = query_resource(create_api_conn(), 'virtual_parameters', {'_id' => id})
+      @virtual_parameter = res[:result][0] || {}
     end
   end
 

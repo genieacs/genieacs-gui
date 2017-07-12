@@ -3,30 +3,21 @@ class FaultsController < ApplicationController
   require 'json'
   require 'util'
 
-  def find_faults(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/faults/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   # GET /faults
   # GET /faults.json
   def index
     can?(:read, 'faults') do
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
       if params.has_key?('query')
         @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
       else
         @query = {}
       end
 
-      @faults = find_faults(@query, skip, Rails.configuration.page_size)
+      res = query_resource(create_api_conn(), 'faults', @query, nil, skip, Rails.configuration.page_size)
+      @faults = res[:result]
+      @total = res[:total]
+
       respond_to do |format|
         format.html # index.html.erb
         format.json { render json: @faults }

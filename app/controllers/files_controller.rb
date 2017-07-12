@@ -3,27 +3,15 @@ class FilesController < ApplicationController
   require 'json'
   require 'util'
 
-  def find_files(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/files/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   # GET /files
   # GET /files.json
   def index
     can?(:read, 'files') do
-      filters = nil
+      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
 
-      skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
-
-      @files = find_files(filters, skip)
+      res = query_resource(create_api_conn(), 'files', nil, nil, skip, Rails.configuration.page_size)
+      @files = res[:result]
+      @total = res[:total]
 
       respond_to do |format|
         format.html # index.html.erb

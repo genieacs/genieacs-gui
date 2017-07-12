@@ -3,36 +3,15 @@ class ObjectsController < ApplicationController
   require 'json'
   require 'util'
 
-  def get_object(id)
-    query = {
-      'query' => ActiveSupport::JSON.encode({'_id' => id}),
-    }
-    http = create_api_conn()
-    res = http.get("/objects/?#{query.to_query}")
-    return ActiveSupport::JSON.decode(res.body)[0]
-  end
-
-  def find_objects(query, skip = 0, limit = Rails.configuration.page_size)
-    q = {
-      'query' => ActiveSupport::JSON.encode(query),
-      'skip' => skip,
-      'limit' => limit
-    }
-    http = create_api_conn()
-    res = http.get("/objects/?#{q.to_query}")
-    @total = res['Total'].to_i
-    return ActiveSupport::JSON.decode(res.body)
-  end
-
   # GET /objects
   # GET /objects.json
   def index
     can?(:read, 'objects') do
-      filters = nil
-
       skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
 
-      @objects = find_objects(filters, skip)
+      res = query_resource(create_api_conn(), 'objects', nil, nil, skip, Rails.configuration.page_size)
+      @objects = res[:result]
+      @total = res[:total]
 
       respond_to do |format|
         format.html # index.html.erb
@@ -57,7 +36,9 @@ class ObjectsController < ApplicationController
   # GET /objects/1/edit
   def edit
     can?(:update, 'objects') do
-      @object = get_object(params[:id]) || {}
+      id = params[:id]
+      res = query_resource(create_api_conn(), 'objects', {'_id' => id})
+      @object = res[:result][0] || {}
     end
   end
 
