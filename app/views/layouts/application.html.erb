@@ -9,7 +9,8 @@
 </head>
 <body>
 <div id="header">
-  <div id="user_menu" style="float: right; margin: 5px;">
+  <div style="float: right; margin: 5px;">| <%= link_to 'About', about_path %></div>
+  <div id="user_menu" style="float: right; margin: 5px 0px;">
     <% if logged_in? %>
       <%= current_user %> | <%= link_to 'Log out', log_out_path %>
     <% else %>

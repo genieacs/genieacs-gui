@@ -40,4 +40,6 @@ GenieacsGui::Application.routes.draw do
   delete 'files/:id' => 'files#destroy', :constraints => { :id => /.*/ }
 
   get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+/ }
+
+  get 'about' => 'about#index'
 end
