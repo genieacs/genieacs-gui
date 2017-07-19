@@ -16,8 +16,8 @@ content_for :title do 'Provision List' end
 <% @provisions.each do |provision| %>
   <tr>
     <td><%= provision['_id'] %></td>
-    <td class="action"><%= link_to 'Edit', "/provisions/#{provision['_id']}/edit" if can?(:update, 'provisions') %></td>
-    <td class="action"><%= link_to 'Destroy', "/provisions/#{provision['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'provisions') %></td>
+    <td class="action"><%= link_to 'Edit', {controller: 'provisions', action: 'edit', id: provision['_id']} if can?(:update, 'provisions') %></td>
+    <td class="action"><%= link_to 'Destroy', {controller: 'provisions', action: 'destroy', id: provision['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'provisions') %></td>
   </tr>
 <% end %>
 </table>
