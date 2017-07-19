@@ -16,8 +16,8 @@ content_for :title do 'Object List' end
 <% @objects.each do |object| %>
   <tr>
     <td><%= object['_id'] %></td>
-    <td class="action"><%= link_to 'Edit', "/objects/#{object['_id']}/edit" if can?(:update, 'objects') %></td>
-    <td class="action"><%= link_to 'Destroy', "/objects/#{object['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'objects') %></td>
+    <td class="action"><%= link_to 'Edit', {controller: 'objects', action: 'edit', id: object['_id']} if can?(:update, 'objects') %></td>
+    <td class="action"><%= link_to 'Destroy', {controller: 'objects', action: 'destroy', id: object['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'objects') %></td>
   </tr>
 <% end %>
 </table>
