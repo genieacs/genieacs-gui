@@ -22,7 +22,7 @@ filters = {
   <br/><br/>
   <div>
     <input type="submit" value="Filter" />
-    <a href="/faults">Clear</a>
+    <%= link_to "Clear", {} %>
   </div>
 </form>
 
@@ -42,14 +42,14 @@ filters = {
 
 <% @faults.each do |fault| %>
   <tr>
-    <td><a href="/devices/<%=u fault['device'] %>"><%= fault['device'] %></a></td>
+    <td><%= link_to fault['device'], {:controller => :devices, :action => :show, :id => fault['device']} %></td>
     <td><%= fault['channel'] %></td>
     <td><%= fault['code'] %></td>
     <td><%= fault['message'] %></td>
     <td class="long-text-always"><%= fault_detail(fault) %></td>
     <td><%= fault['retries'] %></td>
     <td><%= fault['timestamp'].to_time().in_time_zone() %></td>
-    <td class="action"><%= link_to 'Destroy', "/faults/#{u(fault['_id'])}", method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
+    <td class="action"><%= link_to 'Destroy', {:action => :destroy, :id => fault['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can_delete %></td>
   </tr>
 <% end %>
 </table>

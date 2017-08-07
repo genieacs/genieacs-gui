@@ -31,4 +31,4 @@ content_for :title do 'File List' end
 
 <br />
 
-<%= link_to 'New File', '/files/new' if can?(:create, 'files') %>
+<%= link_to 'New File', {:action => :new} if can?(:create, 'files') %>

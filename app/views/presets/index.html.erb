@@ -34,4 +34,4 @@ content_for :title do 'Preset List' end
 
 <br />
 
-<%= link_to 'New Preset', '/presets/new' if can?(:create, 'presets') %>
+<%= link_to 'New Preset', {:action => :new} if can?(:create, 'presets') %>

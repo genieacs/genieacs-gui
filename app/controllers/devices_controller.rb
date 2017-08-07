@@ -214,8 +214,7 @@ class DevicesController < ApplicationController
     end
 
     http.finish()
-    #redirect_to :action => :show
-    redirect_to "/devices/#{URI.escape(params[:id])}"
+    redirect_to :action => :show
   end
 
   def destroy

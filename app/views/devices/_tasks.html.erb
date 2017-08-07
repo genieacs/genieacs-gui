@@ -22,10 +22,10 @@
   <td><%= fault['retries'].to_i rescue '' %></td>
   <td style="text-align:right;">
     <% if can?(:update, 'tasks/retry') %>
-    <%= link_to 'Retry', "/tasks/#{task['_id']}/retry", method: :post, data: { confirm: 'Are you sure?' } if fault %>
+    <%= link_to 'Retry', {:controller => :faults, :action => :retry_task, :id => task['_id']}, method: :post, data: { confirm: 'Are you sure?' } if fault %>
     <% end %>
     <% if can?(:delete, 'tasks') %>
-    <%= link_to 'Destroy', "/tasks/#{task['_id']}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Destroy', {:controller => :faults, :action => :destroy_task, :id => task['_id']}, method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
   </td>
   </tr>

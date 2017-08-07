@@ -1,5 +1,4 @@
-<form method="POST" action="/provisions">
-<%= token_tag form_authenticity_token %>
+<%= form_tag({:action => :update}) do %>
 <div class="field">
   <label for="name">Name</label><br />
   <input id="name" name="name" type="text" <%= 'readonly' if @provision.include? '_id' %> value="<%= @provision['_id'] %>" />
@@ -15,6 +14,7 @@
 <div class="actions">
   <input type="submit" value="Save" />
 </div>
+<% end %>
 
 <script type="text/javascript">
 CodeMirror.fromTextArea(document.getElementById('script'), {mode: 'javascript', lineNumbers: true});

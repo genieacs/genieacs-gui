@@ -16,8 +16,8 @@ content_for :title do 'Virtual Parameter List' end
 <% @virtual_parameters.each do |virtual_parameter| %>
   <tr>
     <td><%= virtual_parameter['_id'] %></td>
-    <td class="action"><%= link_to 'Edit', "/virtual_parameters/#{virtual_parameter['_id']}/edit" if can?(:update, 'virtual_parameters') %></td>
-    <td class="action"><%= link_to 'Destroy', "/virtual_parameters/#{virtual_parameter['_id']}", method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'virtual_parameters') %></td>
+    <td class="action"><%= link_to 'Edit', {:action => :edit, :id => virtual_parameter['_id']} if can?(:update, 'virtual_parameters') %></td>
+    <td class="action"><%= link_to 'Destroy', {:action => :destroy, :id => virtual_parameter['_id']}, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'virtual_parameters') %></td>
   </tr>
 <% end %>
 </table>
@@ -26,4 +26,4 @@ content_for :title do 'Virtual Parameter List' end
 
 <br />
 
-<%= link_to 'New virtual parameter', '/virtual_parameters/new' if can?(:create, 'virtual_parameters') %>
+<%= link_to 'New virtual parameter', {:action => :new} if can?(:create, 'virtual_parameters') %>
