@@ -3,16 +3,15 @@ can_edit_parameters = can?(:update, 'devices/parameters')
 content_for :title do 'Device ' + @device['_id'] end
 %>
 <script type="text/javascript">
-var pending = {};
-
 $(function() {
+  clearPending();
+
   var options = {
     valueNames: ['param-path', 'param-value'],
     page: 4000
   };
 
   var featureList = new List('device-params', options);
-  refreshPending();
 });
 </script>
 

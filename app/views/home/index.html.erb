@@ -16,6 +16,10 @@ content_for :title do 'Home' end
 <% end %>
 <script type="text/javascript">
 $(function() {
+  // Skip if Turbolinks preview
+  if (document.documentElement.hasAttribute("data-turbolinks-preview"))
+    return;
+
 <% @graphs.each do |group_name, group_graphs| %>
   <% group_graphs.each do |graph_name, graph| %>
   pieChart("<%= group_name %>_<%= graph_name %>", 200, <%= ActiveSupport::JSON.encode(graph).html_safe %>);
