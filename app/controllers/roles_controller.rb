@@ -26,6 +26,7 @@ class RolesController < ApplicationController
     can?(:create, 'roles') do
       @role = Role.new(role_params)
       if @role.save
+        clear_permissions_cache
         redirect_to roles_path
       else
         render 'new'
@@ -37,6 +38,7 @@ class RolesController < ApplicationController
     can?(:update, 'roles') do
       @role = Role.find(params['id'])
       if @role.update(role_params)
+        clear_permissions_cache
         redirect_to roles_path
       else
           render 'edit'
@@ -48,6 +50,7 @@ class RolesController < ApplicationController
     can?(:delete, 'roles') do
       @role = Role.find(params['id'])
       @role.destroy
+      clear_permissions_cache
       redirect_to roles_path
     end
   end

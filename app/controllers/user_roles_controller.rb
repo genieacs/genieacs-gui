@@ -4,6 +4,7 @@ class UserRolesController < ApplicationController
     can?(:create, 'user_roles') do
       @user = User.find(params[:user_id])
       @user_role = @user.user_roles.create(user_role_params)
+      clear_permissions_cache
       redirect_to edit_user_path(@user)
     end
   end
@@ -13,6 +14,7 @@ class UserRolesController < ApplicationController
       @user = User.find(params[:user_id])
       @user_role = @user.user_roles.find(params['id'])
       @user_role.destroy
+      clear_permissions_cache
       redirect_to edit_user_path(@user)
     end
   end

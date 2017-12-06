@@ -69,7 +69,33 @@ class ApplicationController < ActionController::Base
   def get_permissions
     case Rails.configuration.auth_method
     when :db
-      fetch_permissions_from_db
+      Rails.configuration.permissions = Rails.cache.fetch("all_permissions", race_condition_ttl: 5.seconds) do
+        roles = Role.all
+        Rails.configuration.permissions = {}
+
+        roles.each do |role|
+          Rails.configuration.permissions[role.name] = Array.new
+          role.privileges.each do |privilege|
+            Rails.configuration.permissions[role.name].push([privilege.action, privilege.weight, privilege.resource])
+          end
+        end
+        Rails.configuration.permissions
+      end
+
+      Rails.configuration.users = Rails.cache.fetch("all_users", race_condition_ttl: 5.seconds) do
+        users = User.all
+        Rails.configuration.users = {}
+
+        users.each do |user|
+          Rails.configuration.users[user.username] = Hash.new
+          Rails.configuration.users[user.username]["password"] = user.password
+          Rails.configuration.users[user.username]["roles"] = Array.new
+          user.roles.each do |role|
+            Rails.configuration.users[user.username]["roles"].push(role.name)
+          end
+        end
+        Rails.configuration.users
+      end
     end
 
     roles = ['anonymous']
@@ -77,7 +103,7 @@ class ApplicationController < ActionController::Base
       roles.concat(Rails.configuration.users[current_user]['roles'])
     end
 
-    @permissions ||= Rails.cache.fetch("#{roles}_permisions", :expires_in => 60.seconds) do
+    @permissions ||= Rails.cache.fetch("#{roles}_permissions", race_condition_ttl: 5.seconds) do
       permissions = []
       roles.each do |role|
         if Rails.configuration.permissions.has_key?(role)
@@ -91,28 +117,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def fetch_permissions_from_db
-    roles = Role.all
-    Rails.configuration.permissions = {}
-
-    roles.each do |role|
-      Rails.configuration.permissions[role.name] = Array.new
-      role.privileges.each do |privilege|
-        Rails.configuration.permissions[role.name].push([privilege.action, privilege.weight, privilege.resource])
-      end
-    end
-
-    users = User.all
-    Rails.configuration.users = {}
-
-    users.each do |user|
-      Rails.configuration.users[user.username] = Hash.new
-      Rails.configuration.users[user.username]["password"] = user.password
-      Rails.configuration.users[user.username]["roles"] = Array.new
-      user.roles.each do |role|
-        Rails.configuration.users[user.username]["roles"].push(role.name)
-      end
-    end
+  def clear_permissions_cache
+    Rails.cache.delete("all_permissions")
+    Rails.cache.delete("all_users")
+    Rails.cache.delete_matched(".*_permissions")
   end
 
 end
