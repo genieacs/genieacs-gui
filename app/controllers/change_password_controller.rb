@@ -21,6 +21,8 @@ class ChangePasswordController < ApplicationController
       flash[:error] = user.errors.full_messages.join('; ')
       redirect_to change_password_path
       return
+    else
+      clear_permissions_cache
     end
 
     flash[:success] = 'Password successfully changed'

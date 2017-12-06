@@ -25,6 +25,7 @@ class UsersController < ApplicationController
     can?(:create, 'users') do
       @user = User.new(user_params)
       if @user.save
+        clear_permissions_cache
         redirect_to users_path
       else
         render 'new'
@@ -40,6 +41,7 @@ class UsersController < ApplicationController
       end
 
       if @user.update(user_params)
+        clear_permissions_cache
         redirect_to users_path
       else
           render 'edit'
@@ -51,6 +53,7 @@ class UsersController < ApplicationController
     can?(:delete, 'users') do
       @user = User.find(params['id'])
       @user.destroy
+      clear_permissions_cache
       redirect_to users_path
     end
   end
