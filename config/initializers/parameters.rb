@@ -28,6 +28,10 @@ end
 
 GenieacsGui::Application.config.device_filters.each {|k, v| v.uniq!}
 
+GenieacsGui::Application.config.preset_filters = {'Name' => ['_id'], 'Precondition' => ['precondition'],
+                                                  'Configurations - Set value' => ['configurations.value'],
+                                                  'Configurations - Provision name' => ['configurations.name']}
+
 module ParameterRenderers
   Dir['config/parameter_renderers/*.rb'].each {|file| load "./#{file}" }
 end

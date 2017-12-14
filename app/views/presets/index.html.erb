@@ -2,6 +2,27 @@
 content_for :title do 'Preset List' end
 %>
 <h1>Listing presets</h1>
+<script type="text/javascript">
+filters = {
+<% for k,v in Rails.configuration.preset_filters %>
+  <% for vv in v %>
+  '<%= vv %>' : '<%= if v.length == 1 then k else vv end %>',
+  <% end %>
+<% end %>
+}
+</script>
+<b>Filters</b>
+<form id="filters" onsubmit="updateFilters('filters');" >
+  <input type="hidden" name="query" value='<%= @query.to_json %>' />
+  <input type="hidden" name="sort" value="<%= params[:sort] %>" />
+  <div class="filters_container"></div>
+  <div class="filter_selection"></div>
+  <br/><br/>
+  <div>
+    <input type="submit" value="Filter" />
+    <%= link_to 'Clear', {} %>
+  </div>
+</form>
 
 <h2>Showing <%= @total %> presets</h2>
 
@@ -35,3 +56,9 @@ content_for :title do 'Preset List' end
 <br />
 
 <%= link_to 'New Preset', {:action => :new} if can?(:create, 'presets') %>
+
+<script type="text/javascript">
+$(function() {
+  initFilters('filters');
+});
+</script>

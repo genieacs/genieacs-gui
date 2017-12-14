@@ -33,7 +33,12 @@ class PresetsController < ApplicationController
     can?(:read, 'presets') do
       skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
 
-      res = query_resource(create_api_conn(), 'presets', nil, nil, skip, Rails.configuration.page_size)
+      @query = {}
+      if params.has_key?('query')
+        @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
+      end
+
+      res = query_resource(create_api_conn(), 'presets', @query, nil, skip, Rails.configuration.page_size)
       @presets = res[:result]
       @total = res[:total]
 
