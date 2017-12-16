@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if (Rails.configuration.users[params[:username]]['password'] == params[:password] rescue false)
+    if (Rails.configuration.users[params[:username]]['password'].to_s == params[:password] rescue false)
       session[:username] = params[:username]
       redirect_to params[:url]
     else
