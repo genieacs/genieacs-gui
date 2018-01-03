@@ -1,6 +1,7 @@
 class PingController < ApplicationController
   def index
     require 'net/http'
+    require 'util'
     http = create_api_conn()
     res = http.send_request(request.method, "/ping/#{params[:ip]}", nil)
 

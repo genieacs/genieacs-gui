@@ -1,6 +1,6 @@
 <%
   connUrl = @device['InternetGatewayDevice']['ManagementServer']['ConnectionRequestURL']['_value'] rescue @device['Device']['ManagementServer']['ConnectionRequestURL']['_value'] rescue ''
-  pingIp = URI.parse(connUrl).host
+  pingIp = URI.parse(connUrl).hostname
 %>
 <p>
   <b>Last inform:</b>
