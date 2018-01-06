@@ -52,7 +52,7 @@ GenieacsGui::Application.routes.draw do
   post 'files' => 'files#upload'
   delete 'files/:id' => 'files#destroy', :constraints => { :id => /.*/ }
 
-  get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+/ }
+  get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+|[0-9a-f:]+/ }
 
   resources :users do
     resources :user_roles
