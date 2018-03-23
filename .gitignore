@@ -14,3 +14,12 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore config files
+/config/graphs.json.erb
+/config/index_parameters.yml
+/config/summary_parameters.yml
+/config/parameters_edit.yml
+/config/parameter_renderers.yml
+/config/roles.yml
+/config/users.yml
