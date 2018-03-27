@@ -38,3 +38,8 @@ if Rails.env.development?
   UserRole.create(user_id: 4, role_id: 4)
   UserRole.create(user_id: 5, role_id: 5)
 end
+
+# Reset id sequence on each tables
+ActiveRecord::Base.connection.tables.each do |t|
+  ActiveRecord::Base.connection.reset_pk_sequence!(t)
+end
