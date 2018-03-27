@@ -6,23 +6,33 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Role.create(name: 'anonymous')
-Role.create(name: 'admin')
-Role.create(name: 'view')
+Role.create(id: 1, name: 'View Only')
+Role.create(id: 2, name: 'User')
+Role.create(id: 3, name: 'Super User')
+Role.create(id: 4, name: 'Admin')
+Role.create(id: 5, name: 'Super Admin')
 
-Privilege.create(action: 'read', weight: 1, resource: '/home', role_id: 1)
+# View
+Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 1)
 
-Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 2)
-Privilege.create(action: 'create', weight: 1, resource: '/', role_id: 2)
-Privilege.create(action: 'update', weight: 1, resource: '/', role_id: 2)
-Privilege.create(action: 'delete', weight: 1, resource: '/', role_id: 2)
+# Admin
+Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 4)
+Privilege.create(action: 'read', weight: -1, resource: '/users', role_id: 4)
+Privilege.create(action: 'read', weight: -1, resource: '/roles', role_id: 4)
 
-Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 3)
-Privilege.create(action: 'read', weight: -1, resource: '/users', role_id: 3)
-Privilege.create(action: 'read', weight: -1, resource: '/roles', role_id: 3)
+# Super Admin
+Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 5)
+Privilege.create(action: 'create', weight: 1, resource: '/', role_id: 5)
+Privilege.create(action: 'update', weight: 1, resource: '/', role_id: 5)
+Privilege.create(action: 'delete', weight: 1, resource: '/', role_id: 5)
 
-User.create(username: 'admin', password: 'admin')
-User.create(username: 'user', password: 'user')
 
-UserRole.create(user_id: 1, role_id: 2)
-UserRole.create(user_id: 2, role_id: 3)
+User.create(id: 1, username: 'view_only', password: 'password', password_confirmation: 'password')
+User.create(id: 2, username: 'user', password: 'password', password_confirmation: 'password')
+User.create(id: 3, username: 'super_user', password: 'password', password_confirmation: 'password')
+User.create(id: 4, username: 'admin', password: 'password', password_confirmation: 'password')
+User.create(id: 5, username: 'super_admin', password: 'password', password_confirmation: 'password')
+
+UserRole.create(user_id: 1, role_id: 1)
+UserRole.create(user_id: 4, role_id: 4)
+UserRole.create(user_id: 5, role_id: 5)
