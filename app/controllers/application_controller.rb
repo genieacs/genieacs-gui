@@ -65,13 +65,13 @@ class ApplicationController < ActionController::Base
       fetch_permissions_from_db
     end
 
-    roles = ['anonymous']
+    roles = []
     if user_signed_in?
       roles.concat(Rails.configuration.users[current_user.username]['roles'])
     end
 
     @permissions ||= Rails.cache.fetch("#{roles}_permisions", :expires_in => 60.seconds) do
-      permissions = []
+      permissions = user_signed_in? ? [] : [['read', 1, '/home']]
       roles.each do |role|
         if Rails.configuration.permissions.has_key?(role)
           # do not concat directly to avoid modifying original permissions during normalization
