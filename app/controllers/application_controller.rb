@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   require 'permissions'
 
@@ -22,15 +23,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  helper_method :current_user, :logged_in?, :can?, :get_can
-
-  def current_user
-    session[:username]
-  end
-
-  def logged_in?
-    current_user != nil
-  end
+  helper_method :can?, :get_can
 
   def can?(action, resource)
     if not block_given?
@@ -73,8 +66,8 @@ class ApplicationController < ActionController::Base
     end
 
     roles = ['anonymous']
-    if current_user
-      roles.concat(Rails.configuration.users[current_user]['roles'])
+    if user_signed_in?
+      roles.concat(Rails.configuration.users[current_user.username]['roles'])
     end
 
     @permissions ||= Rails.cache.fetch("#{roles}_permisions", :expires_in => 60.seconds) do
@@ -113,6 +106,15 @@ class ApplicationController < ActionController::Base
         Rails.configuration.users[user.username]["roles"].push(role.name)
       end
     end
+  end
+
+  protected
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :password, :remember_me])
+    devise_parameter_sanitizer.permit(:account_update, keys: [
+      :username, :email, :password, :password_confirmation, :current_password
+    ])
+
   end
 
 end

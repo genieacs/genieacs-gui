@@ -1,5 +1,5 @@
 <%= form_for @user do |f| %>
- 
+
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2>
@@ -13,19 +13,19 @@
       </ul>
     </div>
   <% end %>
- 
+
   <p>
     <%= f.label :username %><br>
     <%= f.text_field :username %>
   </p>
- 
+
   <p>
     <%= f.label :password %><br>
     <%= f.password_field :password %>
   </p>
- 
+
   <p>
     <%= f.submit %>
   </p>
- 
+
 <% end %>

@@ -12,10 +12,12 @@
 <body>
 <div id="header">
   <div id="user_menu" style="float: right; margin: 5px;">
-    <% if logged_in? %>
-      <%= current_user %> | <%= link_to 'Log out', log_out_path %>
+    <% if user_signed_in? %>
+      <%= current_user.username %> |
+      <%= link_to "Edit Profile", edit_user_registration_path %> |
+      <%= link_to 'Log out', destroy_user_session_path, method: :delete %>
     <% else %>
-      <%= link_to 'Log in', log_in_path %>
+      <%= link_to 'Log in', new_user_session_path %>
     <% end %>
   </div>
   <%= image_tag('logo.png', class: 'logo') %>

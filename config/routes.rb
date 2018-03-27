@@ -8,9 +8,11 @@ module URI
 end
 
 GenieacsGui::Application.routes.draw do
-  get 'log_out' => 'sessions#destroy', :as => 'log_out'
-  get 'log_in' => 'sessions#new', :as => 'log_in'
-  post 'log_in' => 'sessions#create'
+  devise_for :users, :skip => [:registrations]
+  as :user do
+    get 'users/edit' => 'users/registrations#edit', :as => 'edit_user_registration'
+    put 'users' => 'users/registrations#update', :as => 'user_registration'
+  end
 
   root 'home#index'
   get 'devices' => 'devices#index'
