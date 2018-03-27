@@ -27,12 +27,14 @@ Privilege.create(action: 'update', weight: 1, resource: '/', role_id: 5)
 Privilege.create(action: 'delete', weight: 1, resource: '/', role_id: 5)
 
 
-User.create(id: 1, username: 'view_only', password: 'password', password_confirmation: 'password')
-User.create(id: 2, username: 'user', password: 'password', password_confirmation: 'password')
-User.create(id: 3, username: 'super_user', password: 'password', password_confirmation: 'password')
-User.create(id: 4, username: 'admin', password: 'password', password_confirmation: 'password')
-User.create(id: 5, username: 'super_admin', password: 'password', password_confirmation: 'password')
+if Rails.env.development?
+  User.create(id: 1, username: 'view_only', password: 'password')
+  User.create(id: 2, username: 'user', password: 'password')
+  User.create(id: 3, username: 'super_user', password: 'password')
+  User.create(id: 4, username: 'admin', password: 'password')
+  User.create(id: 5, username: 'super_admin', password: 'password')
 
-UserRole.create(user_id: 1, role_id: 1)
-UserRole.create(user_id: 4, role_id: 4)
-UserRole.create(user_id: 5, role_id: 5)
+  UserRole.create(user_id: 1, role_id: 1)
+  UserRole.create(user_id: 4, role_id: 4)
+  UserRole.create(user_id: 5, role_id: 5)
+end
