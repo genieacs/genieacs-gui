@@ -1,9 +1,14 @@
-<%
-content_for :title do 'Edit Role ' + @role.name end
-%>
-<h1>Editing role</h1>
+<% content_for :title, 'Edit Role ' + @role.name %>
 
-<%= render 'form' %>
+<h1>Editing role</h1>
+<%= link_to "Back", :back  %>
+
+<%#= render 'form' %>
+
+<h3>
+  <strong>Name: </strong> <%= @role.name %>
+</h3>
+
 
 <h2>Privileges</h2>
 
