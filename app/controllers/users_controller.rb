@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  
+
   def index
     can?(:read, 'users') do
       off = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
@@ -8,19 +8,19 @@ class UsersController < ApplicationController
       @total = User.count
     end
   end
-  
+
   def new
     can?(:create, 'users') do
       @user = User.new
     end
   end
-  
+
   def edit
     can?(:update, 'users') do
       @user = User.find(params['id'])
     end
   end
-  
+
   def create
     can?(:create, 'users') do
       @user = User.new(user_params)
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   def update
     can?(:update, 'users') do
       @user = User.find(params['id'])
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     can?(:delete, 'users') do
       @user = User.find(params['id'])
@@ -57,6 +57,6 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:username, :password)
+      params.require(:user).permit(:username, :email, :password)
     end
 end
