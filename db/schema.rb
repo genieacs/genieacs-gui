@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180327064304) do
+ActiveRecord::Schema.define(version: 20180327085739) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "privileges", force: :cascade do |t|
     t.string "action"
@@ -49,6 +52,7 @@ ActiveRecord::Schema.define(version: 20180327064304) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.datetime "expired_at"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
