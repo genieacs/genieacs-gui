@@ -64,11 +64,11 @@ class UsersController < ApplicationController
 
     def load_users
       role = current_user.roles.pluck(:id).max
-      @users = User.left_outer_joins(:roles).where('roles.id <= ? OR roles is null', role)
+      @users = User.left_outer_joins(:roles).where('roles.id < ? OR roles is null', role)
     end
 
     def load_user
       role = current_user.roles.pluck(:id).max
-      @user = User.left_outer_joins(:roles).where('roles.id <= ? OR roles is null', role).find(params[:id])
+      @user = User.left_outer_joins(:roles).where('roles.id < ? OR roles is null', role).find(params[:id])
     end
 end

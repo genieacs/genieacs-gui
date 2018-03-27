@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
     end
 
     @permissions ||= Rails.cache.fetch("#{roles}_permisions", :expires_in => 60.seconds) do
-      permissions = user_signed_in? ? [] : [['read', 1, '/home']]
+      permissions = []
       roles.each do |role|
         if Rails.configuration.permissions.has_key?(role)
           # do not concat directly to avoid modifying original permissions during normalization
@@ -80,6 +80,8 @@ class ApplicationController < ActionController::Base
           end
         end
       end
+
+      permissions = [['read', 1, '/home']] if permissions.blank?
       normalize_permissions(permissions)
     end
   end
