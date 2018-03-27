@@ -59,7 +59,7 @@ GenieacsGui::Application.routes.draw do
   resources :users do
     resources :user_roles
   end
-  resources :roles do
+  resources :roles, except: [:new, :create, :destroy] do
     resources :privileges
   end
 

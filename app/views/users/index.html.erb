@@ -8,7 +8,7 @@ content_for :title do 'User List' end
 <table class="records">
   <tr>
     <th>Name</th>
-    <th></th>
+    <th>Email</th>
     <th></th>
     <th></th>
   </tr>
@@ -16,6 +16,7 @@ content_for :title do 'User List' end
 <% @users.each do |user| %>
   <tr>
     <td><%= user.username %></td>
+    <td><%= user.email %></td>
     <td class="action"><%= link_to 'Edit', edit_user_path(user) if can?(:update, 'users') %></td>
     <td class="action"><%= link_to 'Destroy', user_path(user), method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'users') %></td>
   </tr>

@@ -1,26 +1,28 @@
 class UsersController < ApplicationController
-  
+
   def index
     can?(:read, 'users') do
       off = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
       lim = Rails.configuration.page_size
-      @users = User.limit(lim).offset(off)
-      @total = User.count
+      load_users
+
+      @users = @users.limit(lim).offset(off)
+      @total = @users.count
     end
   end
-  
+
   def new
     can?(:create, 'users') do
       @user = User.new
     end
   end
-  
+
   def edit
     can?(:update, 'users') do
-      @user = User.find(params['id'])
+      load_user
     end
   end
-  
+
   def create
     can?(:create, 'users') do
       @user = User.new(user_params)
@@ -31,10 +33,10 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   def update
     can?(:update, 'users') do
-      @user = User.find(params['id'])
+      load_user
       if user_params['password'].blank?
         params['user'].delete('password')
       end
@@ -46,10 +48,10 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     can?(:delete, 'users') do
-      @user = User.find(params['id'])
+      load_user
       @user.destroy
       redirect_to users_path
     end
@@ -57,6 +59,16 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:username, :password)
+      params.require(:user).permit(:username, :email, :password)
+    end
+
+    def load_users
+      role = current_user.roles.pluck(:id).max
+      @users = User.left_outer_joins(:roles).where('roles.id < ? OR roles is null', role)
+    end
+
+    def load_user
+      role = current_user.roles.pluck(:id).max
+      @user = User.left_outer_joins(:roles).where('roles.id < ? OR roles is null', role).find(params[:id])
     end
 end

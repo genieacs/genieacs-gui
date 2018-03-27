@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
       fetch_permissions_from_db
     end
 
-    roles = ['anonymous']
+    roles = []
     if user_signed_in?
       roles.concat(Rails.configuration.users[current_user.username]['roles'])
     end
@@ -80,6 +80,8 @@ class ApplicationController < ActionController::Base
           end
         end
       end
+
+      permissions = [['read', 1, '/home']] if permissions.blank?
       normalize_permissions(permissions)
     end
   end
