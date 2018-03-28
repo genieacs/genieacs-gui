@@ -24,3 +24,6 @@
 /config/roles.yml
 /config/users.yml
 /config/database.yml
+
+# RSpec
+spec/examples.txt
