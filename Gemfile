@@ -46,6 +46,8 @@ group :development do
   # Awesome Print
   gem 'awesome_print'
 
+  gem 'mailcatcher'
+
   # Better errors
   gem "better_errors"
   gem "binding_of_caller"

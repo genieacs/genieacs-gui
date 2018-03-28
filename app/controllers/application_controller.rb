@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     else
       error_msg = 'You must be logged in to access this section.'
       respond_to do |format|
-        format.html { flash.now[:error] = error_msg; render 'sessions/new', :status => 401 }
+        format.html { flash.now[:error] = error_msg; redirect_to new_user_session_path }
         format.all { render :text => error_msg, :status => 401 }
       end
     end
