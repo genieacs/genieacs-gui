@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   class NotAuthorized < StandardError; end
 
   rescue_from NotAuthorized do |exception|
-    if logged_in?
+    if user_signed_in?
       respond_to do |format|
         format.html { render 'not_authorized', :status => 403 }
         format.all { render :text => 'You are not authorized to access this section.', :status => 403 }
