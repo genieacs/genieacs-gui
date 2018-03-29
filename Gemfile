@@ -53,6 +53,13 @@ group :development do
   # Better errors
   gem "better_errors"
   gem "binding_of_caller"
+
+  # Use Capistrano for deployment
+  gem 'capistrano', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :development, :test do
@@ -64,6 +71,13 @@ group :development, :test do
   gem 'faker'
   gem 'database_cleaner'
 end
+
+group :production do
+  gem 'rails_12factor'
+end
+
+gem 'unicorn'
+gem 'unicorn-worker-killer'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

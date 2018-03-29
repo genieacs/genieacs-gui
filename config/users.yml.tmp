@@ -1,0 +1,7 @@
+admin:
+    password: admin
+    roles: [admin]
+
+user:
+    password: user
+    roles: [view]

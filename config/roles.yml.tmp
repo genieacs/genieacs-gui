@@ -1,0 +1,11 @@
+anonymous:
+    - [read, 1, /home]
+
+admin:
+    - [read, 1, /]
+    - [create, 1, /]
+    - [update, 1, /]
+    - [delete, 1, /]
+
+view:
+    - [read, 1, /]
