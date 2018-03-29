@@ -29,6 +29,15 @@ Go to directory and bundle install
 cd genieacs-gui
 bundle install
 ```
+Copy & Change config files
+```
+cp config/graphs-sample.json.erb config/graphs.json.erb
+cp config/index_parameters-sample.yml config/index_parameters.yml
+cp config/summary_parameters-sample.yml config/summary_parameters.yml
+cp config/parameters_edit-sample.yml config/parameters_edit.yml
+cp config/parameter_renderers-sample.yml config/parameter_renderers.yml
+cp config/database.sample.yml config/database.yml
+```
 Setup database
 ```
 rake db:reset
