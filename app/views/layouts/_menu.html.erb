@@ -39,6 +39,11 @@
     <%= link_to 'Files', files_path %>
   </li>
   <% end %>
+  <% if can?(:read, 'logs') %>
+  <li class="<%= params[:controller] == 'logs' ? 'active' : ''%>" >
+    <%= link_to 'Activity logs', logs_path %>
+  </li>
+  <% end %>
   <% if Rails.configuration.auth_method == :db %>
   <% if can?(:read, 'roles') %>
   <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >

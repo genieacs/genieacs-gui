@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  DISPLAY_FILEDS = ["username", "email", "expired_at"]
+  has_paper_trail
 
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
    :registerable, :timeoutable, authentication_keys: [:username]

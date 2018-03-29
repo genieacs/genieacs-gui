@@ -1,4 +1,6 @@
 class Privilege < ApplicationRecord
+  has_paper_trail
+
   belongs_to :role
   validates :action, presence: true,
                     length: { minimum: 4 }

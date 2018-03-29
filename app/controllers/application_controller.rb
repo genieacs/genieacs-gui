@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_paper_trail_whodunnit
+
+  before_action :load_object, if: :is_required_controller?
+  after_action :keep_activity, only: [:update, :destroy], if: :is_required_controller?
 
   require 'permissions'
 
@@ -116,7 +120,33 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [
       :username, :email, :password, :password_confirmation, :current_password
     ])
-
   end
 
+  def is_required_controller?
+    required_controllers = [
+      'presets', 'objects', 'provisions', 'virtual_parameters', 'files'
+    ]
+    required_controllers.include? controller_name
+  end
+
+  def keep_activity
+    object_changes = ApplicationHelper.diff_hashes(@before_change, @changed)
+
+    if ['create', 'update'].include?(@action) && !@changed.blank?
+      PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
+            item_id: @id, object: @before_change, object_changes: object_changes)
+
+    elsif @action == 'destroy' && !@before_change.blank?
+      PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
+            item_id: @id, object: @before_change, object_changes: object_changes)
+    end
+  end
+
+  def load_object
+    @id = params['name']&.strip || params[:id]
+    res = query_resource(create_api_conn(), controller_name, {'_id' => @id })
+    @before_change = res[:result][0]&.merge({ _id: params['name'] })
+
+    @action = @before_change.blank? ? 'create' : action_name
+  end
 end

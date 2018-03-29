@@ -37,7 +37,7 @@ class ObjectsController < ApplicationController
   def edit
     can?(:update, 'objects') do
       id = params[:id]
-      res = query_resource(create_api_conn(), 'objects', {'_id' => id})
+      res = query_resource(create_api_conn(), 'objects', {'_id' => id })
       @object = res[:result][0] || {}
     end
   end
@@ -51,6 +51,7 @@ class ObjectsController < ApplicationController
       http = create_api_conn()
       res = http.put("/objects/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(object))
       if res.code == '200'
+        @changed = object
         flash[:success] = 'Object saved'
       else
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"

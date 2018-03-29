@@ -1,4 +1,6 @@
 class Role < ApplicationRecord
+  has_paper_trail
+
   has_many :user_roles, class_name:   "UserRole",
                         dependent:    :destroy
   has_many :users, through: :user_roles

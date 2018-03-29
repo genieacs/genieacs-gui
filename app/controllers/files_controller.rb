@@ -46,6 +46,8 @@ class FilesController < ApplicationController
       res = http.request(req)
 
       if res.code == '201'
+        save_log(req)
+
         flash[:success] = 'File saved'
       else
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"
@@ -70,5 +72,20 @@ class FilesController < ApplicationController
 
       redirect_to :action => :index
     end
+  end
+
+  private
+
+  def save_log(req)
+    file_data = {
+      "fileType": req["fileType"],
+      "oui": req["oui"],
+      "productClass": req["productClass"],
+      "version": req["version"],
+      "file": params[:file].original_filename,
+    }
+
+    PaperTrail::Version.create(event: 'create', whodunnit: current_user.id, item_type: controller_name,
+        item_id: params[:file].original_filename, object: nil, object_changes: file_data)
   end
 end

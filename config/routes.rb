@@ -8,7 +8,9 @@ module URI
 end
 
 GenieacsGui::Application.routes.draw do
-  devise_for :users, :skip => [:registrations]
+  devise_for :users,
+    controllers: { sessions: 'users/sessions', },
+    skip: [:registrations]
   as :user do
     get 'users/edit' => 'users/registrations#edit', :as => 'edit_user_registration'
     put 'users' => 'users/registrations#update', :as => 'user_registration'
@@ -62,6 +64,7 @@ GenieacsGui::Application.routes.draw do
   resources :roles, except: [:new, :create, :destroy] do
     resources :privileges
   end
+  resources :logs, only: [:index]
 
   if Rails.configuration.auth_method == :db
     get 'change_password' => 'change_password#index'
