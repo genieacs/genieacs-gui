@@ -30,9 +30,14 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 
+# Authentication
 gem 'devise'
 
+# Track changes models
 gem 'paper_trail'
+
+# Cron jobs
+gem 'whenever', require: false
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
