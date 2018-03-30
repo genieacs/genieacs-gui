@@ -21,13 +21,13 @@ class Users::SessionsController < Devise::SessionsController
 
   # DELETE /resource/sign_out
   def destroy
-    super
     PaperTrail::Version.create(
       event: 'logout',
       whodunnit: current_user.id,
       item_id: current_user.id,
       item_type: "Auth"
     )
+    super
   end
 
   # protected
