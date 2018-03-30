@@ -6,26 +6,94 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Role.create(id: 1, name: 'View Only')
-Role.create(id: 2, name: 'User')
-Role.create(id: 3, name: 'Super User')
-Role.create(id: 4, name: 'Admin')
-Role.create(id: 5, name: 'Super Admin')
+# rails db:seed delete_all=true
+if ENV['delete_all'].present?
+  Privilege.delete_all
+  UserRole.delete_all
+  Role.delete_all
+  User.delete_all
+end
+
+view_only = Role.create(id: 1, name: 'View Only')
+user = Role.create(id: 2, name: 'User')
+super_user = Role.create(id: 3, name: 'Super User')
+admin = Role.create(id: 4, name: 'Admin')
+super_admin = Role.create(id: 5, name: 'Super Admin')
 
 # View
-Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 1)
+view_only.privileges.create!([
+  { action: 'read', weight: 1, resource: '/home' },
+  { action: 'read', weight: 1, resource: '/devices' }
+])
+
+# User
+user.privileges.create!([
+  { action: 'read', weight: 1, resource: '/home' },
+  { action: 'read', weight: 1, resource: '/devices' },
+  { action: 'update', weight: 1, resource: '/devices' },
+  { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'read', weight: 1, resource: '/faults' },
+  { action: 'update', weight: 1, resource: '/faults' },
+  { action: 'create', weight: 1, resource: '/faults' },
+  { action: 'delete', weight: 1, resource: '/faults' },
+  { action: 'read', weight: 1, resource: '/provisions' },
+  { action: 'update', weight: 1, resource: '/provisions' },
+  { action: 'create', weight: 1, resource: '/provisions' },
+  { action: 'delete', weight: 1, resource: '/provisions' },
+])
+
+# Super User
+super_user.privileges.create!([
+  { action: 'read', weight: 1, resource: '/home' },
+  { action: 'read', weight: 1, resource: '/devices' },
+  { action: 'update', weight: 1, resource: '/devices' },
+  { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'read', weight: 1, resource: '/users' },
+  { action: 'update', weight: 1, resource: '/users' },
+  { action: 'create', weight: 1, resource: '/users' },
+  { action: 'delete', weight: 1, resource: '/users' },
+  { action: 'read', weight: 1, resource: '/provisions' },
+  { action: 'update', weight: 1, resource: '/provisions' },
+  { action: 'create', weight: 1, resource: '/provisions' },
+  { action: 'delete', weight: 1, resource: '/provisions' },
+  { action: 'read', weight: 1, resource: '/faults' },
+  { action: 'update', weight: 1, resource: '/faults' },
+  { action: 'create', weight: 1, resource: '/faults' },
+  { action: 'delete', weight: 1, resource: '/faults' },
+  { action: 'read', weight: 1, resource: '/roles' },
+  { action: 'update', weight: 1, resource: '/roles' },
+  { action: 'create', weight: 1, resource: '/roles' },
+  { action: 'delete', weight: 1, resource: '/roles' },
+  { action: 'read', weight: 1, resource: '/logs' },
+])
 
 # Admin
-Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 4)
-Privilege.create(action: 'read', weight: -1, resource: '/users', role_id: 4)
-Privilege.create(action: 'read', weight: -1, resource: '/roles', role_id: 4)
+admin.privileges.create!([
+  { action: 'read', weight: 1, resource: '/home' },
+  { action: 'read', weight: 1, resource: '/devices' },
+  { action: 'update', weight: 1, resource: '/devices' },
+  { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'read', weight: 1, resource: '/users' },
+  { action: 'update', weight: 1, resource: '/users' },
+  { action: 'create', weight: 1, resource: '/users' },
+  { action: 'delete', weight: 1, resource: '/users' },
+  { action: 'read', weight: 1, resource: '/provisions' },
+  { action: 'update', weight: 1, resource: '/provisions' },
+  { action: 'create', weight: 1, resource: '/provisions' },
+  { action: 'delete', weight: 1, resource: '/provisions' },
+  { action: 'read', weight: 1, resource: '/faults' },
+  { action: 'update', weight: 1, resource: '/faults' },
+  { action: 'create', weight: 1, resource: '/faults' },
+  { action: 'delete', weight: 1, resource: '/faults' },
+])
 
 # Super Admin
-Privilege.create(action: 'read', weight: 1, resource: '/', role_id: 5)
-Privilege.create(action: 'create', weight: 1, resource: '/', role_id: 5)
-Privilege.create(action: 'update', weight: 1, resource: '/', role_id: 5)
-Privilege.create(action: 'delete', weight: 1, resource: '/', role_id: 5)
-
+super_admin.privileges.create!([
+  { action: 'read', weight: 1, resource: '/' },
+  { action: 'create', weight: 1, resource: '/' },
+  { action: 'update', weight: 1, resource: '/' },
+  { action: 'delete', weight: 1, resource: '/' }
+])
 
 if Rails.env.development?
   User.create(id: 1, username: 'view_only', password: 'password')
@@ -35,6 +103,8 @@ if Rails.env.development?
   User.create(id: 5, username: 'super_admin', password: 'password')
 
   UserRole.create(user_id: 1, role_id: 1)
+  UserRole.create(user_id: 2, role_id: 2)
+  UserRole.create(user_id: 3, role_id: 3)
   UserRole.create(user_id: 4, role_id: 4)
   UserRole.create(user_id: 5, role_id: 5)
 end

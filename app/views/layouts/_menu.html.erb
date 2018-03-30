@@ -9,7 +9,7 @@
     <%= link_to 'Devices', devices_path %>
   </li>
   <% end %>
-  <% if can?(:read, 'tasks') %>
+  <% if can?(:read, 'faults') %>
   <li class="<%= params[:controller] == 'faults' ? 'active' : ''%>" >
     <%= link_to 'Faults', faults_path %>
   </li>
