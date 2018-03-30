@@ -7,12 +7,13 @@ class LogsController < ApplicationController
 
       @filter_from = params[:from]
       @filter_to = params[:to]
-      if @filter_start.present? && @filter_to.present?
-        @logs = @logs.where('created_at BETWEEN ? AND ?', @filter_start, @filter_to)
-      elsif @filter_start.present?
-        @logs = @logs.where('created_at > ?', @filter_start)
+
+      if @filter_from.present? && @filter_to.present?
+        @logs = @logs.where('created_at::timestamp::date BETWEEN ? AND ?', @filter_from, @filter_to)
+      elsif @filter_from.present?
+        @logs = @logs.where('created_at::timestamp::date >= ?', @filter_from)
       elsif @filter_to.present?
-        @logs = @logs.where('created_at < ?', @filter_to)
+        @logs = @logs.where('created_at::timestamp::date <= ?', @filter_to)
       end
 
       @logs = @logs.order(created_at: :desc)
