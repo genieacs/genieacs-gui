@@ -1,3 +1,5 @@
+[![Build Status](http://183.88.244.121:6100/api/badges/BananaCoding/genieacs-gui/status.svg)](http://183.88.244.121:6100/BananaCoding/genieacs-gui)
+
 genieacs-gui
 ============
 
