@@ -218,6 +218,8 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
+    rspec-retry (0.5.7)
+      rspec-core (> 3.3)
     rspec-support (3.7.0)
     rubocop (0.54.0)
       parallel (~> 1.10)
@@ -328,6 +330,7 @@ DEPENDENCIES
   rails (~> 5.1.5)
   rails_12factor
   rspec-rails
+  rspec-retry
   rubocop (~> 0.54.0)
   sass-rails (~> 5.0)
   spring
