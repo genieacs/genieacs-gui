@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403051430) do
+ActiveRecord::Schema.define(version: 20180403094858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 20180403051430) do
     t.json "object"
     t.json "object_changes"
     t.datetime "created_at"
+    t.string "ip"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

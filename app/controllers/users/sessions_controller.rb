@@ -15,7 +15,8 @@ class Users::SessionsController < Devise::SessionsController
       event: 'login',
       whodunnit: current_user.id,
       item_id: current_user.id,
-      item_type: "Auth"
+      item_type: "Session",
+      ip: current_user.current_sign_in_ip
     )
   end
 
@@ -25,7 +26,8 @@ class Users::SessionsController < Devise::SessionsController
       event: 'logout',
       whodunnit: current_user.id,
       item_id: current_user.id,
-      item_type: "Auth"
+      item_type: "Session",
+      ip: current_user.current_sign_in_ip
     )
     super
   end

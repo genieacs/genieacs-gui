@@ -12,6 +12,11 @@ if ENV['delete_all'].present?
   UserRole.delete_all
   Role.delete_all
   User.delete_all
+  Office.delete_all
+  City.delete_all
+  SectorCity.delete_all
+  Division.delete_all
+  Department.delete_all
 end
 
 Department.create!(code: 'dm301', name: "ภูมิภาค")
@@ -133,6 +138,8 @@ if Rails.env.development?
   UserRole.create(user_id: 4, role_id: 4)
   UserRole.create(user_id: 5, role_id: 5)
 end
+
+PaperTrail::Version.delete_all
 
 # Reset id sequence on each tables
 ActiveRecord::Base.connection.tables.each do |t|

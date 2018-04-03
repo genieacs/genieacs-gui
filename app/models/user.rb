@@ -1,9 +1,9 @@
 class User < ApplicationRecord
   DISPLAY_FILEDS = ["username", "email", "expired_at"]
-  has_paper_trail
+  has_paper_trail only: [*User::DISPLAY_FILEDS, "encrypted_password"]
 
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-   :registerable, :timeoutable, authentication_keys: [:username]
+   :trackable, :registerable, :timeoutable, authentication_keys: [:username]
 
   has_many :user_roles, class_name: "UserRole", dependent: :destroy
   has_many :roles, through: :user_roles

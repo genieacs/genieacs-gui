@@ -134,11 +134,11 @@ class ApplicationController < ActionController::Base
 
     if ['create', 'update'].include?(@action) && !@changed.blank?
       PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
-            item_id: @id, object: @before_change, object_changes: object_changes)
+            item_id: @id, object: @before_change, object_changes: object_changes, ip: current_user.current_sign_in_ip)
 
     elsif @action == 'destroy' && !@before_change.blank?
       PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
-            item_id: @id, object: @before_change, object_changes: object_changes)
+            item_id: @id, object: @before_change, object_changes: object_changes, ip: current_user.current_sign_in_ip)
     end
   end
 

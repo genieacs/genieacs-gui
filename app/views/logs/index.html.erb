@@ -19,18 +19,20 @@
 
 <table class="records">
   <tr>
-    <th>Event</th>
+    <th>Action</th>
     <th>Action by</th>
-    <th>Item Type</th>
-    <th>Evented at</th>
+    <th>IP</th>
+    <th>Source</th>
+    <th>Action at</th>
     <th>Object</th>
     <th>Object changed</th>
   </tr>
 
 <% @logs.each do |log| %>
   <tr>
-    <td><%= log.event %></td>
+    <td><%= log.event.capitalize %></td>
     <td><%= User.find_by(id: log.whodunnit)&.username %></td>
+    <td><%= log&.ip %></td>
     <td><%= log.item_type %></td>
     <td><%= log.created_at %></td>
     <td>
