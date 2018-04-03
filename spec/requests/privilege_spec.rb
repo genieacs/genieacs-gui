@@ -26,6 +26,14 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).not_to include('Roles')
     end
 
+
+    it 'shouldn\'t see Download and Show' do
+      get '/devices'
+
+      assert_select 'td.action',  { count: 0, text: 'Show' }
+      expect(response.body).not_to include('Download')
+    end
+
     it "should access devices" do
       get '/devices'
       expect(response.body).not_to include("You are not authorized to access this section.")
@@ -94,6 +102,10 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).not_to include('Users')
       expect(response.body).not_to include('Roles')
     end
+
+    it 'should see reboot, Factory reset and Push file' do
+      # TODO check link in device detail
+    end
   end
 
   describe 'Super User role' do
@@ -118,6 +130,10 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).to include('Users')
       expect(response.body).to include('Roles')
     end
+
+    it 'should see reboot, Factory reset, Push file and Delete' do
+      # TODO check link in device detail
+    end
   end
 
   describe 'Admin role' do
@@ -141,6 +157,10 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).not_to include('Activity logs')
       expect(response.body).to include('Users')
       expect(response.body).not_to include('Roles')
+    end
+
+    it 'should see reboot, Factory reset, Push file and Delete' do
+      # TODO check link in device detail
     end
   end
 
@@ -177,6 +197,10 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).to include('New user')
       expect(response.body).to include('Edit')
       expect(response.body).to include('Destroy')
+    end
+
+    it 'should see all command' do
+      # TODO check link in device detail
     end
   end
 end

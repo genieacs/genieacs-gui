@@ -9,7 +9,9 @@ FactoryBot.define do
     after(:create) do |role, evaluator|
       role.privileges.create!([
         { action: 'read', weight: 1, resource: '/home' },
-        { action: 'read', weight: 1, resource: '/devices' }
+        { action: 'read', weight: 1, resource: '/devices' },
+        { action: 'read', weight: -1, resource: '/devices/download' },
+        { action: 'read', weight: -1, resource: '/devices/{id}' },
       ])
     end
   end
@@ -21,9 +23,15 @@ FactoryBot.define do
       role.privileges.create!([
         { action: 'read', weight: 1, resource: '/home' },
         { action: 'read', weight: 1, resource: '/devices' },
-        { action: 'update', weight: 1, resource: '/devices' },
-        { action: 'delete', weight: 1, resource: '/devices' },
+        { action: 'create', weight: 1, resource: '/devices/tags' },
+        { action: 'delete', weight: 1, resource: '/devices/tags' },
+        { action: 'update', weight: 1, resource: '/devices/reboot' },
+        { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+        { action: 'update', weight: 1, resource: '/devices/download' },
         { action: 'read', weight: 1, resource: '/faults' },
+        { action: 'read', weight: 1, resource: '/tasks' },
+        { action: 'update', weight: 1, resource: '/tasks/retry' },
+        { action: 'delete', weight: 1, resource: '/tasks' },
         { action: 'update', weight: 1, resource: '/faults' },
         { action: 'create', weight: 1, resource: '/faults' },
         { action: 'delete', weight: 1, resource: '/faults' },
@@ -42,8 +50,15 @@ FactoryBot.define do
       role.privileges.create!([
         { action: 'read', weight: 1, resource: '/home' },
         { action: 'read', weight: 1, resource: '/devices' },
-        { action: 'update', weight: 1, resource: '/devices' },
+        { action: 'create', weight: 1, resource: '/devices/tags' },
+        { action: 'delete', weight: 1, resource: '/devices/tags' },
+        { action: 'update', weight: 1, resource: '/devices/reboot' },
+        { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+        { action: 'update', weight: 1, resource: '/devices/download' },
         { action: 'delete', weight: 1, resource: '/devices' },
+        { action: 'read', weight: 1, resource: '/tasks' },
+        { action: 'update', weight: 1, resource: '/tasks/retry' },
+        { action: 'delete', weight: 1, resource: '/tasks' },
         { action: 'read', weight: 1, resource: '/users' },
         { action: 'update', weight: 1, resource: '/users' },
         { action: 'create', weight: 1, resource: '/users' },
@@ -72,8 +87,15 @@ FactoryBot.define do
       role.privileges.create!([
         { action: 'read', weight: 1, resource: '/home' },
         { action: 'read', weight: 1, resource: '/devices' },
-        { action: 'update', weight: 1, resource: '/devices' },
+        { action: 'create', weight: 1, resource: '/devices/tags' },
+        { action: 'delete', weight: 1, resource: '/devices/tags' },
+        { action: 'update', weight: 1, resource: '/devices/reboot' },
+        { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+        { action: 'update', weight: 1, resource: '/devices/download' },
         { action: 'delete', weight: 1, resource: '/devices' },
+        { action: 'read', weight: 1, resource: '/tasks' },
+        { action: 'update', weight: 1, resource: '/tasks/retry' },
+        { action: 'delete', weight: 1, resource: '/tasks' },
         { action: 'read', weight: 1, resource: '/users' },
         { action: 'update', weight: 1, resource: '/users' },
         { action: 'create', weight: 1, resource: '/users' },

@@ -23,16 +23,24 @@ super_admin = Role.create(id: 5, name: 'Super Admin')
 # View
 view_only.privileges.create!([
   { action: 'read', weight: 1, resource: '/home' },
-  { action: 'read', weight: 1, resource: '/devices' }
+  { action: 'read', weight: 1, resource: '/devices' },
+  { action: 'read', weight: -1, resource: '/devices/download' },
+  { action: 'read', weight: -1, resource: '/devices/{id}' },
 ])
 
 # User
 user.privileges.create!([
   { action: 'read', weight: 1, resource: '/home' },
   { action: 'read', weight: 1, resource: '/devices' },
-  { action: 'update', weight: 1, resource: '/devices' },
-  { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'create', weight: 1, resource: '/devices/tags' },
+  { action: 'delete', weight: 1, resource: '/devices/tags' },
+  { action: 'update', weight: 1, resource: '/devices/reboot' },
+  { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+  { action: 'update', weight: 1, resource: '/devices/download' },
   { action: 'read', weight: 1, resource: '/faults' },
+  { action: 'read', weight: 1, resource: '/tasks' },
+  { action: 'update', weight: 1, resource: '/tasks/retry' },
+  { action: 'delete', weight: 1, resource: '/tasks' },
   { action: 'update', weight: 1, resource: '/faults' },
   { action: 'create', weight: 1, resource: '/faults' },
   { action: 'delete', weight: 1, resource: '/faults' },
@@ -46,8 +54,15 @@ user.privileges.create!([
 super_user.privileges.create!([
   { action: 'read', weight: 1, resource: '/home' },
   { action: 'read', weight: 1, resource: '/devices' },
-  { action: 'update', weight: 1, resource: '/devices' },
+  { action: 'create', weight: 1, resource: '/devices/tags' },
+  { action: 'delete', weight: 1, resource: '/devices/tags' },
+  { action: 'update', weight: 1, resource: '/devices/reboot' },
+  { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+  { action: 'update', weight: 1, resource: '/devices/download' },
   { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'read', weight: 1, resource: '/tasks' },
+  { action: 'update', weight: 1, resource: '/tasks/retry' },
+  { action: 'delete', weight: 1, resource: '/tasks' },
   { action: 'read', weight: 1, resource: '/users' },
   { action: 'update', weight: 1, resource: '/users' },
   { action: 'create', weight: 1, resource: '/users' },
@@ -71,8 +86,15 @@ super_user.privileges.create!([
 admin.privileges.create!([
   { action: 'read', weight: 1, resource: '/home' },
   { action: 'read', weight: 1, resource: '/devices' },
-  { action: 'update', weight: 1, resource: '/devices' },
+  { action: 'create', weight: 1, resource: '/devices/tags' },
+  { action: 'delete', weight: 1, resource: '/devices/tags' },
+  { action: 'update', weight: 1, resource: '/devices/reboot' },
+  { action: 'update', weight: 1, resource: '/devices/factory_reset' },
+  { action: 'update', weight: 1, resource: '/devices/download' },
   { action: 'delete', weight: 1, resource: '/devices' },
+  { action: 'read', weight: 1, resource: '/tasks' },
+  { action: 'update', weight: 1, resource: '/tasks/retry' },
+  { action: 'delete', weight: 1, resource: '/tasks' },
   { action: 'read', weight: 1, resource: '/users' },
   { action: 'update', weight: 1, resource: '/users' },
   { action: 'create', weight: 1, resource: '/users' },

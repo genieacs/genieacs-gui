@@ -20,7 +20,7 @@
 <div><%= link_to 'Add Firmware', {controller: 'files', action: 'new', params: {oui: @device['_deviceId']['_OUI'].html_safe, product_class: @device['_deviceId']['_ProductClass'].html_safe, version: software_version.html_safe }} %></div>
 <% end %>
 
-<% if can?(:delete, 'devices') %>
+<% if can?(:delete, 'devices/{id}') %>
 <div><%= link_to 'Delete', nil, method: :delete, data: {confirm: 'Are you sure you want to delete this device?'} %></div>
 <% end %>
 </p>

@@ -54,14 +54,14 @@ filters = {
       <% cls = 'status-green' if (@now - device['_lastInform'].to_time) < 300 %>
       <span class="<%= cls %>" title="<%=device['_lastInform'].to_time.in_time_zone%>"><%= distance_of_time_in_words(@now, device['_lastInform'], include_seconds: true) %> ago</span>
     </td>
-    <td class="action"><%= link_to 'Show', {:action => :show, :id => device['_id']} %></td>
+    <td class="action"><%= link_to 'Show', {:action => :show, :id => device['_id']} if can?(:read, 'devices/{id}') %></td>
   </tr>
 <% end %>
 </table>
 
 <%= render partial: 'pagination' %>
 
-<%= link_to 'Download', params.permit(:query).merge(:format => :csv) %>
+<%= link_to 'Download', params.permit(:query).merge(:format => :csv) if can?(:read, 'devices/download') %>
 
 <script type="text/javascript">
 $(function() {
