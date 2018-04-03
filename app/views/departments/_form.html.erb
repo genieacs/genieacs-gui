@@ -1,0 +1,13 @@
+<%= simple_form_for(@department) do |f| %>
+  <%= render 'shared/error_message', model: @department %>
+
+  <div class="form-inputs">
+    <%= f.input :code %><br>
+    <%= f.input :name %><br>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+

@@ -1,0 +1,29 @@
+<h1>List Sector City</h1>
+<hr>
+<%= link_to 'New Sector City', new_sector_city_path if can?(:create, 'offices') %>
+<table class="records">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Division</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sector_cities.each do |sector_city| %>
+      <tr>
+        <td><%= sector_city.code %></td>
+        <td><%= sector_city.name %></td>
+        <td><%= sector_city.department.name %></td>
+        <td><%= sector_city.division.name %></td>
+        <td><%= link_to 'Edit', edit_sector_city_path(sector_city) if can?(:update, 'offices') %></td>
+        <td><%= link_to 'Destroy', sector_city, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'offices') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @sector_cities, param_name: :sector_city_page %>
+<br>

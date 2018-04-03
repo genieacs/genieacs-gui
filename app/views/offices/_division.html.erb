@@ -1,0 +1,27 @@
+<h1>List division</h1>
+<hr>
+<%= link_to 'New Division', new_division_path if can?(:create, 'offices') %>
+<table class="records">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Department</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @divisions.each do |division| %>
+      <tr>
+        <td><%= division.code %></td>
+        <td><%= division.name %></td>
+        <td><%= division.department.name %></td>
+        <td><%= link_to 'Edit', edit_division_path(division) if can?(:update, 'offices') %></td>
+        <td><%= link_to 'Destroy', division, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'offices') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @divisions, param_name: :division_page %>
+<br>

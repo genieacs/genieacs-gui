@@ -1,0 +1,16 @@
+<%= simple_form_for(@office) do |f| %>
+  <%= render 'shared/error_message', model: @office %>
+
+  <div class="form-inputs">
+    <%= f.input :code %><br>
+    <%= f.input :name %><br>
+    <%= f.association :department, prompt: 'Select department' %><br>
+    <%= f.association :division, prompt: 'Select division' %><br>
+    <%= f.association :sector_city, prompt: 'Select sector city' %><br>
+    <%= f.association :city, prompt: 'Select city' %><br>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

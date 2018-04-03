@@ -10,10 +10,54 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180328094643) do
+ActiveRecord::Schema.define(version: 20180403051430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cities", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "department_id"
+    t.bigint "division_id"
+    t.bigint "sector_city_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_cities_on_department_id"
+    t.index ["division_id"], name: "index_cities_on_division_id"
+    t.index ["sector_city_id"], name: "index_cities_on_sector_city_id"
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "divisions", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "department_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_divisions_on_department_id"
+  end
+
+  create_table "offices", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "department_id"
+    t.bigint "division_id"
+    t.bigint "sector_city_id"
+    t.bigint "city_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_offices_on_city_id"
+    t.index ["department_id"], name: "index_offices_on_department_id"
+    t.index ["division_id"], name: "index_offices_on_division_id"
+    t.index ["sector_city_id"], name: "index_offices_on_sector_city_id"
+  end
 
   create_table "privileges", force: :cascade do |t|
     t.string "action"
@@ -29,6 +73,17 @@ ActiveRecord::Schema.define(version: 20180328094643) do
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "sector_cities", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "department_id"
+    t.bigint "division_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_sector_cities_on_department_id"
+    t.index ["division_id"], name: "index_sector_cities_on_division_id"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -67,4 +122,14 @@ ActiveRecord::Schema.define(version: 20180328094643) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "cities", "departments"
+  add_foreign_key "cities", "divisions"
+  add_foreign_key "cities", "sector_cities"
+  add_foreign_key "divisions", "departments"
+  add_foreign_key "offices", "cities"
+  add_foreign_key "offices", "departments"
+  add_foreign_key "offices", "divisions"
+  add_foreign_key "offices", "sector_cities"
+  add_foreign_key "sector_cities", "departments"
+  add_foreign_key "sector_cities", "divisions"
 end

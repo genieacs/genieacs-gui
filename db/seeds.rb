@@ -14,6 +14,9 @@ if ENV['delete_all'].present?
   User.delete_all
 end
 
+Department.create!(code: 'dm301', name: "ภูมิภาค")
+Department.create!(code: 'dm302', name: "นครหลวง")
+
 view_only = Role.create(id: 1, name: 'View Only')
 user = Role.create(id: 2, name: 'User')
 super_user = Role.create(id: 3, name: 'Super User')
