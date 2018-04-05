@@ -19,5 +19,7 @@ module GenieacsGui
     # config.auth_method = :yml
     # :db = use roles and users stored in the database
     config.auth_method = :db
+
+    config.time_zone = 'Bangkok'
   end
 end
