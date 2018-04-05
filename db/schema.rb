@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403094858) do
+ActiveRecord::Schema.define(version: 20180405040744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,7 +108,20 @@ ActiveRecord::Schema.define(version: 20180403094858) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.datetime "expired_at"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "telephone"
+    t.bigint "department_id"
+    t.bigint "division_id"
+    t.bigint "sector_city_id"
+    t.bigint "city_id"
+    t.bigint "office_id"
+    t.index ["city_id"], name: "index_users_on_city_id"
+    t.index ["department_id"], name: "index_users_on_department_id"
+    t.index ["division_id"], name: "index_users_on_division_id"
+    t.index ["office_id"], name: "index_users_on_office_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["sector_city_id"], name: "index_users_on_sector_city_id"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -133,4 +146,9 @@ ActiveRecord::Schema.define(version: 20180403094858) do
   add_foreign_key "offices", "sector_cities"
   add_foreign_key "sector_cities", "departments"
   add_foreign_key "sector_cities", "divisions"
+  add_foreign_key "users", "cities"
+  add_foreign_key "users", "departments"
+  add_foreign_key "users", "divisions"
+  add_foreign_key "users", "offices"
+  add_foreign_key "users", "sector_cities"
 end

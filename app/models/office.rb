@@ -1,6 +1,7 @@
 class Office < ApplicationRecord
   has_paper_trail
 
+  has_many :users, dependent: :nullify
   belongs_to :department
   belongs_to :division
   belongs_to :sector_city

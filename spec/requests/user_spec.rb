@@ -14,11 +14,11 @@ RSpec.describe 'User', type: :request do
     assert_select 'table.records' do
       assert_select 'tr', 3
       assert_select 'tr > td', { count: 0, text: current_user.username }
-      assert_select 'tr > td', { count: 0, text: current_user.email }
+      assert_select 'tr > td', { count: 0, text: current_user.roles.pluck(:name).join(',') }
       assert_select 'tr > td', users[1].username
-      assert_select 'tr > td', users[1].email
+      assert_select 'tr > td', users[1].roles.pluck(:name).join(',')
       assert_select 'tr > td', users[2].username
-      assert_select 'tr > td', users[2].email
+      assert_select 'tr > td', users[2].roles.pluck(:name).join(',')
     end
 
     expect(response.body).to include(current_user.username)

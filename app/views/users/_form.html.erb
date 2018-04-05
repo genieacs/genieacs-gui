@@ -1,38 +1,56 @@
-<%= form_for @user do |f| %>
+<%= simple_form_for @user do |f| %>
 
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@user.errors.count, "error") %> prohibited
-        this user from being saved:
-      </h2>
-      <ul>
-        <% @user.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+  <%= render 'shared/error_message', model: @user %>
+  <div>
+    <div>
+      <%= f.input :username, wrapper_html: { class: 'd-inline-block' } %>
+      <%= f.input :password, wrapper_html: { class: 'd-inline-block' } %>
     </div>
-  <% end %>
 
-  <p>
-    <%= f.label :username %><br>
-    <%= f.text_field :username %>
-  </p>
+    <div>
+      <%= f.input :first_name, wrapper_html: { class: 'd-inline-block' } %>
+      <%= f.input :last_name, wrapper_html: { class: 'd-inline-block' } %>
+      <%= f.input :telephone, wrapper_html: { class: 'd-inline-block' } %>
+      <%= f.input :email, wrapper_html: { class: 'd-inline-block' } %>
+    </div>
 
-  <p>
-    <%= f.label :email %><br>
-    <%= f.email_field :email %>
-  </p>
+    <div class="mb-10">
+      <%= f.label :expired_at %><br>
+      <%= f.date_field :expired_at %>
+    </div>
+  </div>
 
-  <p>
-    <%= f.label :password %><br>
-    <%= f.password_field :password %>
-  </p>
+  <div id="roles-added" class=" mb-10">
+    <% @user.roles.each do |role| %>
+      <div class="badge badge-pill badge-dark">
+        <%= role.name %>
+        <input type="hidden" name="user[role_ids][]" value="<%= role.id %>">
+        <span class="close">&nbsp;x&nbsp;</span>
+      </div>
+    <% end %>
+  </div>
 
-  <p>
-    <%= f.label :expired_at %><br>
-    <%= f.datetime_field :expired_at %>
-  </p>
+  <div class="">
+    <input type="hidden" name="role_ids" value="<%= params[:role_ids] || @user.roles.pluck(:id).join(",") %>">
+    <%= f.input :roles, collection: Role.all.collect { |x| [x.name, x.id] }, prompt: 'Select role', wrapper_html: { class: 'd-inline-block' } %>
+    <button type="button" class='d-inline-block' onclick="addRole()">Add role</button>
+  </div>
+
+  <div>
+    <h2>Area of responsibility</h2>
+    <hr>
+
+    <div>
+      <%= f.association :department, wrapper_html: { class: 'd-inline-block' }, prompt: 'Select department' %>
+      <%= f.association :division, wrapper_html: { class: 'd-inline-block' }, prompt: 'Select division' %>
+      <%= f.association :sector_city, wrapper_html: { class: 'd-inline-block' }, prompt: 'Select sector city' %>
+    </div>
+
+    <div>
+      <%= f.association :city, wrapper_html: { class: 'd-inline-block' }, prompt: 'Select city' %>
+      <%= f.association :office, wrapper_html: { class: 'd-inline-block' }, prompt: 'Select office' %>
+    </div>
+  </div>
 
   <p>
     <%= f.submit %>

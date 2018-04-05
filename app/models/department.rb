@@ -1,6 +1,7 @@
 class Department < ApplicationRecord
   has_paper_trail
 
+  has_many :users, dependent: :nullify
   has_many :divisions, dependent: :destroy
   has_many :sector_cities, dependent: :destroy
   has_many :cities, dependent: :destroy
