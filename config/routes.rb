@@ -65,11 +65,11 @@ GenieacsGui::Application.routes.draw do
     resources :privileges
   end
   resources :logs, only: [:index]
-  resources :offices
-  resources :cities
-  resources :sector_cities
-  resources :divisions
-  resources :departments
+  resources :offices, execpt: [:show]
+  resources :cities, execpt: [:index, :show]
+  resources :sector_cities, execpt: [:index, :show]
+  resources :divisions, execpt: [:index, :show]
+  resources :departments, execpt: [:index, :show, :destroy]
 
   if Rails.configuration.auth_method == :db
     get 'change_password' => 'change_password#index'

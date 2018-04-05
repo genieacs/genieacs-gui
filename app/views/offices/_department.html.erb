@@ -5,7 +5,7 @@
     <tr>
       <th>Code</th>
       <th>Name</th>
-      <th colspan="2"></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -15,7 +15,6 @@
         <td><%= department.code %></td>
         <td><%= department.name %></td>
         <td><%= link_to 'Edit', edit_department_path(department) if can?(:update, 'offices') %></td>
-        <td><%= link_to 'Destroy', department, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'offices') %></td>
       </tr>
     <% end %>
   </tbody>

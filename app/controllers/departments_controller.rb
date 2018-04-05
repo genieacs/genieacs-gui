@@ -38,13 +38,13 @@ class DepartmentsController < ApplicationController
   end
 
   # DELETE /departments/1
-  def destroy
-    can?(:delete, 'offices') do
-      load_department
-      @department.destroy
-      redirect_to offices_path, notice: 'Department was successfully destroyed.'
-    end
-  end
+  # def destroy
+  #   can?(:delete, 'offices') do
+  #     load_department
+  #     @department.destroy
+  #     redirect_to offices_path, notice: 'Department was successfully destroyed.'
+  #   end
+  # end
 
   private
     def load_department
