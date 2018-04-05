@@ -11,7 +11,6 @@ class DevicesController < ApplicationController
       next if n.start_with?('_') or v.is_a?(String)
       v['_path'] = "#{prefix}#{n}"
       output << v
-
       if not v.include?('_value')
         output += flatten_params(v, prefix ? "#{prefix}#{n}." : "#{n}.")
       end

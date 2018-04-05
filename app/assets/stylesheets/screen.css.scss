@@ -46,7 +46,7 @@ i {
       margin-left: 2px;
       margin-right: 2px;
       height: 14px;
-      padding: 4px;
+      padding: 4px 10px;
       border: 2px solid $color1;
       margin: 0;
       background-color: $color1;
@@ -65,7 +65,6 @@ i {
 
       a, a:visited, a:hover {
         display: inline-block;
-        min-width: 100px;
         color: $color4;
         text-decoration: none;
         background: none; } } }

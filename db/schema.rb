@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(version: 20180405040744) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "devices", force: :cascade do |t|
+    t.string "device_id"
+    t.json "info"
+    t.datetime "last_inform"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "divisions", force: :cascade do |t|
     t.string "code"
     t.string "name"
@@ -57,6 +65,14 @@ ActiveRecord::Schema.define(version: 20180405040744) do
     t.index ["department_id"], name: "index_offices_on_department_id"
     t.index ["division_id"], name: "index_offices_on_division_id"
     t.index ["sector_city_id"], name: "index_offices_on_sector_city_id"
+  end
+
+  create_table "parameters", force: :cascade do |t|
+    t.bigint "device_id"
+    t.json "parameters"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_parameters_on_device_id"
   end
 
   create_table "privileges", force: :cascade do |t|

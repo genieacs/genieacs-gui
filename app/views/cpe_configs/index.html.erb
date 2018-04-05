@@ -1,0 +1,67 @@
+<h1>CPE Configs</h1>
+<hr>
+<br>
+
+<form action="<%= cpe_configs_url %>" data-method="GET">
+  <div class="d-inline-block">
+    <label>From: </label>
+    <input type="date" name="start_date" value="<%= @start_date %>">
+  </div>
+
+  <div class="d-inline-block">
+    <label>To: </label>
+    <input type="date" name="end_date" value="<%= @end_date %>">
+  </div>
+
+  <input type="submit">
+</form>
+
+<h2>Showing <%= @total %> parameters</h2>
+<br>
+
+<div>
+  <span>
+    <input type="checkbox" id="parameter_all" value="1" onchange="toggleSelectedAll(this)">
+    <label for="parameter_all">All</label>
+  </span>
+  <span>
+    <button type="button" class="button" onclick="downloadParameters()">Download selected</button>
+  </span>
+</div>
+<br>
+
+<%= form_tag(download_parameters_path, id: 'download_form', method: :get, target: '_blank') do %>
+
+<table class="records">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Serial number</th>
+      <th>Product class</th>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @parameters.each do |parameter| %>
+      <% info = parameter.device.info %>
+      <tr>
+        <td><%= check_box_tag('ids[]', parameter.id) %></td>
+        <td><%= info['_SerialNumber'] %></td>
+        <td><%= info['_ProductClass'] %></td>
+        <td><%= parameter.created_at.strftime('%Y-%m-%d') %></td>
+        <td>
+          <span><%= link_to('Download', download_parameters_path(ids: [parameter.id]), target: '_blank') %></span>
+          <% if can?(:delete, 'cpe_configs') %>
+            <span><%= link_to('Delete', parameter, data: { confirm: "Are you sure?" }, method: :delete) %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% end %>
+
+<br>
+<%= render partial: 'pagination' %>

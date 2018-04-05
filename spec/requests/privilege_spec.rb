@@ -175,7 +175,8 @@ RSpec.describe 'Privilege', type: :request do
 
     it "should see all tab" do
       get '/'
-      sleep(1)
+      sleep(2)
+      expect(response).to have_http_status(:ok)
 
       expect(response.body).to include('Home')
       expect(response.body).to include('Devices')
@@ -192,7 +193,8 @@ RSpec.describe 'Privilege', type: :request do
 
     it 'should can manage user' do
       get '/users'
-      sleep(1)
+      sleep(2)
+      expect(response).to have_http_status(:ok)
 
       expect(response.body).to include('New user')
       expect(response.body).to include('Edit')
