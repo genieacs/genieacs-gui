@@ -27,3 +27,6 @@
 
 # RSpec
 spec/examples.txt
+
+# Assets
+/public/assets
