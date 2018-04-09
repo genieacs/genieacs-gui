@@ -6,7 +6,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'support/factory_bot'
 require 'rake'
-require 'rspec/retry'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -67,10 +66,6 @@ RSpec.configure do |config|
       example.run
     end
   end
-
-  # Rspec Retry
-  config.verbose_retry = true
-  config.default_retry_count = 3
 
   # Helper
   config.include RequestSpecHelper, type: :request

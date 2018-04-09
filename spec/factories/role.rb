@@ -129,12 +129,10 @@ FactoryBot.define do
     name 'Super Admin'
 
     after(:create) do |role, evaluator|
-      role.privileges.create!([
-        { action: 'read', weight: 1, resource: '/' },
-        { action: 'create', weight: 1, resource: '/' },
-        { action: 'update', weight: 1, resource: '/' },
-        { action: 'delete', weight: 1, resource: '/' }
-      ])
+      create(:privilege, action: 'read', weight: 1, resource: '/', role: role)
+      create(:privilege, action: 'create', weight: 1, resource: '/', role: role)
+      create(:privilege, action: 'update', weight: 1, resource: '/', role: role)
+      create(:privilege, action: 'delete', weight: 1, resource: '/', role: role)
     end
   end
 end

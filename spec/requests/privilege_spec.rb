@@ -168,14 +168,14 @@ RSpec.describe 'Privilege', type: :request do
     let(:role) { FactoryBot.create(:super_admin) }
 
     before do
-      FactoryBot.create(:user)
       FactoryBot.create(:user_role, user_id: user.id, role_id: role.id)
       sign_in user
     end
 
     it "should see all tab" do
       get '/'
-      sleep(2)
+      expect(controller.current_user).to eq(user)
+      expect(response).to render_template(:index)
       expect(response).to have_http_status(:ok)
 
       expect(response.body).to include('Home')
@@ -186,14 +186,18 @@ RSpec.describe 'Privilege', type: :request do
       expect(response.body).to include('Provisions')
       expect(response.body).to include('Virtual Parameters')
       expect(response.body).to include('Files')
+      expect(response.body).to include('CPE Configs')
       expect(response.body).to include('Activity logs')
       expect(response.body).to include('Users')
       expect(response.body).to include('Roles')
     end
 
     it 'should can manage user' do
+      FactoryBot.create(:user)
+
       get '/users'
-      sleep(2)
+      expect(controller.current_user).to eq(user)
+      expect(response).to render_template(:index)
       expect(response).to have_http_status(:ok)
 
       expect(response.body).to include('New user')
