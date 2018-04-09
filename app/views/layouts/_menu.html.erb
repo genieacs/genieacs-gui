@@ -48,17 +48,17 @@
     </li>
   <% end %>
 
-<!--   <%# if can?(:read, 'cpe_configs') %>
-  <li class="<%#= params[:controller] == 'cpe_configs' ? 'active' : ''%>" >
-    <%#= link_to 'CPE Configs', cpe_configs_path %>
+  <% if can?(:read, 'cpe_configs') %>
+  <li class="<%= params[:controller] == 'cpe_configs' ? 'active' : ''%>" >
+    <%= link_to 'CPE Configs', cpe_configs_path %>
   </li>
-  <%# end %>
+  <% end %>
 
-  <%# if can?(:read, 'logs') %>
-    <li class="<%#= params[:controller] == 'logs' ? 'active' : ''%>" >
-      <%#= link_to 'Activity logs', logs_path %>
+  <% if can?(:read, 'logs') %>
+    <li class="<%= params[:controller] == 'logs' ? 'active' : ''%>" >
+      <%= link_to 'Activity logs', logs_path %>
     </li>
-  <%# end %> -->
+  <% end %>
 
   <% if can?(:read, 'roles') %>
     <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >
