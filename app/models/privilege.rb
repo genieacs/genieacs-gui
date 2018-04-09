@@ -24,7 +24,7 @@ class Privilege < ApplicationRecord
     ['/virtaul_parameters', '/virtaul_parameters'],
     ['/files', '/files'],
     ['/cpe_configs', '/cpe_configs'],
-    ['/logs', '/logs'],
+    ['/activity_logs', '/logs'],
     ['/device_lists', '/device_lists'],
     ['/offices', '/offices'],
     ['/users', '/users'],
