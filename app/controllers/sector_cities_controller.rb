@@ -47,6 +47,11 @@ class SectorCitiesController < ApplicationController
     end
   end
 
+  def cities
+    load_sector_city
+    render json: @sector_city.cities.order(code: :asc)
+  end
+
   private
     def load_sector_city
       @sector_city = SectorCity.find(params[:id])

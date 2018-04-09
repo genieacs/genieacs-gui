@@ -45,6 +45,12 @@ class DepartmentsController < ApplicationController
   #     redirect_to offices_path, notice: 'Department was successfully destroyed.'
   #   end
   # end
+  #
+
+  def divisions
+    load_department
+    render json: @department.divisions.order(code: :asc)
+  end
 
   private
     def load_department

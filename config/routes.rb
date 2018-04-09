@@ -78,11 +78,27 @@ GenieacsGui::Application.routes.draw do
   end
 
   resources :logs, only: %i[index]
+  resources :departments, execpt: %i[index show destroy] do
+    member do
+      get 'divisions'
+    end
+  end
+  resources :divisions, execpt: %i[index show] do
+    member do
+      get 'sector_cities'
+    end
+  end
+  resources :sector_cities, execpt: %i[index show] do
+    member do
+      get 'cities'
+    end
+  end
+  resources :cities, execpt: %i[index show] do
+    member do
+      get 'offices'
+    end
+  end
   resources :offices, execpt: %i[show]
-  resources :cities, execpt: %i[index show]
-  resources :sector_cities, execpt: %i[index show]
-  resources :divisions, execpt: %i[index show]
-  resources :departments, execpt: %i[index show destroy]
   resources :cpe_configs, only: %i[index]
 
   if Rails.configuration.auth_method == :db

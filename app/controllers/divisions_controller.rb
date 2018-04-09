@@ -46,6 +46,11 @@ class DivisionsController < ApplicationController
     end
   end
 
+  def sector_cities
+    load_division
+    render json: @division.sector_cities.order(code: :asc)
+  end
+
   private
     def load_division
       @division = Division.find(params[:id])

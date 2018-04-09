@@ -2,10 +2,14 @@
   <%= render 'shared/error_message', model: @sector_city %>
 
   <div class="form-inputs">
-    <%= f.input :code %><br>
-    <%= f.input :name %><br>
-    <%= f.association :department, prompt: 'Select department' %><br>
-    <%= f.association :division, prompt: 'Select division' %><br>
+    <%= f.input :code %>
+    <%= f.input :name %>
+    <%= f.association :department, prompt: 'Select department',
+        input_html: { class: 'select-department' } %>
+
+    <%= f.association :division, prompt: 'Select division',
+        collection: (@sector_city&.department&.divisions || []),
+        input_html: { class: 'select-division' } %>
   </div>
 
   <div class="form-actions">
