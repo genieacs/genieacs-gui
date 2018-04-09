@@ -1,54 +1,80 @@
 <ul class="menu">
+
   <% if can?(:read, 'home') %>
-  <li class="<%= params[:controller] == 'home' ? 'active' : ''%>" >
-    <%= link_to 'Home', root_path %>
-  </li>
+    <li class="<%= params[:controller] == 'home' ? 'active' : ''%>" >
+      <%= link_to 'Home', root_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'devices') %>
-  <li class="<%= params[:controller] == 'devices' ? 'active' : ''%>" >
-    <%= link_to 'Devices', devices_path %>
-  </li>
+    <li class="<%= params[:controller] == 'devices' ? 'active' : ''%>" >
+      <%= link_to 'Devices', devices_path %>
+    </li>
   <% end %>
-  <% if can?(:read, 'tasks') %>
-  <li class="<%= params[:controller] == 'faults' ? 'active' : ''%>" >
-    <%= link_to 'Faults', faults_path %>
-  </li>
+
+  <% if can?(:read, 'faults') %>
+    <li class="<%= params[:controller] == 'faults' ? 'active' : ''%>" >
+      <%= link_to 'Faults', faults_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'presets') %>
-  <li class="<%= params[:controller] == 'presets' ? 'active' : ''%>" >
-    <%= link_to 'Presets', presets_path %>
-  </li>
+    <li class="<%= params[:controller] == 'presets' ? 'active' : ''%>" >
+      <%= link_to 'Presets', presets_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'objects') %>
-  <li class="<%= params[:controller] == 'objects' ? 'active' : ''%>" >
-    <%= link_to 'Objects', objects_path %>
-  </li>
+    <li class="<%= params[:controller] == 'objects' ? 'active' : ''%>" >
+      <%= link_to 'Objects', objects_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'provisions') %>
-  <li class="<%= params[:controller] == 'provisions' ? 'active' : ''%>" >
-    <%= link_to 'Provisions', provisions_path %>
-  </li>
+    <li class="<%= params[:controller] == 'provisions' ? 'active' : ''%>" >
+      <%= link_to 'Provisions', provisions_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'virtual_parameters') %>
-  <li class="<%= params[:controller] == 'virtual_parameters' ? 'active' : ''%>" >
-    <%= link_to 'Virtual Parameters', virtual_parameters_path %>
-  </li>
+    <li class="<%= params[:controller] == 'virtual_parameters' ? 'active' : ''%>" >
+      <%= link_to 'Virtual Parameters', virtual_parameters_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'files') %>
-  <li class="<%= params[:controller] == 'files' ? 'active' : ''%>" >
-    <%= link_to 'Files', files_path %>
+    <li class="<%= params[:controller] == 'files' ? 'active' : ''%>" >
+      <%= link_to 'Files', files_path %>
+    </li>
+  <% end %>
+
+  <% if can?(:read, 'cpe_configs') %>
+  <li class="<%= params[:controller] == 'cpe_configs' ? 'active' : ''%>" >
+    <%= link_to 'CPE Configs', cpe_configs_path %>
   </li>
   <% end %>
-  <% if Rails.configuration.auth_method == :db %>
+
+  <% if can?(:read, 'logs') %>
+    <li class="<%= params[:controller] == 'logs' ? 'active' : ''%>" >
+      <%= link_to 'Activity logs', logs_path %>
+    </li>
+  <% end %>
+
   <% if can?(:read, 'roles') %>
-  <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >
-    <%= link_to 'Roles', roles_path %>
-  </li>
+    <li class="admin <%= params[:controller] == 'roles' ? 'active' : ''%>" >
+      <%= link_to 'Roles', roles_path %>
+    </li>
   <% end %>
+
   <% if can?(:read, 'users') %>
-  <li class="admin <%= params[:controller] == 'users' ? 'active' : ''%>" >
-    <%= link_to 'Users', users_path %>
-  </li>
+    <li class="admin <%= params[:controller] == 'users' ? 'active' : ''%>" >
+      <%= link_to 'Users', users_path %>
+    </li>
   <% end %>
+
+  <% if can?(:read, 'offices') %>
+    <li class="admin <%= params[:controller] == 'offices' ? 'active' : ''%>" >
+      <%= link_to 'Office', offices_path %>
+    </li>
   <% end %>
 </ul>

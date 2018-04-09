@@ -88,4 +88,23 @@ Rails.application.configure do
   config.genieacs_api_host = 'localhost'
   config.genieacs_api_port = 7557
   config.genieacs_api_use_ssl = false
+
+  # SMTP
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = {
+    host: Rails.application.secrets.domain, port: Rails.application.secrets.port
+  }
+
+  ActionMailer::Base.smtp_settings = {
+    user_name: Rails.application.secrets.email_provider_username,
+    password: Rails.application.secrets.email_provider_password,
+    domain: Rails.application.secrets.domain,
+    address: Rails.application.secrets.email_provider_host,
+    port: Rails.application.secrets.email_provider_port,
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+  # Uncomment when you want to serve assetes with rails
+  # config.serve_static_files = true
 end

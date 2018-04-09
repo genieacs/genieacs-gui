@@ -1,0 +1,39 @@
+
+<%= render 'department' %>
+<%= render 'division' %>
+<%= render 'sector_city' %>
+<%= render 'city' %>
+
+<h1>List Office</h1>
+<hr>
+<%= link_to 'New Office', new_office_path if can?(:create, 'offices') %>
+<table class="records">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Division</th>
+      <th>Sector city</th>
+      <th>City</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @offices.each do |office| %>
+      <tr>
+        <td><%= office.code %></td>
+        <td><%= office.name %></td>
+        <td><%= office.department.name %></td>
+        <td><%= office.division.name %></td>
+        <td><%= office.sector_city.name %></td>
+        <td><%= office.city.name %></td>
+        <td><%= link_to 'Edit', edit_office_path(office) if can?(:update, 'offices') %></td>
+        <td><%= link_to 'Destroy', office, method: :delete, data: { confirm: 'Are you sure?' } if can?(:delete, 'offices') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @offices, param_name: :office_page %>
+<br>

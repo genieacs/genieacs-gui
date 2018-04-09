@@ -1,5 +1,5 @@
 class RolesController < ApplicationController
-  
+
   def index
     can?(:read, 'roles') do
       off = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : 0
@@ -8,20 +8,20 @@ class RolesController < ApplicationController
       @total = Role.count
     end
   end
-  
+
   def new
     can?(:create, 'roles') do
       @role = Role.new
     end
   end
-  
+
   def edit
     can?(:update, 'roles') do
       @role = Role.find(params['id'])
       @total = @role.privileges.count
     end
   end
-  
+
   def create
     can?(:create, 'roles') do
       @role = Role.new(role_params)
@@ -32,7 +32,7 @@ class RolesController < ApplicationController
       end
     end
   end
-  
+
   def update
     can?(:update, 'roles') do
       @role = Role.find(params['id'])
@@ -43,7 +43,7 @@ class RolesController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     can?(:delete, 'roles') do
       @role = Role.find(params['id'])

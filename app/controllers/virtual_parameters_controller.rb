@@ -51,6 +51,7 @@ class VirtualParametersController < ApplicationController
       http = create_api_conn()
       res = http.put("/virtual_parameters/#{URI.escape(params['name'].strip)}", script)
       if res.code == '200'
+        @changed = { script: script }
         flash[:success] = 'Virtual parameter saved'
       else
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"

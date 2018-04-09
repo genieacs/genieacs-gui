@@ -81,6 +81,7 @@ class PresetsController < ApplicationController
       http = create_api_conn()
       res = http.put("/presets/#{URI.escape(params['name'].strip)}", ActiveSupport::JSON.encode(preset))
       if res.code == '200'
+        @changed = preset
         flash[:success] = 'Preset saved'
       else
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"

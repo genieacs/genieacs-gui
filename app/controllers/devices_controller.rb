@@ -11,7 +11,6 @@ class DevicesController < ApplicationController
       next if n.start_with?('_') or v.is_a?(String)
       v['_path'] = "#{prefix}#{n}"
       output << v
-
       if not v.include?('_value')
         output += flatten_params(v, prefix ? "#{prefix}#{n}." : "#{n}.")
       end
@@ -84,7 +83,7 @@ class DevicesController < ApplicationController
   # GET /devices/1
   # GET /devices/1.json
   def show
-    can?(:read, 'devices') do
+    can?(:read, 'devices/{id}') do
       id = params[:id]
       create_api_conn() do |http|
         res = query_resource(http, 'devices', {'_id' => id})
@@ -218,7 +217,7 @@ class DevicesController < ApplicationController
   end
 
   def destroy
-    can?(:delete, '/devices/') do
+    can?(:delete, '/devices/{id}') do
       http = create_api_conn()
       res = http.delete("/devices/#{URI::escape(params[:id])}")
       if res.code != '200'

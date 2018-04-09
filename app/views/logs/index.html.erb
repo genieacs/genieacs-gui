@@ -1,0 +1,57 @@
+<% content_for :title, 'Activity logs' %>
+<h1>Listing activity logs</h1>
+
+<h2>Showing <%= pluralize(@total, "activity") %></h2>
+
+<form action="<%= logs_url %>" data-method="GET">
+  <div class="d-inline-block">
+    <label>From: </label>
+    <input type="date" name="from" value="<%= @filter_from %>">
+  </div>
+
+  <div class="d-inline-block">
+    <label>To: </label>
+    <input type="date" name="to" value="<%= @filter_to %>">
+  </div>
+
+  <input type="submit">
+</form>
+
+<table class="records">
+  <tr>
+    <th>Action</th>
+    <th>Action by</th>
+    <th>IP</th>
+    <th>Source</th>
+    <th>Action at</th>
+    <th>Object</th>
+    <th>Object changed</th>
+  </tr>
+
+<% @logs.each do |log| %>
+  <tr>
+    <td><%= log.event.capitalize %></td>
+    <td><%= User.find_by(id: log.whodunnit)&.username %></td>
+    <td><%= log&.ip %></td>
+    <td><%= log.item_type %></td>
+    <td><%= log.created_at %></td>
+    <td>
+      <% if log.item_type == "User" %>
+        <%= log.object&.select{ |k, v| User::DISPLAY_FILEDS.include?(k) }  %>
+      <% else %>
+        <%= log.object %>
+      <% end %>
+    </td>
+    <td>
+      <% if log.item_type == "User" %>
+        <%= log.object_changes&.select{ |k, v| User::DISPLAY_FILEDS.include?(k) }  %>
+      <% else %>
+        <%= log.object_changes %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<%= render partial: 'pagination' %>
+

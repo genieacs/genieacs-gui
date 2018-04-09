@@ -1,3 +1,8 @@
-<%= form_for([@role, @role.privileges.build]) do |f| %>
-    <%= f.text_field :action %> <%= f.text_field :weight %> <%= f.text_field :resource %> <%= f.submit "Add Privilege" %>
+<%= simple_form_for([@role, @role.privileges.build]) do |f| %>
+
+  <%= f.input :action, collection: Privilege::ACTION_COLLECTION, wrapper_html: { class: 'd-inline-block'}, prompt: 'Select action' %>
+  <%= f.input :weight, collection: Privilege::WEIGHT_COLLECTION, wrapper_html: { class: 'd-inline-block'}, prompt: 'Select weight' %>
+  <%= f.input :resource, collection: Privilege::RESOURCE_COLLECTION, wrapper_html: { class: 'd-inline-block'}, prompt: 'Select resource' %>
+  <br>
+  <%= f.submit "Add Privilege" %>
 <% end %>

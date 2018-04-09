@@ -1,0 +1,44 @@
+pipeline:
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./bundler
+    volumes:
+      - /tmp/cache:/cache
+  build:
+    image: bananacoding/ruby-nodejs:2.5.0
+    environment:
+      - RAILS_ENV=test
+    commands:
+      - cp -f config/database.drone.yml config/database.yml
+      - cp config/graphs-sample.json.erb config/graphs.json.erb
+      - cp config/index_parameters-sample.yml config/index_parameters.yml
+      - cp config/summary_parameters-sample.yml config/summary_parameters.yml
+      - cp config/parameters_edit-sample.yml config/parameters_edit.yml
+      - cp config/parameter_renderers-sample.yml config/parameter_renderers.yml
+      - gem install bundler
+      - bundle install --path=./bundler
+      - npm install -g genieacs --unsafe-perm
+      - sed -i 's/127.0.0.1/mongo/g' /usr/lib/node_modules/genieacs/config/config.json
+      - nohup /usr/lib/node_modules/genieacs/bin/genieacs-nbi /dev/null 2>&1 &
+      - rake db:create
+      - rake db:schema:load
+      - rake db:migrate
+      - rspec
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./bundler
+    volumes:
+      - /tmp/cache:/cache
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_USER=tester
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test
+  mongo:
+    image: mongo

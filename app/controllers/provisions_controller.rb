@@ -51,6 +51,7 @@ class ProvisionsController < ApplicationController
       http = create_api_conn()
       res = http.put("/provisions/#{URI.escape(params['name'].strip)}", script)
       if res.code == '200'
+        @changed = { "script": script }
         flash[:success] = 'Provision saved'
       else
         flash[:error] = "Unexpected error (#{res.code}): #{res.body}"

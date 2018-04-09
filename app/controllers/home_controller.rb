@@ -27,4 +27,8 @@ class HomeController < ApplicationController
       end
     end
   end
+
+  def release_notes
+    render layout: false
+  end
 end

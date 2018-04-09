@@ -1,5 +1,5 @@
 class UserRolesController < ApplicationController
-  
+
   def create
     can?(:create, 'user_roles') do
       @user = User.find(params[:user_id])
@@ -7,7 +7,7 @@ class UserRolesController < ApplicationController
       redirect_to edit_user_path(@user)
     end
   end
-  
+
   def destroy
     can?(:delete, 'user_roles') do
       @user = User.find(params[:user_id])

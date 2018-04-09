@@ -1,0 +1,22 @@
+<h1>List department</h1>
+<hr>
+<table class="records">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @departments.each do |department| %>
+      <tr>
+        <td><%= department.code %></td>
+        <td><%= department.name %></td>
+        <td><%= link_to 'Edit', edit_department_path(department) if can?(:update, 'offices') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>

@@ -2,13 +2,18 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_paper_trail_whodunnit
+
+  before_action :load_object, if: :is_required_controller?
+  after_action :keep_activity, only: [:update, :destroy], if: :is_required_controller?
 
   require 'permissions'
 
   class NotAuthorized < StandardError; end
 
   rescue_from NotAuthorized do |exception|
-    if logged_in?
+    if user_signed_in?
       respond_to do |format|
         format.html { render 'not_authorized', :status => 403 }
         format.all { render :text => 'You are not authorized to access this section.', :status => 403 }
@@ -16,21 +21,13 @@ class ApplicationController < ActionController::Base
     else
       error_msg = 'You must be logged in to access this section.'
       respond_to do |format|
-        format.html { flash.now[:error] = error_msg; render 'sessions/new', :status => 401 }
+        format.html { flash.now[:error] = error_msg; redirect_to new_user_session_path }
         format.all { render :text => error_msg, :status => 401 }
       end
     end
   end
 
-  helper_method :current_user, :logged_in?, :can?, :get_can
-
-  def current_user
-    session[:username]
-  end
-
-  def logged_in?
-    current_user != nil
-  end
+  helper_method :can?, :get_can
 
   def can?(action, resource)
     if not block_given?
@@ -72,9 +69,9 @@ class ApplicationController < ActionController::Base
       fetch_permissions_from_db
     end
 
-    roles = ['anonymous']
-    if current_user
-      roles.concat(Rails.configuration.users[current_user]['roles'])
+    roles = []
+    if user_signed_in?
+      roles.concat(Rails.configuration.users[current_user.username]['roles'])
     end
 
     @permissions ||= Rails.cache.fetch("#{roles}_permisions", :expires_in => 60.seconds) do
@@ -87,6 +84,8 @@ class ApplicationController < ActionController::Base
           end
         end
       end
+
+      permissions = [['read', 1, '/home']] if permissions.blank?
       normalize_permissions(permissions)
     end
   end
@@ -115,4 +114,40 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  protected
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :password, :remember_me])
+    devise_parameter_sanitizer.permit(:account_update, keys: [
+      :email, :password, :password_confirmation, :current_password, :first_name,
+      :last_name, :telephone
+    ])
+  end
+
+  def is_required_controller?
+    required_controllers = [
+      'presets', 'objects', 'provisions', 'virtual_parameters', 'files'
+    ]
+    required_controllers.include? controller_name
+  end
+
+  def keep_activity
+    object_changes = ApplicationHelper.diff_hashes(@before_change, @changed)
+
+    if ['create', 'update'].include?(@action) && !@changed.blank?
+      PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
+            item_id: @id, object: @before_change, object_changes: object_changes, ip: current_user.current_sign_in_ip)
+
+    elsif @action == 'destroy' && !@before_change.blank?
+      PaperTrail::Version.create(event: @action, whodunnit: current_user.id, item_type: controller_name,
+            item_id: @id, object: @before_change, object_changes: object_changes, ip: current_user.current_sign_in_ip)
+    end
+  end
+
+  def load_object
+    @id = params['name']&.strip || params[:id]
+    res = query_resource(create_api_conn(), controller_name, {'_id' => @id })
+    @before_change = res[:result][0]&.merge({ _id: params['name'] })
+
+    @action = @before_change.blank? ? 'create' : action_name
+  end
 end

@@ -1,0 +1,19 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  host: database
+  port: 5432
+  username: tester
+  password: password
+  database: dev
+
+test:
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  host: database
+  port: 5432
+  username: tester
+  password: password
+  database: test

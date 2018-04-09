@@ -1,0 +1,26 @@
+<%= simple_form_for(@office) do |f| %>
+  <%= render 'shared/error_message', model: @office %>
+
+  <div class="form-inputs">
+    <%= f.input :code %>
+    <%= f.input :name %>
+    <%= f.association :department, prompt: 'Select department',
+        input_html: { class: 'select-department' } %>
+
+    <%= f.association :division, prompt: 'Select division',
+        collection: @office&.department&.divisions || [],
+        input_html: { class: 'select-division' } %>
+
+    <%= f.association :sector_city, prompt: 'Select sector city',
+        collection: @office&.division&.sector_cities || [],
+        input_html: { class: 'select-sector_city' } %>
+
+    <%= f.association :city, prompt: 'Select city',
+        collection: @office&.sector_city&.cities || [],
+        input_html: { class: 'select-city' } %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

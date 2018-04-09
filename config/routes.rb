@@ -8,11 +8,18 @@ module URI
 end
 
 GenieacsGui::Application.routes.draw do
-  get 'log_out' => 'sessions#destroy', :as => 'log_out'
-  get 'log_in' => 'sessions#new', :as => 'log_in'
-  post 'log_in' => 'sessions#create'
+  devise_for :users,
+             controllers: { sessions: 'users/sessions' },
+             skip: [:registrations]
+  as :user do
+    get 'users/edit' => 'users/registrations#edit', as: :edit_user_registration
+    put 'users' => 'users/registrations#update', as: :user_registration
+  end
 
-  root 'home#index'
+  authenticated :user do
+    root to: 'home#index', as: :authenticated_root
+  end
+
   get 'devices' => 'devices#index'
   get 'devices/:id' => 'devices#show'
   post 'devices/:id' => 'devices#update'
@@ -54,15 +61,50 @@ GenieacsGui::Application.routes.draw do
 
   get 'ping/:ip' => 'ping#index', :constraints => { :ip => /[0-9\.]+|[0-9a-f:]+/ }
 
+  get 'release_notes', to: 'home#release_notes'
+
   resources :users do
     resources :user_roles
   end
-  resources :roles do
+
+  resources :roles, except: %i[new create destroy] do
     resources :privileges
   end
+
+  resources :parameters, only: %i[destroy] do
+    collection do
+      get 'download'
+    end
+  end
+
+  resources :logs, only: %i[index]
+  resources :departments, execpt: %i[index show destroy] do
+    member do
+      get 'divisions'
+    end
+  end
+  resources :divisions, execpt: %i[index show] do
+    member do
+      get 'sector_cities'
+    end
+  end
+  resources :sector_cities, execpt: %i[index show] do
+    member do
+      get 'cities'
+    end
+  end
+  resources :cities, execpt: %i[index show] do
+    member do
+      get 'offices'
+    end
+  end
+  resources :offices, execpt: %i[show]
+  resources :cpe_configs, only: %i[index]
 
   if Rails.configuration.auth_method == :db
     get 'change_password' => 'change_password#index'
     post 'change_password' => 'change_password#update'
   end
+
+  root to: redirect('/users/sign_in')
 end
