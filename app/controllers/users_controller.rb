@@ -6,8 +6,8 @@ class UsersController < ApplicationController
       lim = Rails.configuration.page_size
       load_users
 
-      @users = @users.limit(lim).offset(off)
       @total = @users.count
+      @users = @users.limit(lim).offset(off)
     end
   end
 
