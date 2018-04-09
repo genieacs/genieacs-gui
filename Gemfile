@@ -41,6 +41,8 @@ gem 'whenever', require: false
 
 gem 'simple_form'
 
+gem "select2-rails"
+
 # Pagination
 gem 'kaminari'
 

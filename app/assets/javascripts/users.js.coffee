@@ -16,3 +16,8 @@ window.addRole = () ->
     $('input[name="role_ids"]').val roleIds.join(',')
     $('#roles-added').append()
   $('#user_roles').val null
+
+document.addEventListener "turbolinks:load", () ->
+  $('#user_sector_city_id').select2()
+  $('#user_city_id').select2()
+  $('#user_office_id').select2()

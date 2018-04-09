@@ -19,4 +19,5 @@
 //= require pie
 //= require codemirror
 //= require codemirror-javascript
+//= require select2-full
 //= require_tree .
