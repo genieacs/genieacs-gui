@@ -24,6 +24,8 @@ class Privilege < ApplicationRecord
                          '/virtaul_parameters',
                          '/files',
                          '/logs',
+                         '/device_lists',
+                         '/offices',
                          '/users',
                          '/roles']
 
