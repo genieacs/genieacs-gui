@@ -53,7 +53,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # GenieACS API
-  config.genieacs_api_host = 'localhost'
-  config.genieacs_api_port = 7557
+  config.genieacs_api_host = ENV['GENIEACS_NBI_IP']
+  config.genieacs_api_port = ENV['GENIEACS_NBI_PORT']
   config.genieacs_api_use_ssl = false
 end
