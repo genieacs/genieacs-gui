@@ -18,4 +18,4 @@ RUN cp config/roles-sample.yml config/roles.yml
 RUN cp config/users-sample.yml config/users.yml
 RUN bundle
 
-ENTRYPOINT ["rails", "s"]
+ENTRYPOINT ["rails", "s", "-b", "0.0.0.0"]
