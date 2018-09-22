@@ -5,10 +5,9 @@ ARG GITHUB_TOKEN
 RUN git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 RUN apt-get update && apt-get install -y -q git
 RUN gem install rdoc bundle
-RUN mkdir /build
+RUN mkdir -p /build/genieacs-gui
 
-WORKDIR	/build
-RUN git clone https://github.com/utilitywarehouse/genieacs-gui.git
+ADD . /build/genieacs-gui
 
 WORKDIR /build/genieacs-gui
 RUN cp config/graphs-sample.json.erb config/graphs.json.erb
