@@ -58,7 +58,7 @@ class DevicesController < ApplicationController
 
       @query = {}
       if params.has_key?('query')
-        @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
+        @query = ActiveSupport::JSON.decode(params['query'])
       end
 
       if request.format == Mime[:csv]
