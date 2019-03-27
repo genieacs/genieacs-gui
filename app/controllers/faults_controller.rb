@@ -9,7 +9,7 @@ class FaultsController < ApplicationController
     can?(:read, 'faults') do
       skip = params.include?(:page) ? (Integer(params[:page]) - 1) * Rails.configuration.page_size : nil
       if params.has_key?('query')
-        @query = ActiveSupport::JSON.decode(URI.unescape(params['query']))
+        @query = ActiveSupport::JSON.decode(params['query'])
       else
         @query = {}
       end
