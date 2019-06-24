@@ -61,7 +61,7 @@ filters = {
 
 <%= render partial: 'pagination' %>
 
-<%= link_to 'Download', params.permit(:query).merge(:format => :csv) %>
+<%= link_to 'Download', params.permit(:query, :page).merge(:format => :csv) %>
 
 <script type="text/javascript">
 $(function() {
